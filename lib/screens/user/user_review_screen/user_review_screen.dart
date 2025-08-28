@@ -1,0 +1,368 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
+import 'package:itzel/screens/user/user_review_screen/widgets/feedback_text_field_widget.dart';
+import 'package:itzel/screens/user/user_review_screen/widgets/popup_widget.dart';
+import 'package:itzel/screens/user/user_review_screen/widgets/review_search_text_field_widget.dart';
+import 'package:itzel/widgets/app_image/app_image.dart';
+
+import '../../../constants/app_colors.dart';
+import '../../../models/all_organizations_model.dart';
+import '../../../widgets/button_widget/button_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+import 'controllers/user_review_controller.dart';
+
+class UserReviewScreen extends StatelessWidget {
+  final String categoryTitle;
+  final String categoryId;
+
+  const UserReviewScreen({
+    super.key,
+    required this.categoryTitle,
+    required this.categoryId,
+  });
+
+  void _showRatingPopup(BuildContext context, UserReviewController controller,
+      AllOrganizations organization) {
+    double rating = 3.0; // Default rating
+    final feedbackController = TextEditingController();
+
+    showCustomPopup(context, [
+      InkWell(
+        onTap: () {
+          Get.back();
+        },
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        child: const Align(
+          alignment: Alignment.centerRight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextWidget(
+                text: 'Skip',
+                fontColor: AppColors.blackLight2,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+              SpaceWidget(spaceWidth: 2),
+              Icon(
+                Icons.arrow_forward,
+                size: 14,
+                color: AppColors.blackLight2,
+              ),
+            ],
+          ),
+        ),
+      ),
+      const SpaceWidget(spaceHeight: 30),
+      const Center(
+        child: TextWidget(
+          text: 'Give your Rating',
+          fontColor: AppColors.blackDarkest,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      const SpaceWidget(spaceHeight: 16),
+      Center(
+        child: RatingBar.builder(
+          initialRating: rating,
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (newRating) {
+            rating = newRating;
+          },
+        ),
+      ),
+      const SpaceWidget(spaceHeight: 28),
+      const TextWidget(
+        text: 'Feedback',
+        fontColor: AppColors.blackDark,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
+      const SpaceWidget(spaceHeight: 8),
+      FeedbackTextFieldWidget(
+        hintText: '',
+        controller: feedbackController,
+        maxLines: 5,
+      ),
+      const SpaceWidget(spaceHeight: 40),
+      ButtonWidget(
+        onPressed: () {
+          Navigator.pop(context);
+          controller.submitReview(
+            organization: organization,
+            description: feedbackController.text,
+            star: rating.toInt(),
+          );
+        },
+        label: 'Submit Review',
+        buttonWidth: double.infinity,
+      ),
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      backgroundColor: AppColors.whiteBg,
+      body: GetBuilder<UserReviewController>(
+        init: UserReviewController(categoryId: categoryId),
+        builder: (controller) {
+          return SafeArea(
+            child: RefreshIndicator(
+              onRefresh: controller.fetchOrganizations, // Trigger refresh
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                // Ensure scrollability
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SpaceWidget(spaceHeight: 24),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: size.width / (size.width / 20)),
+                      child: ReviewSearchTextFieldWidget(
+                        hintText: 'Search',
+                        controller: controller.searchController,
+                        maxLines: 1,
+                        onChanged: (value) {
+                          controller.fetchOrganizations();
+                        },
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 16),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: size.width / (size.width / 20)),
+                      child: TextWidget(
+                        text: categoryTitle,
+                        fontColor: AppColors.black500,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 16),
+                    Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (controller.organizations.isEmpty) {
+                        return const Center(
+                          child: TextWidget(
+                            text: 'No organizations found',
+                            fontColor: AppColors.black500,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      } else {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: controller.organizations.length,
+                          itemBuilder: (context, index) {
+                            final organization =
+                                controller.organizations[index];
+                            return Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(
+                                  size.width / (size.width / 12)),
+                              margin: EdgeInsets.only(
+                                  left: size.width / (size.width / 20),
+                                  right: size.width / (size.width / 20),
+                                  bottom: size.width / (size.width / 12)),
+                              decoration: BoxDecoration(
+                                color: AppColors.blue50,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppColors.blueDark,
+                                  width: size.width / (size.width / 1.35),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: AppImage(
+                                          url: organization.image ?? '',
+                                          height:
+                                              size.width / (size.width / 45),
+                                          width: size.width / (size.width / 45),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SpaceWidget(spaceWidth: 8),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextWidget(
+                                            text: organization.name ?? '',
+                                            fontColor: AppColors.black800,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          const SpaceWidget(spaceHeight: 4),
+                                          TextWidget(
+                                            text:
+                                                organization.locationName ?? '',
+                                            fontColor: AppColors.black800,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SpaceWidget(spaceHeight: 12),
+                                  const TextWidget(
+                                    text: 'Reviews',
+                                    fontColor: AppColors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  const SpaceWidget(spaceHeight: 8),
+                                  ...organization.reviews!.map(
+                                    (review) {
+                                      return Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(12),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 12),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(9),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: AppColors.grey200,
+                                              spreadRadius: 1,
+                                              blurRadius: 3,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  child: AppImage(
+                                                    url: review.user!.profile ??
+                                                        '',
+                                                    height: size.width /
+                                                        (size.width / 36),
+                                                    width: size.width /
+                                                        (size.width / 36),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                const SpaceWidget(
+                                                    spaceWidth: 8),
+                                                Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: size.width /
+                                                          (size.width / 150),
+                                                      child: TextWidget(
+                                                        text:
+                                                            review.user!.name ??
+                                                                '',
+                                                        fontColor:
+                                                            AppColors.black500,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        maxLines: 2,
+                                                        textAlignment:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: size.width /
+                                                          (size.width / 150),
+                                                      child: TextWidget(
+                                                        text: review
+                                                                .description ??
+                                                            '',
+                                                        fontColor:
+                                                            AppColors.black500,
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        maxLines: 2,
+                                                        textAlignment:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.star,
+                                                  color: AppColors.starIcon,
+                                                  size: 12,
+                                                ),
+                                                const SpaceWidget(
+                                                    spaceWidth: 2),
+                                                TextWidget(
+                                                  text: review.star.toString(),
+                                                  fontColor: AppColors.black500,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SpaceWidget(spaceHeight: 15),
+                                  ButtonWidget(
+                                    onPressed: () {
+                                      _showRatingPopup(
+                                          context, controller, organization);
+                                    },
+                                    label: 'Give Reviews',
+                                    buttonWidth: double.infinity,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

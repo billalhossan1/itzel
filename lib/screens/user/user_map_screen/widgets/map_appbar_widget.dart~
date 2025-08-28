@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+import '../../../../constants/app_colors.dart';
+import '../../../../widgets/space_widget/space_widget.dart';
+import '../../../../widgets/text_widget/text_widgets.dart';
+
+class MapAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  final String titleText;
+  final String subTitleText;
+
+  const MapAppBarWidget({
+    super.key,
+    required this.titleText,
+    required this.subTitleText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      flexibleSpace: Container(
+        color: AppColors.whiteBg,
+      ),
+      titleSpacing: -10,
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: AppColors.black500,
+        ),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextWidget(
+            text: titleText,
+            fontColor: AppColors.black500,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          const SpaceWidget(spaceHeight: 2),
+          TextWidget(
+            text: subTitleText,
+            fontColor: AppColors.grey900,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}

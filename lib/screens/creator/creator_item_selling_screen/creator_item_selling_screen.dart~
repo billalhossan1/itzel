@@ -1,0 +1,161 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:itzel/screens/creator/creator_job_publish_screen/widgets/creator_job_publish_textfield_widget.dart';
+
+import '../../../constants/app_colors.dart';
+import '../../../widgets/appbar_widget/appbar_widget.dart';
+import '../../../widgets/button_widget/button_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+import 'controller/creator_item_selling_controller.dart';
+
+// screens/creator_item_selling_screen.dart
+class CreatorItemSellingScreen extends StatelessWidget {
+  final ProductController controller = Get.put(ProductController());
+
+  CreatorItemSellingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      backgroundColor: AppColors.whiteBg,
+      appBar: const AppbarWidget(text: 'Uploading Selling Item'),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TextWidget(
+              text: 'Upload Picture',
+              fontColor: AppColors.black500,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            DottedBorder(
+              borderType: BorderType.RRect,
+              radius: const Radius.circular(12),
+              child: InkWell(
+                onTap: controller.pickImage,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  child: SizedBox(
+                    height: size.height / (size.height / 143),
+                    width: double.infinity,
+                    child: Obx(() => controller.imageFile.value == null
+                        ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add,
+                          size: 32,
+                          color: AppColors.black500,
+                        ),
+                        SpaceWidget(spaceHeight: 12),
+                        TextWidget(
+                          text: 'Upload',
+                          fontColor: AppColors.black500,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    )
+                        : Image.file(
+                      controller.imageFile.value!,
+                      height: size.height / (size.height / 143),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )),
+                  ),
+                ),
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 16),
+            _buildTextField(
+              label: 'Product Name',
+              controller: controller.companyNameController,
+            ),
+            _buildTextField(
+              label: 'Product Description',
+              controller: controller.jobDescriptionController,
+              maxLines: 5,
+            ),
+            _buildTextField(
+              label: 'Price',
+              controller: controller.priceController,
+              keyboardType: TextInputType.number,
+            ),
+            _buildTextField(
+              label: 'Country',
+              controller: controller.countryController,
+            ),
+            _buildTextField(
+              label: 'State',
+              controller: controller.stateController,
+            ),
+            _buildTextField(
+              label: 'City',
+              controller: controller.cityController,
+            ),
+            _buildTextField(
+              label: 'Phone Number',
+              controller: controller.phoneNumberController,
+            ),
+            _buildTextField(
+              label: 'WhatsApp Number',
+              controller: controller.whatsAppController,
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Obx(() => ButtonWidget(
+          onPressed: controller.isLoading.value
+              ? null
+              : controller.publishProduct,
+          label: controller.isLoading.value ? 'Publishing...' : 'Publish Post',
+          buttonWidth: double.infinity,
+          buttonHeight: (size.height / (size.height / 56)),
+          buttonRadius: BorderRadius.circular(16),
+        )),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: TextWidget(
+            text: label,
+            fontColor: AppColors.grey900,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        const SpaceWidget(spaceHeight: 4),
+        CreatorJobPublishTextFieldWidget(
+          hintText: '',
+          controller: controller,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+        ),
+        const SpaceWidget(spaceHeight: 8),
+      ],
+    );
+  }
+}

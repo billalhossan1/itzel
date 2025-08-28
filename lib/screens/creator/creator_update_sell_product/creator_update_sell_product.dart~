@@ -1,0 +1,302 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:itzel/screens/creator/creator_job_publish_screen/widgets/creator_job_publish_textfield_widget.dart';
+
+import '../../../constants/app_colors.dart';
+import '../../../widgets/appbar_widget/appbar_widget.dart';
+import '../../../widgets/button_widget/button_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+
+class CreatorUpdateSellProductScreen extends StatefulWidget {
+  const CreatorUpdateSellProductScreen({super.key});
+
+  @override
+  State<CreatorUpdateSellProductScreen> createState() =>
+      _CreatorUpdateSellProductScreenState();
+}
+
+class _CreatorUpdateSellProductScreenState extends State<CreatorUpdateSellProductScreen> {
+  final companyNameController = TextEditingController();
+  final countryController = TextEditingController();
+  final stateController = TextEditingController();
+  final cityController = TextEditingController();
+  final jobDescriptionController = TextEditingController();
+  final priceController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final whatsAppController = TextEditingController();
+
+  final List<Map<String, TextEditingController>> questions = [];
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? image;
+
+  Future<void> getImage() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      image = pickedImage;
+    });
+  }
+
+  void addQuestion(BuildContext context) {
+    TextEditingController questionController = TextEditingController();
+    TextEditingController answerController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Question',
+              style: TextStyle(fontWeight: FontWeight.w500)),
+          content: TextField(
+            controller: questionController,
+            decoration: const InputDecoration(
+              hintText: 'Type your question',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel', style: TextStyle(color: Colors.red)),
+            ),
+            TextButton(
+              onPressed: () {
+                if (questionController.text.isNotEmpty) {
+                  setState(() {
+                    questions.add({
+                      'question': questionController,
+                      'answer': answerController,
+                    });
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    companyNameController.dispose();
+    countryController.dispose();
+    jobDescriptionController.dispose();
+    priceController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    phoneNumberController.dispose();
+    whatsAppController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      backgroundColor: AppColors.whiteBg,
+      appBar: const AppbarWidget(text: 'Uploading Selling Item'),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TextWidget(
+              text: 'Upload Picture',
+              fontColor: AppColors.black500,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            DottedBorder(
+              borderType: BorderType.RRect,
+              radius: const Radius.circular(12),
+              child: InkWell(
+                onTap: getImage,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  child: SizedBox(
+                    height: size.height / (size.height / 143),
+                    width: double.infinity,
+                    child: image == null
+                        ? const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 32,
+                                color: AppColors.black500,
+                              ),
+                              SpaceWidget(spaceHeight: 12),
+                              TextWidget(
+                                text: 'Upload',
+                                fontColor: AppColors.black500,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ],
+                          )
+                        : Image.file(
+                            File(image!.path),
+                            height: size.height / (size.height / 143),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 16),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'Product Name',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: companyNameController,
+              maxLines: 1,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'Product Description',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: jobDescriptionController,
+              maxLines: 5,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'Price',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: priceController,
+              maxLines: 1,
+              keyboardType: TextInputType.number,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'Country',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: countryController,
+              maxLines: 1,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'State',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: stateController,
+              maxLines: 1,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'City',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: cityController,
+              maxLines: 1,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'Phone Number',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: phoneNumberController,
+              maxLines: 1,
+            ),
+            const SpaceWidget(spaceHeight: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: TextWidget(
+                text: 'WhatsApp Number',
+                fontColor: AppColors.grey900,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            CreatorJobPublishTextFieldWidget(
+              hintText: '',
+              controller: whatsAppController,
+              maxLines: 1,
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: ButtonWidget(
+          onPressed: () {},
+          label: 'Publish Post',
+          buttonWidth: double.infinity,
+          buttonHeight: (size.height / (size.height / 56)),
+          buttonRadius: BorderRadius.circular(16),
+        ),
+      ),
+    );
+  }
+}

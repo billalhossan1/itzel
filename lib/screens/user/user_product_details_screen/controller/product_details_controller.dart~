@@ -1,0 +1,34 @@
+import 'package:get/get.dart';
+
+import '../../../../models/single_product_model.dart';
+import '../../../../services/repository/creator_product_repository/creator_product_repository.dart';
+import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
+
+class ProductDetailsController extends GetxController {
+  final ProductRepository _productRepository = ProductRepository();
+  var productDetails = SingleProduct().obs;
+  var isLoading = true.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Get the product ID from arguments and fetch product details
+    final String productId = Get.arguments['productId'];
+    fetchProductDetails(productId);
+  }
+
+  Future<void> fetchProductDetails(String productId) async {
+    try {
+      isLoading.value = true;
+      final fetchedProduct =
+      await _productRepository.fetchProductDetails(productId);
+      if (fetchedProduct != null) {
+        productDetails.value = fetchedProduct;
+      }
+    } catch (e) {
+      AppSnackBar.error('Error fetching product details');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}

@@ -1,0 +1,305 @@
+import 'dart:convert';
+
+class EventResponse {
+  bool? success;
+  String? message;
+  List<EventModel>? data;
+
+  EventResponse({
+    this.success,
+    this.message,
+    this.data,
+  });
+
+  factory EventResponse.fromJson(Map<String, dynamic> json) {
+    try {
+      return EventResponse(
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
+            : List<EventModel>.from(
+                (json["data"] as List).map((x) => EventModel.fromJson(x))),
+      );
+    } catch (e) {
+      print("Error in EventResponse.fromJson: $e");
+      return EventResponse();
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class EventModel {
+  String? id;
+  String? thumbnailImage;
+  String? introMedia;
+  String? name;
+  DateTime? time;
+  String? description;
+  List<String>? tags;
+  int? price;
+  Creator? creator;
+  String? type;
+  String? address;
+  List<double>? coordinate;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+  bool? isFavourite;
+
+  EventModel({
+    this.id,
+    this.thumbnailImage,
+    this.introMedia,
+    this.name,
+    this.time,
+    this.description,
+    this.tags,
+    this.price,
+    this.creator,
+    this.type,
+    this.address,
+    this.coordinate,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+    this.isFavourite,
+  });
+
+  factory EventModel.fromJson(dynamic json) {
+    try {
+      // Handle String input
+      if (json is String) {
+        try {
+          json = jsonDecode(json);
+        } catch (e) {
+          print("Error decoding JSON string in EventModel.fromJson: $e");
+          return EventModel();
+        }
+      }
+
+      // Ensure we have a Map
+      if (json is! Map<String, dynamic>) {
+        print("EventModel.fromJson received non-map type: ${json.runtimeType}");
+        return EventModel();
+      }
+
+      // Process creator field safely
+      Creator? creator;
+      if (json["creator"] != null) {
+        try {
+          creator = Creator.fromJson(json["creator"]);
+        } catch (e) {
+          print("Error parsing creator: $e");
+        }
+      }
+
+      // Process time field safely
+      DateTime? time;
+      if (json["time"] != null) {
+        try {
+          time = DateTime.parse(json["time"].toString());
+        } catch (e) {
+          print("Error parsing time: $e");
+        }
+      }
+
+      // Process dates safely
+      DateTime? createdAt;
+      if (json["createdAt"] != null) {
+        try {
+          createdAt = DateTime.parse(json["createdAt"].toString());
+        } catch (e) {
+          print("Error parsing createdAt: $e");
+        }
+      }
+
+      DateTime? updatedAt;
+      if (json["updatedAt"] != null) {
+        try {
+          updatedAt = DateTime.parse(json["updatedAt"].toString());
+        } catch (e) {
+          print("Error parsing updatedAt: $e");
+        }
+      }
+
+      // Process tags safely
+      List<String> tagsList = [];
+      if (json["tags"] != null) {
+        if (json["tags"] is List) {
+          tagsList = List<String>.from(
+              (json["tags"] as List).map((x) => x.toString()));
+        } else if (json["tags"] is String) {
+          try {
+            // Try to decode JSON string if it's a serialized list
+            var decodedTags = jsonDecode(json["tags"]);
+            if (decodedTags is List) {
+              tagsList =
+                  List<String>.from(decodedTags.map((x) => x.toString()));
+            }
+          } catch (e) {
+            // If not a JSON string, just add the string itself
+            tagsList = [json["tags"].toString()];
+          }
+        }
+      }
+
+      // Process coordinates safely
+      List<double> coordinateList = [];
+      if (json["coordinate"] != null) {
+        if (json["coordinate"] is List) {
+          coordinateList = (json["coordinate"] as List).map((item) {
+            if (item is double) return item;
+            if (item is int) return item.toDouble();
+            return double.tryParse(item.toString()) ?? 0.0;
+          }).toList();
+        } else if (json["coordinate"] is String) {
+          try {
+            var decodedCoords = jsonDecode(json["coordinate"]);
+            if (decodedCoords is List) {
+              coordinateList = List<double>.from(decodedCoords.map((x) {
+                if (x is double) return x;
+                if (x is int) return x.toDouble();
+                return double.tryParse(x.toString()) ?? 0.0;
+              }));
+            }
+          } catch (e) {
+            print("Error parsing coordinates string: $e");
+          }
+        }
+      }
+
+      // Parse price safely
+      int? price;
+      if (json["price"] != null) {
+        if (json["price"] is int) {
+          price = json["price"];
+        } else {
+          price = int.tryParse(json["price"].toString()) ?? 0;
+        }
+      }
+
+      // Parse version safely
+      int? v;
+      if (json["__v"] != null) {
+        if (json["__v"] is int) {
+          v = json["__v"];
+        } else {
+          v = int.tryParse(json["__v"].toString()) ?? 0;
+        }
+      }
+
+      // Parse isFavourite safely
+      bool? isFavourite;
+      if (json["isFavourite"] != null) {
+        if (json["isFavourite"] is bool) {
+          isFavourite = json["isFavourite"];
+        } else {
+          String favStr = json["isFavourite"].toString().toLowerCase();
+          isFavourite = favStr == 'true' || favStr == '1';
+        }
+      }
+
+      return EventModel(
+        id: json["_id"]?.toString(),
+        thumbnailImage: json["thumbnailImage"]?.toString(),
+        introMedia: json["introMedia"]?.toString(),
+        name: json["name"]?.toString(),
+        time: time,
+        description: json["description"]?.toString(),
+        tags: tagsList,
+        price: price,
+        creator: creator,
+        type: json["type"]?.toString(),
+        address: json["address"]?.toString(),
+        coordinate: coordinateList,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        v: v,
+        isFavourite: isFavourite,
+      );
+    } catch (e) {
+      print("Unexpected error in EventModel.fromJson: $e");
+      return EventModel();
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "thumbnailImage": thumbnailImage,
+        "introMedia": introMedia,
+        "name": name,
+        "time": time?.toIso8601String(),
+        "description": description,
+        "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x)),
+        "price": price,
+        "creator": creator?.toJson(),
+        "type": type,
+        "address": address,
+        "coordinate": coordinate == null
+            ? []
+            : List<dynamic>.from(coordinate!.map((x) => x)),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "__v": v,
+        "isFavourite": isFavourite,
+      };
+}
+
+class Creator {
+  String? id;
+  String? name;
+  String? email;
+  String? profile;
+
+  Creator({
+    this.id,
+    this.name,
+    this.email,
+    this.profile,
+  });
+
+  factory Creator.fromJson(dynamic json) {
+    try {
+      // Handle String input
+      if (json is String) {
+        try {
+          json = jsonDecode(json);
+        } catch (e) {
+          print("Error decoding JSON string in Creator.fromJson: $e");
+          return Creator();
+        }
+      }
+
+      // Ensure we have a Map
+      if (json is! Map<String, dynamic>) {
+        print("Creator.fromJson received non-map type: ${json.runtimeType}");
+        return Creator();
+      }
+
+      return Creator(
+        id: json["_id"]?.toString(),
+        name: json["name"]?.toString(),
+        email: json["email"]?.toString(),
+        profile: json["profile"]?.toString(),
+      );
+    } catch (e) {
+      print("Unexpected error in Creator.fromJson: $e");
+      return Creator();
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "email": email,
+        "profile": profile,
+      };
+}

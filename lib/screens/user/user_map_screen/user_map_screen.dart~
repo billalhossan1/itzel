@@ -1,0 +1,89 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:itzel/screens/user/user_map_screen/widgets/map_appbar_widget.dart';
+
+import '../../../constants/app_colors.dart';
+import 'controller/location_controller.dart';
+
+class UserMapScreen extends StatelessWidget {
+  final locationController = Get.put(LocationController());
+
+  UserMapScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final arguments = Get.arguments;
+    final String name = arguments['name'];
+    final List<double> coordinate = arguments['coordinate'];
+    final LatLng destination = LatLng(coordinate[0], coordinate[1]);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      locationController.initializeDestination(destination);
+    });
+
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      backgroundColor: AppColors.whiteBg,
+      body: Obx(() {
+        final currentLocation = locationController.currentLocation.value;
+
+        if (currentLocation == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Column(
+          children: [
+            Obx(() => MapAppBarWidget(
+                  titleText: name,
+                  subTitleText: locationController.isLoadingDestination.value
+                      ? 'Fetching address...'
+                      : locationController.destinationAddress.value,
+                )),
+            Expanded(
+              child: GoogleMap(
+                mapType: MapType.normal,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+
+                circles: {
+                  Circle(
+                    circleId: const CircleId('Current Circle'),
+                    center: currentLocation,
+                    radius: 100,
+                    fillColor: Colors.blue.shade100.withOpacity(0.6),
+                    strokeColor: Colors.blue.shade100.withOpacity(0.4),
+                  ),
+                },
+                onMapCreated: (GoogleMapController controller) {
+                  Completer<GoogleMapController>().complete(controller);
+                },
+                initialCameraPosition: CameraPosition(
+                  target: destination,
+                  zoom: 16,
+                ),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: currentLocation,
+                    visible: true,
+                  ),
+                  Marker(
+                    markerId: const MarkerId("destination"),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueBlue),
+                    position: destination,
+                    visible: true,
+                  ),
+                },
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+}
