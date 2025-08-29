@@ -26,7 +26,6 @@ class RegistrationScreen extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: GetBuilder<RegistrationController>(
-                init: RegistrationController(),
                 builder: (controller) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -307,7 +306,7 @@ class RegistrationScreen extends StatelessWidget {
                                   const SpaceWidget(spaceWidth: 8),
                                   TextButton(
                                     onPressed: () {
-                                      Get.delete<RegistrationController>(force: true);
+                                      // Use Get.offAllNamed to navigate and let GetX handle controller lifecycle
                                       Get.offAllNamed(AppRoutes.loginScreen);
                                     },
                                     style: TextButton.styleFrom(

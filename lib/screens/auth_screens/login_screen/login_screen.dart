@@ -28,7 +28,6 @@ class LoginScreen extends StatelessWidget {
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: GetBuilder<LoginController>(
-              init: LoginController(),
               builder: (controller) {
                 return Form(
                   key: controller.formKey,
@@ -191,8 +190,8 @@ class LoginScreen extends StatelessWidget {
                           const SpaceWidget(spaceWidth: 8),
                           TextButton(
                             onPressed: () {
-                              Get.delete<LoginController>(force: true);
-                              Get.toNamed(AppRoutes.registrationScreen);
+                              // Use Get.offNamed to navigate and let GetX handle controller lifecycle
+                              Get.offNamed(AppRoutes.registrationScreen);
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,

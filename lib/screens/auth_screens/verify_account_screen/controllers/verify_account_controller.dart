@@ -22,8 +22,7 @@ class VerifyAccountController extends GetxController {
 
   @override
   void onInit() {
-    final email = Get.arguments['email'];
-    bool isResetPass = Get.arguments['forgot'];
+
     super.onInit();
     startTimer();
   }

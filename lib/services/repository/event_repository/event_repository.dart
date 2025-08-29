@@ -19,6 +19,9 @@ class EventRepository {
   final ApiPostServices _apiPostServices = ApiPostServices();
   final ApiDeleteServices _apiDeleteServices = ApiDeleteServices();
 
+  static const int maxImageSize = 5 * 1024 * 1024; // 5MB
+  static const int maxVideoSize = 20 * 1024 * 1024; // 20MB
+
   Future<List<EventModel>?> getAllEvents() async {
     try {
       final response = await _apiGetServices.apiGetServices(AppApiUrl.allEvent);
@@ -291,10 +294,23 @@ class EventRepository {
   Future<bool> createEvent(Map<String, dynamic> eventData,
       {File? imageFile, File? videoFile}) async {
     try {
+      // File size checks
+      if (imageFile != null && await imageFile.exists()) {
+        final imageLength = await imageFile.length();
+        if (imageLength > maxImageSize) {
+          throw Exception('Image file is too large. Max size is 5MB.');
+        }
+      }
+      if (videoFile != null && await videoFile.exists()) {
+        final videoLength = await videoFile.length();
+        if (videoLength > maxVideoSize) {
+          throw Exception('Video file is too large. Max size is 20MB.');
+        }
+      }
+
       FormData formData = FormData.fromMap({
         ...eventData,
       });
-
       if (imageFile != null && await imageFile.exists()) {
         String imageFileName = imageFile.path.split('/').last;
         String? imageMimeType = lookupMimeType(imageFile.path);
@@ -307,7 +323,6 @@ class EventRepository {
           ),
         ));
       }
-
       if (videoFile != null && await videoFile.exists()) {
         String videoFileName = videoFile.path.split('/').last;
         String? videoMimeType = lookupMimeType(videoFile.path);
@@ -320,7 +335,6 @@ class EventRepository {
           ),
         ));
       }
-
       final response = await _apiPostServices.apiPostServices(
         url: AppApiUrl.createEvent,
         body: formData,

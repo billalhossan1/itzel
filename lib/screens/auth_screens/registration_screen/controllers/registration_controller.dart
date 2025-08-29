@@ -9,22 +9,35 @@ class RegistrationController extends GetxController {
   bool isCreator = false;
   bool isUserChecked = false;
   bool isCreatorChecked = false;
+  @override
+  void onInit() {
+    userNameController=TextEditingController();
+    userEmailController=TextEditingController();
+    userPasswordController=TextEditingController();
+    userConfirmPasswordController=TextEditingController();
+    creatorNameController=TextEditingController();
+    creatorEmailController=TextEditingController();
+    creatorPasswordController=TextEditingController();
+    creatorConfirmPasswordController=TextEditingController();
+
+    super.onInit();
+  }
 
   // Form keys
   final userFormKey = GlobalKey<FormState>();
   final creatorFormKey = GlobalKey<FormState>();
 
   // User's auth controllers
-  final userNameController = TextEditingController();
-  final userEmailController = TextEditingController();
-  final userPasswordController = TextEditingController();
-  final userConfirmPasswordController = TextEditingController();
+  TextEditingController  userNameController = TextEditingController();
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
+  TextEditingController  userConfirmPasswordController = TextEditingController();
 
   // Creator's auth controllers
-  final creatorNameController = TextEditingController();
-  final creatorEmailController = TextEditingController();
-  final creatorPasswordController = TextEditingController();
-  final creatorConfirmPasswordController = TextEditingController();
+  TextEditingController creatorNameController = TextEditingController();
+  TextEditingController creatorEmailController = TextEditingController();
+  TextEditingController creatorPasswordController = TextEditingController();
+  TextEditingController creatorConfirmPasswordController = TextEditingController();
 
   // Auth repository
   final AuthRepository authRepository = AuthRepository();
@@ -100,5 +113,18 @@ class RegistrationController extends GetxController {
     } else {
       Get.snackbar('Error', 'Please fill all fields correctly');
     }
+  }
+
+  @override
+  void onClose() {
+    userNameController.dispose();
+    userEmailController.dispose();
+    userPasswordController.dispose();
+    userConfirmPasswordController.dispose();
+    creatorNameController.dispose();
+    creatorEmailController.dispose();
+    creatorPasswordController.dispose();
+    creatorConfirmPasswordController.dispose();
+    super.onClose();
   }
 }

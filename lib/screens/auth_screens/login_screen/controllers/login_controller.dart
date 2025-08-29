@@ -6,10 +6,19 @@ import '../../../../services/repository/auth_repository/auth_repository.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool isChecked = false;
   final AuthRepository authRepository = AuthRepository();
+  @override
+  void onInit() {
+   initial();
+    super.onInit();
+  }
+  void initial(){
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
 
   void toggleRememberMe(bool? value) {
     isChecked = value ?? false;
