@@ -8,11 +8,14 @@ class ForgotPasswordController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final AuthRepository authRepository = AuthRepository();
+  RxBool isLoading = false.obs;
 
   void validateAndNavigate() async {
     if (formKey.currentState!.validate()) {
       String email = emailController.text;
+      isLoading.value = true;
       bool isSuccess = await authRepository.forgotPassword(email: email);
+      isLoading.value = false;
       if (isSuccess) {
         emailController.clear();
         Get.toNamed(

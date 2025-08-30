@@ -122,12 +122,13 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       const SpaceWidget(spaceHeight: 32),
-                      ButtonWidget(
+                      Obx(()=>ButtonWidget(
+                        isLoading: controller.isLoading.value,
                         onPressed: controller.onSignIn,
                         label: AppStrings.signInButtonText,
                         buttonWidth: double.infinity,
                         buttonHeight: 56,
-                      ),
+                      ),),
                       const SpaceWidget(spaceHeight: 32),
                       // Row(
                       //   children: [

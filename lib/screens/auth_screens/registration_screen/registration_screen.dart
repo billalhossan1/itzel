@@ -285,12 +285,13 @@ class RegistrationScreen extends StatelessWidget {
                                 ],
                               ),
                               const SpaceWidget(spaceHeight: 50),
-                              ButtonWidget(
-                                onPressed: controller.submitForm,
-                                label: 'Create Account',
-                                buttonWidth: double.infinity,
-                                buttonHeight: 56,
-                              ),
+                             Obx(()=> ButtonWidget(
+                               onPressed: controller.submitForm,
+                               label: 'Create Account',
+                               buttonWidth: double.infinity,
+                               buttonHeight: 56,
+                               isLoading: controller.isLoading.value,
+                             ),),
                               const SpaceWidget(spaceHeight: 20),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,

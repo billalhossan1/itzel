@@ -16,6 +16,7 @@ class VerifyAccountController extends GetxController {
 
   var remainingSeconds = 180.obs; // 2.5 minutes
   var canResend = false.obs;
+  RxBool isLoading = false.obs;
 
   late Timer _timer;
   final AuthRepository authRepository = AuthRepository();
@@ -87,10 +88,15 @@ class VerifyAccountController extends GetxController {
     // print('OTP Length: ${otp.length}');
 
     if (otp.length == 4) {
+      isLoading.value = true;
+      print("Loading =======================================");
       String? token = await authRepository.forgotVerifyEmail(
         email: email,
         otp: otp,
       );
+      isLoading.value = false;
+      print("Loading =======================================");
+
 
       // print('API Response: $token');
 

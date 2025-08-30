@@ -9,15 +9,11 @@ class RegistrationController extends GetxController {
   bool isCreator = false;
   bool isUserChecked = false;
   bool isCreatorChecked = false;
+  // Loading state
+  final RxBool isLoading = false.obs;
+
   @override
   void onInit() {
-    userNameController=TextEditingController();
-    userEmailController=TextEditingController();
-    userPasswordController=TextEditingController();
-    userConfirmPasswordController=TextEditingController();
-    creatorNameController=TextEditingController();
-    creatorEmailController=TextEditingController();
-    creatorPasswordController=TextEditingController();
     creatorConfirmPasswordController=TextEditingController();
 
     super.onInit();
@@ -78,22 +74,25 @@ class RegistrationController extends GetxController {
         Get.snackbar('Error', 'Passwords do not match');
         return;
       }
-
       bool isSuccess;
       if (isCreator) {
+        isLoading.value = true;
         isSuccess = await authRepository.createCreator(
           email: emailController.text,
           password: passwordController.text,
           name: nameController.text,
           role: 'CREATOR',
         );
+        isLoading.value = false;
       } else {
+        isLoading.value = true;
         isSuccess = await authRepository.createUser(
           email: emailController.text,
           password: passwordController.text,
           name: nameController.text,
           role: 'USER',
         );
+        isLoading.value = false;
       }
 
       if (isSuccess) {

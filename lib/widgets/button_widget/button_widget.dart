@@ -16,6 +16,7 @@ class ButtonWidget extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final BorderRadiusGeometry buttonRadius;
   final Color? backgroundColor;
+  final bool isLoading;
 
   const ButtonWidget({
     super.key,
@@ -32,6 +33,7 @@ class ButtonWidget extends StatelessWidget {
     this.padding,
     this.buttonRadius = const BorderRadius.all(Radius.circular(8)),
     this.backgroundColor,
+    this.isLoading = false,
   });
 
   @override
@@ -56,17 +58,26 @@ class ButtonWidget extends StatelessWidget {
         borderRadius: buttonRadius,
       ),
       child: MaterialButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: Text(
-          label,
-          style: TextStyle(
-            color: textColor,
-            fontSize: (MediaQuery.sizeOf(context).width /
-                (MediaQuery.sizeOf(context).width / fontSize)),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  strokeWidth: 2.5,
+                ),
+              )
+            : Text(
+                label,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: (MediaQuery.sizeOf(context).width /
+                      (MediaQuery.sizeOf(context).width / fontSize)),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
       ),
     );
   }

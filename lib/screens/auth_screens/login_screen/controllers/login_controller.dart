@@ -25,12 +25,16 @@ class LoginController extends GetxController {
     update(); // Notify listeners
   }
 
+  RxBool isLoading = false.obs;
+
   void onSignIn() async {
     if (formKey.currentState!.validate()) {
+      isLoading.value = true;
       String? role = await authRepository.signIn(
         email: emailController.text,
         password: passwordController.text,
       );
+      isLoading.value = false;
 
       if (role != null) {
         emailController.clear();

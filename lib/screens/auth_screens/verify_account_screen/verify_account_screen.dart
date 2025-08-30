@@ -126,7 +126,8 @@ class VerifyAccountScreen extends StatelessWidget {
                         horizontal: MediaQuery.sizeOf(context).width /
                             (MediaQuery.sizeOf(context).width / 8),
                       ),
-                      child: ButtonWidget(
+                      child: Obx(()=>ButtonWidget(
+                        isLoading: controller.isLoading.value,
                         onPressed: () {
                           if (controller.formKey.currentState!.validate()) {
                             controller.verifyOTP();
@@ -137,7 +138,7 @@ class VerifyAccountScreen extends StatelessWidget {
 
                             // Call the verifyOTP method from the controller
                           } else if (controller
-                                  .otpTextEditingController1.text.isEmpty ||
+                              .otpTextEditingController1.text.isEmpty ||
                               controller
                                   .otpTextEditingController2.text.isEmpty ||
                               controller
@@ -150,7 +151,7 @@ class VerifyAccountScreen extends StatelessWidget {
                         label:isResetPass?"Reset": 'Verify',
                         buttonWidth: double.infinity,
                         buttonHeight: 56,
-                      ),
+                      ),),
                     ),
                     const SpaceWidget(spaceHeight: 24),
                     Obx(() {
