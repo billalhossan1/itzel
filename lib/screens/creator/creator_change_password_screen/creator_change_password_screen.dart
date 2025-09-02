@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:itzel/services/repository/auth_repository/auth_repository.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
+import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_field_widget/text_field_widget.dart';
@@ -25,7 +28,9 @@ class _CreatorChangePasswordScreenState
     obscureNotifier.value = !obscureNotifier.value;
   }
 
-  void handleChangePassword() {
+  RxBool isLoading = false.obs;
+
+  Future<void> handleChangePassword() async {
     final currentPassword = currentPasswordController.text;
     final newPassword = newPasswordController.text;
     final retypeNewPassword = retypeNewPasswordController.text;
@@ -37,14 +42,32 @@ class _CreatorChangePasswordScreenState
         const SnackBar(content: Text('Please fill up all the fields')),
       );
       return;
-    }
-
-    if (newPassword != retypeNewPassword) {
+    } else if (newPassword != retypeNewPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('New password and retype password do not match')),
       );
       return;
+    } else {
+      isLoading.value = true;
+      bool success = await AuthRepository().changePassword(
+        currentPassword: currentPasswordController.text,
+        newPassword: newPasswordController.text,
+        confirmPassword: retypeNewPasswordController.text,
+      );
+      isLoading.value = false;
+      if (success) {
+        AppSnackBar.success("Password changed successfully!");
+        Future.delayed(const Duration(seconds: 1), () {
+          if (Get.isDialogOpen ?? false) {
+            Get.back();
+          } else if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        });
+      } else {
+        AppSnackBar.error("Failed to change password. Please try again.");
+      }
     }
   }
 
@@ -88,32 +111,38 @@ class _CreatorChangePasswordScreenState
             ),
             const SpaceWidget(spaceHeight: 48),
             Container(
-              height: (size.height / (size.height / 54)),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.blue,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 4),
-                    blurRadius: 5.0,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: MaterialButton(
-                onPressed: handleChangePassword,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                child: Text(
-                  AppStrings.changePassword,
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: (size.width / (size.width / 16)),
-                    fontWeight: FontWeight.w500,
-                  ),
+                height: (size.height / (size.height / 54)),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 4),
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ),
-            ),
+                child: Obx(
+                  () => isLoading.value
+                      ? Center(
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        )
+                      : MaterialButton(
+                          onPressed: handleChangePassword,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          child: Text(
+                            AppStrings.changePassword,
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: (size.width / (size.width / 16)),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                )),
           ],
         ),
       ),

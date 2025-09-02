@@ -47,6 +47,7 @@ class UserChangePasswordController extends GetxController {
   bool doPasswordsMatch() {
     return newPasswordController.text == retypeNewPasswordController.text;
   }
+  RxBool isLoading = false.obs;
 
   // Handle button press logic
   void handleChangePassword(BuildContext context) async {
@@ -56,12 +57,13 @@ class UserChangePasswordController extends GetxController {
       } else if (!doPasswordsMatch()) {
         AppSnackBar.error("New Password and Re-type Password do not match.");
       } else {
+        isLoading.value = true;
         bool success = await authRepository.changePassword(
           currentPassword: currentPasswordController.text,
           newPassword: newPasswordController.text,
           confirmPassword: retypeNewPasswordController.text,
         );
-
+        isLoading.value = false;
         if (success) {
           AppSnackBar.success("Password changed successfully!");
           Future.delayed(const Duration(seconds: 1), () {

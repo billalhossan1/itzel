@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:itzel/screens/creator/creator_business_information_screen/widgets/business_information_textfield_widget.dart';
 import 'package:itzel/screens/creator/creator_business_information_screen/widgets/headerTextWidget.dart';
 import 'package:itzel/screens/creator/creator_business_information_screen/widgets/title_text_widget.dart';
@@ -137,15 +138,53 @@ class _CreatorBusinessInformationScreenState
             _buildSection(
               'Personal Information',
               [
-                _buildField('Date of Birth', controller.birthdateController),
+                _buildField('Date of Birth', controller.birthdateController,TextInputType.number),
                 _buildField('Name', controller.nameController),
-                _buildField('Phone Number', controller.phoneNumberController,
-                    TextInputType.text),
+                // Replace phone number field with custom Row for country code picker + phone
+                TitleTextWidget(text: "Phone Number"),
+                const SpaceWidget(spaceHeight: 4),
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      CountryCodePicker(
+                        onChanged: (country) {
+                          controller.countryCode = country.dialCode ?? '+1';
+                        },
+                        initialSelection: controller.countryCode,
+                        favorite: const ['+1', 'US', '+91', 'IN'],
+                        showCountryOnly: false,
+                        showOnlyCountryWhenClosed: false,
+                        alignLeft: false,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          controller: controller.phoneNumberController,
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                            hintText: 'Phone Number',
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Enter phone number';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
                 _buildField('Email', controller.emailController),
-                _buildField('ID Number', controller.idNumberController,
-                    TextInputType.number),
-                _buildField('Account Number',
-                    controller.accountNumberController, TextInputType.number),
+                _buildField('ID Number', controller.idNumberController, TextInputType.number),
+                _buildField('Account Number', controller.accountNumberController, TextInputType.number),
               ],
             ),
             _buildSection(
@@ -166,7 +205,7 @@ class _CreatorBusinessInformationScreenState
                 _buildField('Line 1', controller.lineOneController),
                 _buildField('State', controller.stateController),
                 _buildField('City', controller.cityController),
-                _buildField('Postal Code', controller.postalCodeController),
+                _buildField('Postal Code', controller.postalCodeController,TextInputType.number),
                 _buildField('Country', controller.countryController),
               ],
             ),

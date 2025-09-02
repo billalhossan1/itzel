@@ -28,12 +28,18 @@ class RegistrationController extends GetxController {
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userPasswordController = TextEditingController();
   TextEditingController  userConfirmPasswordController = TextEditingController();
+  TextEditingController userPhoneController = TextEditingController();
 
   // Creator's auth controllers
   TextEditingController creatorNameController = TextEditingController();
   TextEditingController creatorEmailController = TextEditingController();
   TextEditingController creatorPasswordController = TextEditingController();
   TextEditingController creatorConfirmPasswordController = TextEditingController();
+  TextEditingController creatorPhoneController = TextEditingController();
+
+  // Country code variables
+  String userCountryCode = '+1';
+  String creatorCountryCode = '+1';
 
   // Auth repository
   final AuthRepository authRepository = AuthRepository();

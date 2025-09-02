@@ -98,7 +98,8 @@ class AppApiUrl {
 
   // Base Domains
   static const String localDomain = "http://139.59.0.25:3005";
-  static const String serverDomain = "https://www.api.914unplugged.com";
+  // static const String serverDomain = "https://www.api.914unplugged.com";
+  static const String serverDomain = "http://10.10.7.107:5030";
   static final String domain = _getDomain();
 
   // Base API URL

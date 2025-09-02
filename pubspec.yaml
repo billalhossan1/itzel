@@ -75,6 +75,7 @@ dependencies:
   mime:
   flutter_stripe: ^11.5.0
   socket_io_client: ^3.0.2
+  country_code_picker:
 
   mime_type:
 

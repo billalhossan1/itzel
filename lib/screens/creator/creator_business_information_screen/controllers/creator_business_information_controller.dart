@@ -29,6 +29,7 @@ class CreatorBusinessInformationController extends GetxController {
   final RxList<String> fileNames = <String>[].obs;
   final RxList<Uint8List> filesData = <Uint8List>[].obs;
   final RxBool isLoading = false.obs;
+  String countryCode = '+1';
 
   void addFile(String fileName, Uint8List fileData) {
     if (filesData.length < 2) {
