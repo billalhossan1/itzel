@@ -69,21 +69,23 @@ class _CreatorAnalyticsScreenState extends State<CreatorAnalyticsScreen> {
                 children: [
                   Expanded(
                     child: AnalyticsBoxWidget(
-                      title: 'Total Earning',
-                      count: data.totalEarning ?? 'N/A',
+                      title: 'Total',
+                      count: data.totalEarning ?? 'N/A', title2: 'Earning',
                     ),
                   ),
                   const SpaceWidget(spaceWidth: 8),
                   Expanded(
                     child: AnalyticsBoxWidget(
-                      title: 'Total Event',
+                      title: 'Total'
+                          ,title2:'Event' ,
                       count: data.totalEvent ?? 'N/A',
                     ),
                   ),
                   const SpaceWidget(spaceWidth: 8),
                   Expanded(
                     child: AnalyticsBoxWidget(
-                      title: 'Participated',
+                      title2: 'Participated',
+                      title: 'Total',
                       count: data.totalParticipants ?? 'N/A',
                     ),
                   ),
