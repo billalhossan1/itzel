@@ -86,8 +86,11 @@ class CreatorEventCreateController extends GetxController {
       'time': timeController.text,
       'coordinate': '[${locationController.text}]',
       'description': eventDescriptionController.text,
-      'tags': eventTagController.text.split(' '),
-      // Convert tags to a JSON array
+      'tags': eventTagController.text
+          .trim()
+          .split(RegExp(r'[\s,]+'))
+          .where((tag) => tag.isNotEmpty)
+          .toList(),
       'price': int.parse(priceController.text),
       'address': addressController.text,
       'type': selectedType.value,

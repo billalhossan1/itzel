@@ -344,11 +344,11 @@ class RouteManager {
         page: () => const CreatorAnalyticsScreen(),
         // binding: CreatorBindings(),
       ),
-      GetPage(
-        name: AppRoutes.creatorBusinessInformationScreen,
-        page: () => const CreatorBusinessInformationScreen(),
-        // binding: CreatorBindings(),
-      ),
+      // GetPage(
+      //   name: AppRoutes.creatorBusinessInformationScreen,
+      //   page: () => const CreatorBusinessInformationScreen(),
+      //   // binding: CreatorBindings(),
+      // ),
       GetPage(
         name: AppRoutes.creatorSubscriptionsScreen,
         page: () => CreatorSubscriptionsScreen(),

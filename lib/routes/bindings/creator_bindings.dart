@@ -38,7 +38,7 @@ class CreatorBindings extends Bindings {
     Get.lazyPut(() => CreatorChangePasswordController());
     Get.lazyPut(() => CreatorDeleteAccountController());
     Get.lazyPut(() => CreatorAnalyticsController());
-    Get.lazyPut(() => CreatorBusinessInformationController());
+    // Get.lazyPut(() => CreatorBusinessInformationController());
     Get.lazyPut(() => CreatorPaymentMethodController());
     Get.lazyPut(() => CreatorSubscriptionsController());
   }

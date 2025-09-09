@@ -97,9 +97,10 @@ class AppApiUrl {
   AppApiUrl._(); // Private constructor for singleton pattern
 
   // Base Domains
-  static const String localDomain = "http://139.59.0.25:3005";
+  static const String localDomain = "http://10.10.7.79:5030";
   // static const String serverDomain = "https://www.api.914unplugged.com";
-  static const String serverDomain = "http://10.10.7.107:5030";
+  static const String serverDomain = "http://10.10.7.79:5030";
+  static const String accountSuccessUrl = "http://10.10.7.79:5030/api/v1/stripe/success-account";
   static final String domain = _getDomain();
 
   // Base API URL
@@ -122,6 +123,7 @@ class AppApiUrl {
   // static const String privacyAndPolicy = "/privacyandpolicy";
   static const String notification = "/notification";
   static const String unreadNotification = "/notification/count";
+  static const String connectBank = "$serverDomain/api/v1/stripe/create-connected-account";
 
   // User
   static const String allEvent = "/event";

@@ -17,9 +17,9 @@ class UserNotificationController extends GetxController {
     super.onInit();
     // Only fetch the count when controller is initialized
     fetchUnreadNotificationCount();
-    _timer = Timer.periodic(const Duration(seconds: 30), (_) {
-      fetchUnreadNotificationCount();
-    });
+    // _timer = Timer.periodic(const Duration(seconds: 30), (_) {
+    //   fetchUnreadNotificationCount();
+    // });
   }
 
   Future<void> fetchNotifications() async {

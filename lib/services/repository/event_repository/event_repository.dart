@@ -308,6 +308,11 @@ class EventRepository {
         }
       }
 
+      // Ensure tags is sent as a JSON array string
+      if (eventData['tags'] is List) {
+        eventData['tags'] = jsonEncode(eventData['tags']);
+      }
+
       FormData formData = FormData.fromMap({
         ...eventData,
       });
