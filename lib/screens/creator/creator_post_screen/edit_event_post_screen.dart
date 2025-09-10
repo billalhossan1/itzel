@@ -1,9 +1,10 @@
-import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itzel/constants/app_api_url.dart';
 import '../../../models/get_event_status_model.dart';
+import '../creator_event_create_screen/widgets/creator_event_textfield_widget.dart';
+import '../creator_map_screen/creator_map_screen.dart';
 import 'controllers/edit_event_post_controller.dart';
 import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -103,14 +104,34 @@ class EditEventPostScreen extends StatelessWidget {
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 16),
-                  TextField(
-                    controller: controller.addressController,
-                    decoration: const InputDecoration(labelText: 'Address'),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: TextWidget(
+                      text: 'Location',
+                      fontColor: AppColors.grey900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
+                  const SizedBox(height: 4),
+                  CreatorEventTextFieldWidget(
+                    hintText: '',
                     controller: controller.locationController,
-                    decoration: const InputDecoration(labelText: 'Location (lat, lng)'),
+                    maxLines: 1,
+                    suffixIcon: Icons.location_on,
+                    onTapSuffix: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CreatorMapScreen(),
+                        ),
+                      );
+                      if (result != null && result is Map<String, dynamic>) {
+                        final coordinates = result['coordinates'];
+                        controller.locationController.text =
+                            '${coordinates[0]}, ${coordinates[1]}';
+                      }
+                    },
                   ),
                   const SizedBox(height: 16),
                   Row(
