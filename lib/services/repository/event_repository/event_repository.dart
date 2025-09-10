@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:http_parser/http_parser.dart';
 import 'package:itzel/constants/app_api_url.dart';
 import 'package:itzel/models/event_model.dart';
 import 'package:itzel/services/api/api_get_services.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
+import 'package:itzel/services/storage_services/app_user_storage.dart';
 import 'package:mime/mime.dart';
 
 import '../../../models/event_schedule_model.dart' as EventSchedule;
 import '../../../models/get_event_status_model.dart';
+import '../../../screens/creator/creator_post_screen/controllers/creator_post_controller.dart';
 import '../../../utils/app_all_log/error_log.dart';
 import '../../api/api_delete_services.dart';
 import '../../api/api_post_services.dart';
@@ -395,5 +399,73 @@ class EventRepository {
       print('Stack trace: $stackTrace');
       return null;
     }
+  }
+
+  Future<bool> updateEvent({
+    required String eventId,
+    required String name,
+    required String type,
+    required String time,
+    required String address,
+    required String description,
+    required List<String> tags,
+    required int price,
+    required List<double> coordinate,
+    File? thumbnailImage,
+    File? introMedia,
+    String? thumbnailImageUrl,
+    String? introMediaUrl,
+  }) async {
+    try {
+      print('[updateEvent] Calling API for eventId: $eventId');
+      FormData formData = FormData();
+      formData.fields
+        ..add(MapEntry('name', name))
+        ..add(MapEntry('type', type))
+        ..add(MapEntry('time', time))
+        ..add(MapEntry('address', address))
+        ..add(MapEntry('description', description))
+        ..add(MapEntry('tags', jsonEncode(tags)))
+        ..add(MapEntry('price', price.toString()))
+        ..add(MapEntry('coordinate', jsonEncode(coordinate)));
+      if (thumbnailImage != null) {
+        formData.files.add(MapEntry(
+          'thumbnailImage',
+          await MultipartFile.fromFile(thumbnailImage.path, contentType: MediaType('image', 'jpeg')),
+        ));
+      } else if (thumbnailImageUrl != null && thumbnailImageUrl.isNotEmpty) {
+        formData.fields.add(MapEntry('thumbnailImageUrl', thumbnailImageUrl));
+      }
+      if (introMedia != null) {
+        formData.files.add(MapEntry(
+          'introMedia',
+          await MultipartFile.fromFile(introMedia.path, contentType: MediaType('video', 'mp4')),
+        ));
+      } else if (introMediaUrl != null && introMediaUrl.isNotEmpty) {
+        formData.fields.add(MapEntry('introMediaUrl', introMediaUrl));
+      }
+      String? token = AppAuthStorage().getToken();
+      final response = await Dio().patch(
+        '${AppApiUrl.baseUrl}/event/$eventId',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      print('[updateEvent] Response: '
+          'Status: ${response.statusCode} '
+          'Data: ${response.data}');
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        await Get.find<CreatorPostController>().fetchAllStatuses();
+        return true;
+      }
+    } catch (e) {
+      print('[updateEvent] Error: $e');
+      errorLog('Error updating event', e);
+    }
+    return false;
   }
 }

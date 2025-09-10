@@ -164,7 +164,7 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                       IconButtonWidget(
                         icon: AppIconsPath.newChatIcon,
                         onTap: () {
-                          // TODO : Implement chat functionality
+                          Get.toNamed(AppRoutes.editEventPostScreen, arguments: event);
                         },
                         color: AppColors.black900,
                         size: 24,

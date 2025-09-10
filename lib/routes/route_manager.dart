@@ -27,6 +27,7 @@ import '../screens/creator/creator_job_publish_screen/creator_job_publish_screen
 import '../screens/creator/creator_notification_screen/creator_notification_screen.dart';
 import '../screens/creator/creator_payment_method_screen/creator_payment_method_screen.dart';
 import '../screens/creator/creator_post_screen/creator_post_screen.dart';
+import '../screens/creator/creator_post_screen/edit_event_post_screen.dart';
 import '../screens/creator/creator_profile_screen/creator_profile_screen.dart';
 import '../screens/creator/creator_subscriptions_screen/creator_subscriptions_screen.dart';
 import '../screens/creator/creator_update_sell_product/creator_update_sell_product_screen.dart';
@@ -363,6 +364,10 @@ class RouteManager {
         name: AppRoutes.creatorUpdateSellProductScreen,
         page: () => CreatorUpdateSellProductScreen(),
         // binding: CreatorBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.editEventPostScreen,
+        page: () => EditEventPostScreen(),
       ),
     ];
   }

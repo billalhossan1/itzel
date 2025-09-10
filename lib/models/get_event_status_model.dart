@@ -38,6 +38,7 @@ class EventStatus {
   List<String> tags;
   int price;
   String creator;
+  String type;
   String address;
   List<double> coordinate;
   DateTime createdAt;
@@ -55,6 +56,7 @@ class EventStatus {
     required this.tags,
     required this.price,
     required this.creator,
+    required this.type,
     required this.address,
     required this.coordinate,
     required this.createdAt,
@@ -73,6 +75,7 @@ class EventStatus {
         tags: List<String>.from(json["tags"]?.map((x) => x) ?? []),
         price: json["price"] ?? 0,
         creator: json["creator"] ?? '',
+        type: json["type"] ?? '',
         address: json["address"] ?? '',
         coordinate: List<double>.from(
             json["coordinate"]?.map((x) => x.toDouble()) ?? []),

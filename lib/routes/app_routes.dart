@@ -65,4 +65,5 @@ class AppRoutes {
   static const creatorPaymentMethodScreen = '/creatorPaymentMethodScreen';
   static const creatorUpdateSellProductScreen =
       '/creatorUpdateSellProductScreen';
+  static const editEventPostScreen = '/editEventPost';
 }

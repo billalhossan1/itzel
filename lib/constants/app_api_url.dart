@@ -104,7 +104,7 @@ class AppApiUrl {
   static final String domain = _getDomain();
 
   // Base API URL
-  static const String baseUrl = "$serverDomain/api/v1";
+  static const String baseUrl = "$localDomain/api/v1";
 
   // Auth
   static const String createUser = "/user";
