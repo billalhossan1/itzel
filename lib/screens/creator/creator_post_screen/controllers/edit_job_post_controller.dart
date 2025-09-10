@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import '../../../../models/get_job_status_model.dart';
 import '../../../../services/repository/creator_status_repository/creator_status_repository.dart';
+import '../../creator_dashboard_screen/controllers/creator_dashboard_controller.dart';
 
 class EditJobPostController extends GetxController {
   var isLoading = false.obs;
@@ -48,6 +50,7 @@ class EditJobPostController extends GetxController {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       image.value = File(pickedFile.path);
+      print("Image selected: ${pickedFile.path}");
     } else {
       Get.snackbar('No image selected', 'Please select an image.');
     }
@@ -55,6 +58,7 @@ class EditJobPostController extends GetxController {
 
   Future<void> updateJob() async {
     isLoading.value = true;
+    print("try");
     try {
       // Parse lists
       List<String> requirements = requirementsController.text.trim().isEmpty ? [] : requirementsController.text.trim().split(RegExp(r'[ ,]+')).where((tag) => tag.isNotEmpty).toList();
@@ -62,6 +66,7 @@ class EditJobPostController extends GetxController {
       List<String> additionalRequirement = additionalRequirementController.text.trim().isEmpty ? [] : additionalRequirementController.text.trim().split(RegExp(r'[ ,]+')).where((tag) => tag.isNotEmpty).toList();
       List<String> questions = questionsController.text.trim().isEmpty ? [] : questionsController.text.trim().split(RegExp(r'[ ,]+')).where((tag) => tag.isNotEmpty).toList();
       // Call repo
+      String? token = AppAuthStorage().getToken();
       bool success = await _repository.updateJob(
         jobId: job.id,
         companyName: companyNameController.text.trim(),
@@ -75,10 +80,11 @@ class EditJobPostController extends GetxController {
         experience: experience,
         additionalRequirement: additionalRequirement,
         questions: questions,
-        image: image.value,
+        image: image.value, token: token??'',
       );
       if (success) {
         Get.back();
+        Get.snackbar('Success', 'Event updated successfully');
       } else {
         Get.snackbar('Error', 'Failed to update job post');
       }

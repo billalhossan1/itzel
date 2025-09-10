@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/constants/app_api_url.dart';
 import 'controllers/edit_job_post_controller.dart';
 import '../../../models/get_job_status_model.dart';
 import '../../../widgets/button_widget/button_widget.dart';
@@ -106,7 +107,7 @@ class EditJobPostScreen extends StatelessWidget {
                               SizedBox(
                                 width: 80,
                                 height: 80,
-                                child: Image.network(controller.job.image, fit: BoxFit.cover),
+                                child: Image.network("${AppApiUrl.serverDomain}${controller.job.image}", fit: BoxFit.cover),
                               )
                             else
                               const Text('No image selected'),
