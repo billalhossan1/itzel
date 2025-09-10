@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import '../../../constants/app_api_url.dart';
 import '../../../models/creator_analytics_status_model.dart';
 import '../../../models/creator_status_model.dart';
@@ -126,6 +128,78 @@ class CreatorStatusRepository {
       errorLog('Error fetching products', e);
       AppSnackBar.error('Something went wrong while fetching products');
       return null;
+    }
+  }
+
+  Future<bool> updateJob({
+    required String jobId,
+    required String companyName,
+    required String role,
+    required String description,
+    required String address,
+    required String level,
+    required String jobType,
+    required String salary,
+    required List<String> requirements,
+    required List<String> experience,
+    required List<String> additionalRequirement,
+    required List<String> questions,
+    File? image,
+  }) async {
+    try {
+      final uri = Uri.parse(AppApiUrl.serverDomain + AppApiUrl.updateJob(jobId));
+      http.Response response;
+      if (image != null) {
+        var request = http.MultipartRequest('POST', uri);
+        request.fields['companyName'] = companyName;
+        request.fields['role'] = role;
+        request.fields['description'] = description;
+        request.fields['address'] = address;
+        request.fields['level'] = level;
+        request.fields['jobType'] = jobType;
+        request.fields['salary'] = salary;
+        request.fields['requirements'] = requirements.join(',');
+        request.fields['experience'] = experience.join(',');
+        request.fields['additionalRequirement'] =
+            additionalRequirement.join(',');
+        request.fields['questions'] = questions.join(',');
+        request.files.add(
+            await http.MultipartFile.fromPath('image', image.path));
+        var streamedResponse = await request.send();
+        response = await http.Response.fromStream(streamedResponse);
+      } else {
+        final body = {
+          'companyName': companyName,
+          'role': role,
+          'description': description,
+          'address': address,
+          'level': level,
+          'jobType': jobType,
+          'salary': salary,
+          'requirements': requirements,
+          'experience': experience,
+          'additionalRequirement': additionalRequirement,
+          'questions': questions,
+        };
+        response = await http.post(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: body,
+        );
+      }
+      if (response.statusCode == 200) {
+        final res = response.body;
+        // You may want to parse and check for success in the response body
+        return true;
+      } else {
+        print('Failed to update job: ${response.statusCode}');
+        print('Response: ${response.body}');
+        return false;
+      }
+    } catch (e, stackTrace) {
+      print('Error updating job: $e');
+      print('Stack trace: $stackTrace');
+      return false;
     }
   }
 }

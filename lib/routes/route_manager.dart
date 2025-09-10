@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itzel/screens/creator/creator_post_screen/edit_job_post_screen.dart';
 import 'package:itzel/screens/user/user_saved_events_screen/user_saved_events_screen.dart';
 import 'package:itzel/screens/user/user_saved_jobs_screen/user_saved_jobs_screen.dart';
 
@@ -368,6 +369,9 @@ class RouteManager {
       GetPage(
         name: AppRoutes.editEventPostScreen,
         page: () => EditEventPostScreen(),
+      ), GetPage(
+        name: AppRoutes.editJobPostScreen,
+        page: () => EditJobPostScreen(),
       ),
     ];
   }

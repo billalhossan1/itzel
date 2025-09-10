@@ -29,7 +29,7 @@ class ApiPostServices {
         response = await AppApi().sendRequest.post(url, data: body);
       }
 
-      if (response.statusCode == statusCode) {
+      if (response.statusCode != null && response.statusCode >= 200 && response.statusCode < 300) {
         return response.data;
       } else {
         return null;

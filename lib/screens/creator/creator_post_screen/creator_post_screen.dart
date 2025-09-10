@@ -304,7 +304,9 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                               ),
                               IconButtonWidget(
                                 icon: AppIconsPath.newChatIcon,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.editJobPostScreen,arguments: job);
+                                },
                                 color: AppColors.black900,
                                 size: 24,
                               ),

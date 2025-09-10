@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/constants/app_api_url.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
@@ -42,13 +43,13 @@ class CreatorUpdateSellProductScreen extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 child: Obx(() {
                   final localImage = controller.selectedImage.value;
-                  final remoteImage = controller.remoteImageUrl.value;
+                  final remoteImage = AppApiUrl.localDomain+(controller.remoteImageUrl.value??'');
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: SizedBox(
                       height: size.height / (size.height / 143),
                       width: double.infinity,
-                      child: localImage != null
+                      child: localImage != null && localImage.path.isNotEmpty
                           ? Image.file(
                               File(localImage.path),
                               fit: BoxFit.cover,
