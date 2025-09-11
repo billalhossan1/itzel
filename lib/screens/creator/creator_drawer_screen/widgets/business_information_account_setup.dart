@@ -13,7 +13,10 @@ void bankAccountSetup({required BuildContext context, required String paymentUrl
       NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) async {
           if (request.url.contains(AppApiUrl.accountSuccessUrl)) {
+            Navigator.of(context, rootNavigator: true).pop();
             await controller.handleAccountSuccess(request.url, context);
+
+            return NavigationDecision.prevent;
           }
           return NavigationDecision.navigate;
         },

@@ -79,7 +79,7 @@ class CreatorEventCreateController extends GetxController {
       );
     }
   }
-
+RxBool isLoading = false.obs;
   void createEvent() async {
     Map<String, dynamic> eventData = {
       'name': eventNameController.text,
@@ -95,9 +95,11 @@ class CreatorEventCreateController extends GetxController {
       'address': addressController.text,
       'type': selectedType.value,
     };
+    isLoading.value = true;
 
     bool result = await _eventRepository.createEvent(eventData,
         imageFile: image.value, videoFile: videoFile.value);
+    isLoading.value = false;
 
     if (result) {
       Get.snackbar('Success', 'Event created successfully!');

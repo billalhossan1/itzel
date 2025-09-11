@@ -84,18 +84,21 @@ class RegistrationController extends GetxController {
       if (isCreator) {
         isLoading.value = true;
         isSuccess = await authRepository.createCreator(
-          email: emailController.text,
+          contact: creatorPhoneController.text.trim(),
+          email: emailController.text.trim(),
           password: passwordController.text,
-          name: nameController.text,
+          name: nameController.text.trim(),
+
           role: 'CREATOR',
         );
         isLoading.value = false;
       } else {
         isLoading.value = true;
         isSuccess = await authRepository.createUser(
-          email: emailController.text,
+          email: emailController.text.trim(),
           password: passwordController.text,
-          name: nameController.text,
+          contact: userPhoneController.text.trim(),
+          name: nameController.text.trim(),
           role: 'USER',
         );
         isLoading.value = false;

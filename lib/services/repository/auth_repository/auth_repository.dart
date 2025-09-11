@@ -46,6 +46,7 @@ class AuthRepository {
     required String email,
     required String password,
     required String name,
+    required String contact,
     required String role,
   }) async {
     try {
@@ -55,6 +56,7 @@ class AuthRepository {
           "name": name,
           "email": email,
           "password": password,
+          "contact": contact,
           "role": "USER"
         },
       );
@@ -75,6 +77,7 @@ class AuthRepository {
     required String email,
     required String password,
     required String name,
+    required String contact,
     required String role,
   }) async {
     try {
@@ -84,6 +87,7 @@ class AuthRepository {
           "name": name,
           "email": email,
           "password": password,
+          "contact":contact,
           "role": "CREATOR"
         },
       );

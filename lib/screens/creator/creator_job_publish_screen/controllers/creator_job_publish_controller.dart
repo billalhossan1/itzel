@@ -27,7 +27,7 @@ class CreatorJobPublishController extends GetxController {
     image = pickedImage;
     update(); // Notify the UI
   }
-
+RxBool isLoading = false.obs;
   Future<void> publishJob() async {
     Map<String, dynamic> jobDetails = {
       'companyName': companyNameController.text,
@@ -43,9 +43,9 @@ class CreatorJobPublishController extends GetxController {
       'salary': salaryController.text,
       'questions': questions.map((q) => q['question']!.text).toList(),
     };
-
+    isLoading.value = true;
     bool success = await _jobRepository.createJob(jobDetails, image);
-
+    isLoading.value = false;
     if (success) {
       Get.snackbar('Success', 'Job posted successfully!');
     } else {
