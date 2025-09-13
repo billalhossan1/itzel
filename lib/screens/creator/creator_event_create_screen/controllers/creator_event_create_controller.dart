@@ -102,8 +102,9 @@ RxBool isLoading = false.obs;
     isLoading.value = false;
 
     if (result) {
-      Get.snackbar('Success', 'Event created successfully!');
       Get.back();
+      Get.snackbar('Success', 'Event created successfully!');
+
     } else {
       Get.snackbar('Error', 'Failed to create the event.');
     }
