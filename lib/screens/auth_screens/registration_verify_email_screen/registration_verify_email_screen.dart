@@ -101,8 +101,6 @@ class RegistrationVerifyEmailScreen extends StatelessWidget {
                     ),
                     // SpaceWidget(spaceHeight: 24),
                     Obx(() {
-                      print(
-                          "Remaining Time: ${controller.remainingSeconds.value}"); // Debugging
                       return Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.sizeOf(context).width /

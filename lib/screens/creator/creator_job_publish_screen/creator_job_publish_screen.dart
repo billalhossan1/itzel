@@ -321,13 +321,14 @@ class CreatorJobPublishScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 48),
-                ButtonWidget(
-                  onPressed: controller.publishJob,
-                  label: 'Publish Job',
-                  buttonWidth: double.infinity,
-                  buttonHeight: (size.height / (size.height / 56)),
-                  buttonRadius: BorderRadius.circular(16),
-                ),
+               Obx(()=> ButtonWidget(
+                 isLoading: controller.isLoading.value,
+                 onPressed: controller.publishJob,
+                 label: 'Publish Job',
+                 buttonWidth: double.infinity,
+                 buttonHeight: (size.height / (size.height / 56)),
+                 buttonRadius: BorderRadius.circular(16),
+               ),)
               ],
             );
           },

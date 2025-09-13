@@ -79,12 +79,13 @@ class ForgotPasswordScreen extends StatelessWidget {
                       },
                     ),
                     const SpaceWidget(spaceHeight: 24),
-                    ButtonWidget(
-                      onPressed: controller.validateAndNavigate,
-                      label: 'Submit',
-                      buttonWidth: double.infinity,
-                      buttonHeight: 56,
-                    ),
+                   Obx(()=> ButtonWidget(
+                      isLoading: controller.isLoading.value,
+                     onPressed: controller.validateAndNavigate,
+                     label: 'Submit',
+                     buttonWidth: double.infinity,
+                     buttonHeight: 56,
+                   ),)
                   ],
                 ),
               ),

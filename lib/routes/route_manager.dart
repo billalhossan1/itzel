@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itzel/screens/creator/creator_post_screen/edit_job_post_screen.dart';
 import 'package:itzel/screens/user/user_saved_events_screen/user_saved_events_screen.dart';
 import 'package:itzel/screens/user/user_saved_jobs_screen/user_saved_jobs_screen.dart';
 
@@ -14,7 +15,6 @@ import '../screens/creator/creator_all_chat_screen/creator_all_chat_screen.dart'
 import '../screens/creator/creator_all_event_status_screen/creator_all_event_status_screen.dart';
 import '../screens/creator/creator_all_job_application_screen/creator_all_job_application_screen.dart';
 import '../screens/creator/creator_analytics_screen/creator_analytics_screen.dart';
-import '../screens/creator/creator_business_information_screen/creator_business_information_screen.dart';
 import '../screens/creator/creator_change_password_screen/creator_change_password_screen.dart';
 import '../screens/creator/creator_chat_receiver_info_screen/creator_chat_receiver_info_screen.dart';
 import '../screens/creator/creator_chat_screen/creator_chat_screen.dart';
@@ -27,6 +27,7 @@ import '../screens/creator/creator_job_publish_screen/creator_job_publish_screen
 import '../screens/creator/creator_notification_screen/creator_notification_screen.dart';
 import '../screens/creator/creator_payment_method_screen/creator_payment_method_screen.dart';
 import '../screens/creator/creator_post_screen/creator_post_screen.dart';
+import '../screens/creator/creator_post_screen/edit_event_post_screen.dart';
 import '../screens/creator/creator_profile_screen/creator_profile_screen.dart';
 import '../screens/creator/creator_subscriptions_screen/creator_subscriptions_screen.dart';
 import '../screens/creator/creator_update_sell_product/creator_update_sell_product_screen.dart';
@@ -34,6 +35,8 @@ import '../screens/error_screen/error_screen.dart';
 import '../screens/faq_screen/faq_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import '../screens/terms_condition_screen/terms_condition_screen.dart';
+// import '../screens/privacy_policy/privacy_policy_screen.dart';
+
 import '../screens/user/user_account_screen/user_account_screen.dart';
 import '../screens/user/user_all_category_screen/user_all_category_screen.dart';
 import '../screens/user/user_all_chat_screen/user_all_chat_screen.dart';
@@ -122,11 +125,16 @@ class RouteManager {
         page: () => const FaqScreen(),
         // binding: CreatorBindings(),
       ),
-      GetPage(
+            GetPage(
         name: AppRoutes.termsConditionScreen,
         page: () => const TermsConditionScreen(),
         // binding: CreatorBindings(),
       ),
+      // GetPage(
+      //   name: AppRoutes.privacyPolicyScreen,
+      //   page: () => const PrivacyPolicyScreen(),
+      //   binding: PrivacyPolicyBinding(),
+      // ),
 
       //User Section
       GetPage(
@@ -337,11 +345,11 @@ class RouteManager {
         page: () => const CreatorAnalyticsScreen(),
         // binding: CreatorBindings(),
       ),
-      GetPage(
-        name: AppRoutes.creatorBusinessInformationScreen,
-        page: () => const CreatorBusinessInformationScreen(),
-        // binding: CreatorBindings(),
-      ),
+      // GetPage(
+      //   name: AppRoutes.creatorBusinessInformationScreen,
+      //   page: () => const CreatorBusinessInformationScreen(),
+      //   // binding: CreatorBindings(),
+      // ),
       GetPage(
         name: AppRoutes.creatorSubscriptionsScreen,
         page: () => CreatorSubscriptionsScreen(),
@@ -356,6 +364,13 @@ class RouteManager {
         name: AppRoutes.creatorUpdateSellProductScreen,
         page: () => CreatorUpdateSellProductScreen(),
         // binding: CreatorBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.editEventPostScreen,
+        page: () => EditEventPostScreen(),
+      ), GetPage(
+        name: AppRoutes.editJobPostScreen,
+        page: () => EditJobPostScreen(),
       ),
     ];
   }

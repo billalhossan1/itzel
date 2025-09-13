@@ -62,12 +62,14 @@ class CreatorDrawerScreen extends StatelessWidget {
               ),
             ),
             const SpaceWidget(spaceHeight: 16),
-            CreatorDrawerSectionWidget(
-              onTap: () {
-                Get.toNamed(AppRoutes.creatorBusinessInformationScreen);
-              },
-              text: AppStrings.businessInformation,
-              icon: AppIconsPath.businessInformationIcon,
+            Obx(
+              () => CreatorDrawerSectionWidget(
+                      onTap: () {
+                        controller.onTapBusinessInformation();
+                      },
+                      text: controller.isLoading.value?"Loading please wait....":AppStrings.businessInformation,
+                      icon: AppIconsPath.businessInformationIcon,
+                    ),
             ),
             // CreatorDrawerSectionWidget(
             //   onTap: () {
@@ -150,12 +152,15 @@ class CreatorDrawerScreen extends StatelessWidget {
             const SpaceWidget(spaceHeight: 80),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ButtonWidget(
-                onPressed: () {
-                  controller.logout();
-                },
-                label: 'Logout',
-                buttonWidth: double.infinity,
+              child: Obx(
+                () => ButtonWidget(
+                  onPressed: controller.isLogoutLoading.value ? null : () {
+                    controller.logout();
+                  },
+                  label: 'Logout',
+                  buttonWidth: double.infinity,
+                  isLoading: controller.isLogoutLoading.value,
+                ),
               ),
             ),
 

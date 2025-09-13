@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../routes/app_routes.dart';
@@ -26,7 +27,6 @@ class RegistrationScreen extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: GetBuilder<RegistrationController>(
-                init: RegistrationController(),
                 builder: (controller) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -181,6 +181,48 @@ class RegistrationScreen extends StatelessWidget {
                                 },
                               ),
                               const SpaceWidget(spaceHeight: 12),
+                              Row(
+                                children: [
+                                  CountryCodePicker(
+                                    onChanged: (country) {
+                                      if (controller.isCreator) {
+                                        controller.creatorCountryCode = country.dialCode ?? '+1';
+                                      } else {
+                                        controller.userCountryCode = country.dialCode ?? '+1';
+                                      }
+                                    },
+                                    initialSelection: controller.isCreator
+                                        ? controller.creatorCountryCode
+                                        : controller.userCountryCode,
+                                    favorite: const ['+1', 'US', '+91', 'IN'],
+                                    showCountryOnly: false,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: TextFormField(
+
+                                      controller: controller.isCreator
+                                          ? controller.creatorPhoneController
+                                          : controller.userPhoneController,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: const InputDecoration(
+                                        hintText: 'Phone Number',
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Enter phone number';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SpaceWidget(spaceHeight: 12),
                               TextFieldWidget(
                                 controller: controller.isCreator
                                     ? controller.creatorPasswordController
@@ -236,7 +278,9 @@ class RegistrationScreen extends StatelessWidget {
                                     maxLines: 2,
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.toNamed(AppRoutes.termsConditionScreen);
+                                    },
                                     style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
                                       minimumSize: const Size(50, 30),
@@ -245,6 +289,7 @@ class RegistrationScreen extends StatelessWidget {
                                       alignment: Alignment.center,
                                     ),
                                     child: GradientTextWidget(
+
                                       text: 'terms',
                                       fontWeight: FontWeight.w400,
                                       textSize: (MediaQuery.sizeOf(context)
@@ -254,39 +299,42 @@ class RegistrationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const TextWidget(
-                                    text: 'of service and',
+                                    text: 'of service',
                                     fontColor: AppColors.black400,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     maxLines: 2,
                                   ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: const Size(50, 30),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      alignment: Alignment.center,
-                                    ),
-                                    child: GradientTextWidget(
-                                      text: 'policy',
-                                      fontWeight: FontWeight.w400,
-                                      textSize: (MediaQuery.sizeOf(context)
-                                              .width /
-                                          (MediaQuery.sizeOf(context).width /
-                                              14)),
-                                    ),
-                                  ),
+                                  // TextButton(
+                                  //   onPressed: () {
+                                  //     Get.toNamed(AppRoutes.termsConditionScreen);
+                                  //   },
+                                  //   style: TextButton.styleFrom(
+                                  //     padding: EdgeInsets.zero,
+                                  //     minimumSize: const Size(50, 30),
+                                  //     tapTargetSize:
+                                  //         MaterialTapTargetSize.shrinkWrap,
+                                  //     alignment: Alignment.center,
+                                  //   ),
+                                  //   // child: GradientTextWidget(
+                                  //   //   text: 'policy',
+                                  //   //   fontWeight: FontWeight.w400,
+                                  //   //   textSize: (MediaQuery.sizeOf(context)
+                                  //   //           .width /
+                                  //   //       (MediaQuery.sizeOf(context).width /
+                                  //   //           14)),
+                                  //   // ),
+                                  // ),
                                 ],
                               ),
                               const SpaceWidget(spaceHeight: 50),
-                              ButtonWidget(
-                                onPressed: controller.submitForm,
-                                label: 'Create Account',
-                                buttonWidth: double.infinity,
-                                buttonHeight: 56,
-                              ),
+                             Obx(()=> ButtonWidget(
+                               onPressed: controller.submitForm,
+                               label: 'Create Account',
+                               buttonWidth: double.infinity,
+                               buttonHeight: 56,
+                               isLoading: controller.isLoading.value,
+                             ),),
                               const SpaceWidget(spaceHeight: 20),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -302,6 +350,7 @@ class RegistrationScreen extends StatelessWidget {
                                   const SpaceWidget(spaceWidth: 8),
                                   TextButton(
                                     onPressed: () {
+                                      // Use Get.offAllNamed to navigate and let GetX handle controller lifecycle
                                       Get.offAllNamed(AppRoutes.loginScreen);
                                     },
                                     style: TextButton.styleFrom(

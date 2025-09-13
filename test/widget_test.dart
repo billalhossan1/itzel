@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:itzel/main.dart';
 import 'package:itzel/main_app_entry.dart';
 
 void main() {

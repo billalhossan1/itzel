@@ -311,14 +311,15 @@ class CreatorEventCreateScreen extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
             const SpaceWidget(spaceHeight: 32),
-            ButtonWidget(
+            Obx(()=>ButtonWidget(
+              isLoading: controller.isLoading.value,
               onPressed: controller.createEvent,
               label: 'Publish Event',
               buttonWidth: double.infinity,
               buttonHeight: (MediaQuery.sizeOf(context).height /
                   (MediaQuery.sizeOf(context).height / 56)),
               buttonRadius: BorderRadius.circular(16),
-            ),
+            ),)
           ],
         ),
       ),

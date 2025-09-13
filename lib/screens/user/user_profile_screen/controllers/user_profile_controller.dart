@@ -55,11 +55,15 @@ class UserProfileController extends GetxController {
       );
 
       if (success) {
-        AppSnackBar.success('Profile updated successfully');
         // Delay Get.back() to ensure snackbar is visible
-        await Future.delayed(const Duration(milliseconds: 1500));
+
+        await Get.find<UserAccountController>().fetchProfileData();
+        isLoading.value = false;
+        
         Get.back();
-        Get.find<UserAccountController>().fetchProfileData();
+        AppSnackBar.success('Profile updated successfully');
+
+
         isUpdated.value = false;
       } else {
         AppSnackBar.error('Failed to update profile');

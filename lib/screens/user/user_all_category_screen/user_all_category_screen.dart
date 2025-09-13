@@ -32,28 +32,28 @@ class UserAllCategoryScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 24),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.width / (size.width / 20)),
+                    horizontal: size.width * 0.05), // 5% of screen width
                 child: const TextWidget(
-                  text: AppStrings.allCategories,
-                  fontColor: AppColors.black500,
                   fontSize: 18,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w500, text: AppStrings.allCategories,
                 ),
               ),
               const SpaceWidget(spaceHeight: 24),
               Obx(() {
                 if (_controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: size.height * 0.5, // Ensures spinner is centered and avoids overflow
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
                 } else {
                   return GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 8.0,
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                    crossAxisSpacing: size.width * 0.01, // 1% of width
+                    mainAxisSpacing: size.height * 0.01, // 1% of height
                     crossAxisCount: 3,
                     childAspectRatio: 2 / 3,
-                    // Generate 100 widgets that display their index in the List.
                     children:
                         List.generate(_controller.categories.length, (index) {
                       final category = _controller.categories[index];
@@ -70,21 +70,22 @@ class UserAllCategoryScreen extends StatelessWidget {
                           );
                         },
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: AppImage(
                                 url: category.image,
-                                height: size.width / (size.width / 103),
-                                width: size.width / (size.width / 103),
+                                height: size.width * 0.22, // 22% of width
+                                width: size.width * 0.22,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            const SpaceWidget(spaceHeight: 8),
+                            SizedBox(height: size.height * 0.01),
                             TextWidget(
                               text: capitalize(category.name),
                               fontColor: AppColors.black500,
-                              fontSize: 16,
+                              fontSize: size.width * 0.04, // 4% of width
                               fontWeight: FontWeight.w500,
                             ),
                           ],

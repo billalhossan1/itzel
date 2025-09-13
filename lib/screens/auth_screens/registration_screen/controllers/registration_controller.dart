@@ -9,22 +9,37 @@ class RegistrationController extends GetxController {
   bool isCreator = false;
   bool isUserChecked = false;
   bool isCreatorChecked = false;
+  // Loading state
+  final RxBool isLoading = false.obs;
+
+  @override
+  void onInit() {
+    creatorConfirmPasswordController=TextEditingController();
+
+    super.onInit();
+  }
 
   // Form keys
   final userFormKey = GlobalKey<FormState>();
   final creatorFormKey = GlobalKey<FormState>();
 
   // User's auth controllers
-  final userNameController = TextEditingController();
-  final userEmailController = TextEditingController();
-  final userPasswordController = TextEditingController();
-  final userConfirmPasswordController = TextEditingController();
+  TextEditingController  userNameController = TextEditingController();
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
+  TextEditingController  userConfirmPasswordController = TextEditingController();
+  TextEditingController userPhoneController = TextEditingController();
 
   // Creator's auth controllers
-  final creatorNameController = TextEditingController();
-  final creatorEmailController = TextEditingController();
-  final creatorPasswordController = TextEditingController();
-  final creatorConfirmPasswordController = TextEditingController();
+  TextEditingController creatorNameController = TextEditingController();
+  TextEditingController creatorEmailController = TextEditingController();
+  TextEditingController creatorPasswordController = TextEditingController();
+  TextEditingController creatorConfirmPasswordController = TextEditingController();
+  TextEditingController creatorPhoneController = TextEditingController();
+
+  // Country code variables
+  String userCountryCode = '+1';
+  String creatorCountryCode = '+1';
 
   // Auth repository
   final AuthRepository authRepository = AuthRepository();
@@ -65,22 +80,28 @@ class RegistrationController extends GetxController {
         Get.snackbar('Error', 'Passwords do not match');
         return;
       }
-
       bool isSuccess;
       if (isCreator) {
+        isLoading.value = true;
         isSuccess = await authRepository.createCreator(
-          email: emailController.text,
+          contact: creatorPhoneController.text.trim(),
+          email: emailController.text.trim(),
           password: passwordController.text,
-          name: nameController.text,
+          name: nameController.text.trim(),
+
           role: 'CREATOR',
         );
+        isLoading.value = false;
       } else {
+        isLoading.value = true;
         isSuccess = await authRepository.createUser(
-          email: emailController.text,
+          email: emailController.text.trim(),
           password: passwordController.text,
-          name: nameController.text,
+          contact: userPhoneController.text.trim(),
+          name: nameController.text.trim(),
           role: 'USER',
         );
+        isLoading.value = false;
       }
 
       if (isSuccess) {
@@ -100,5 +121,18 @@ class RegistrationController extends GetxController {
     } else {
       Get.snackbar('Error', 'Please fill all fields correctly');
     }
+  }
+
+  @override
+  void onClose() {
+    userNameController.dispose();
+    userEmailController.dispose();
+    userPasswordController.dispose();
+    userConfirmPasswordController.dispose();
+    creatorNameController.dispose();
+    creatorEmailController.dispose();
+    creatorPasswordController.dispose();
+    creatorConfirmPasswordController.dispose();
+    super.onClose();
   }
 }

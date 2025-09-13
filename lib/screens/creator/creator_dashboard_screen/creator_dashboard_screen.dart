@@ -222,157 +222,152 @@ class CreatorDashboardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(6),
-                                child: AppImage(
-                                  url: jobStatus.image,
-                                  height: size.width / (size.width / 43),
-                                  width: size.width / (size.width / 45),
-                                  fit: BoxFit.cover,
-                                ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            // Job image
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: AppImage(
+                                url: jobStatus.image,
+                                height: size.width / (size.width / 43),
+                                width: size.width / (size.width / 45),
+                                fit: BoxFit.cover,
                               ),
-                              const SpaceWidget(spaceWidth: 8),
-                              Column(
+                            ),
+                            const SizedBox(width: 8), // Changed from SpaceWidget
+
+                            // Job information - wrapped in Expanded to prevent overflow
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    width: size.width / (size.width / 250),
-                                    child: TextWidget(
-                                      text: jobStatus.role,
-                                      fontColor: AppColors.whiteBg,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlignment: TextAlign.left,
-                                    ),
+                                  TextWidget(
+                                    text: jobStatus.role,
+                                    fontColor: AppColors.whiteBg,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlignment: TextAlign.left,
                                   ),
+                                  const SizedBox(height: 4),
+                                  // Company name and date row - also needs constraint handling
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      TextWidget(
-                                        text: jobStatus.companyName,
-                                        fontColor: AppColors.grey50,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlignment: TextAlign.left,
+                                      Flexible(
+                                        child: TextWidget(
+                                          text: jobStatus.companyName,
+                                          fontColor: AppColors.grey50,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlignment: TextAlign.left,
+                                        ),
                                       ),
-                                      const SpaceWidget(spaceWidth: 4),
-                                      TextWidget(
-                                        text: DateFormat('dd.MM.yyyy, hh:mm a')
-                                            .format(jobStatus.createdAt),
-                                        fontColor: AppColors.grey500,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlignment: TextAlign.left,
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: TextWidget(
+                                          text: DateFormat('dd.MM.yyyy, hh:mm a')
+                                              .format(jobStatus.createdAt),
+                                          fontColor: AppColors.grey500,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlignment: TextAlign.left,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SpaceWidget(spaceHeight: 8),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Center(
-                          child: TextWidget(
-                            text:
-                                "Total Applicant - ${jobStatus.totalApplicant.toString()}",
-                            fontColor: AppColors.black500,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const SpaceWidget(spaceHeight: 10),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Column(
-                          children: [
-                            const SpaceWidget(spaceHeight: 10),
-                            ...jobStatus.allApplicants.map(
-                              (applicant) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: AppImage(
-                                              url: applicant.user.profile,
-                                              height: size.width /
-                                                  (size.width / 25),
-                                              width: size.width /
-                                                  (size.width / 25),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          const SpaceWidget(spaceWidth: 8),
-                                          SizedBox(
-                                            width:
-                                                size.width / (size.width / 180),
-                                            child: TextWidget(
-                                              text: applicant.user.name,
-                                              fontColor: AppColors.black500,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      ButtonWidget(
-                                        onPressed: () {
-                                          Get.to(() => CreatorJobDetailsScreen(
-                                              applicant: applicant));
-                                        },
-                                        label: 'Details',
-                                        buttonWidth:
-                                            size.width / (size.width / 79),
-                                        buttonHeight:
-                                            size.width / (size.width / 26),
-                                        fontSize:
-                                            size.width / (size.width / 12),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(height: 8), // Changed from SpaceWidget
+
+                        // Total applicant container
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Center(
+                            child: TextWidget(
+                              text: "Total Applicant - ${jobStatus.totalApplicant.toString()}",
+                              fontColor: AppColors.black500,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10), // Changed from SpaceWidget
+
+                        // Applicants list container
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10), // Changed from SpaceWidget
+                              ...jobStatus.allApplicants.map(
+                                    (applicant) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: Row(
+                                      children: [
+                                        // Applicant profile image
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: AppImage(
+                                            url: applicant.user.profile,
+                                            height: size.width / (size.width / 25),
+                                            width: size.width / (size.width / 25),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8), // Changed from SpaceWidget
+
+                                        // Applicant name - wrapped in Expanded
+                                        Expanded(
+                                          child: TextWidget(
+                                            text: applicant.user.name,
+                                            fontColor: AppColors.black500,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 8), // Add spacing before button
+
+                                        // Details button
+                                        ButtonWidget(
+                                          onPressed: () {
+                                            Get.to(() => CreatorJobDetailsScreen(applicant: applicant));
+                                          },
+                                          label: 'Details',
+                                          buttonWidth: size.width / (size.width / 79),
+                                          buttonHeight: size.width / (size.width / 26),
+                                          fontSize: size.width / (size.width / 12),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                 );
               }
             }),

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 
 import '../../routes/app_routes.dart';
 import '../../utils/app_all_log/error_log.dart';
@@ -21,6 +21,7 @@ class ApiPostServices {
   }) async {
     final dynamic response;
     try {
+      Options options;
       if (token != null) {
         response = await NonAuthApi().sendRequest.post(url,
             data: body, options: Options(headers: {"Authorization": token}));
@@ -28,7 +29,7 @@ class ApiPostServices {
         response = await AppApi().sendRequest.post(url, data: body);
       }
 
-      if (response.statusCode == statusCode) {
+      if (response.statusCode != null && response.statusCode >= 200 && response.statusCode < 300) {
         return response.data;
       } else {
         return null;

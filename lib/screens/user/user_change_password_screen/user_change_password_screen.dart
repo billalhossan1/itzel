@@ -60,32 +60,37 @@ class UserChangePasswordScreen extends StatelessWidget {
                 )),
             const SpaceWidget(spaceHeight: 48),
             Container(
-              height: (size.height / (size.height / 54)),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.blue,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 4),
-                    blurRadius: 5.0,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: MaterialButton(
-                onPressed: () => controller.handleChangePassword(context),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                child: Text(
-                  AppStrings.changePassword,
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: (size.width / (size.width / 16)),
-                    fontWeight: FontWeight.w500,
-                  ),
+                height: (size.height / (size.height / 54)),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 4),
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ),
-            ),
+                child: Obx(
+                  () => controller.isLoading.value
+                      ? Center(child: CircularProgressIndicator(color: Colors.white,))
+                      : MaterialButton(
+                          onPressed: () =>
+                              controller.handleChangePassword(context),
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          child: Text(
+                            AppStrings.changePassword,
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: (size.width / (size.width / 16)),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                )),
           ],
         ),
       ),

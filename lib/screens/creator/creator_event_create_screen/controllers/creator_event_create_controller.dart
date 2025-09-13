@@ -79,22 +79,27 @@ class CreatorEventCreateController extends GetxController {
       );
     }
   }
-
+RxBool isLoading = false.obs;
   void createEvent() async {
     Map<String, dynamic> eventData = {
       'name': eventNameController.text,
       'time': timeController.text,
       'coordinate': '[${locationController.text}]',
       'description': eventDescriptionController.text,
-      'tags': eventTagController.text.split(' '),
-      // Convert tags to a JSON array
+      'tags': eventTagController.text
+          .trim()
+          .split(RegExp(r'[\s,]+'))
+          .where((tag) => tag.isNotEmpty)
+          .toList(),
       'price': int.parse(priceController.text),
       'address': addressController.text,
       'type': selectedType.value,
     };
+    isLoading.value = true;
 
     bool result = await _eventRepository.createEvent(eventData,
         imageFile: image.value, videoFile: videoFile.value);
+    isLoading.value = false;
 
     if (result) {
       Get.snackbar('Success', 'Event created successfully!');

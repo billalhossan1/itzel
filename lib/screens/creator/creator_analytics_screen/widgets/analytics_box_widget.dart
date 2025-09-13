@@ -7,11 +7,13 @@ import '../../../../widgets/text_widget/text_widgets.dart';
 
 class AnalyticsBoxWidget extends StatelessWidget {
   final String title;
+  final String title2;
   final String count;
 
   const AnalyticsBoxWidget({
     super.key,
     required this.title,
+    required this.title2,
     required this.count,
   });
 
@@ -29,6 +31,12 @@ class AnalyticsBoxWidget extends StatelessWidget {
         children: [
           TextWidget(
             text: title,
+            fontColor: AppColors.grey50,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          TextWidget(
+            text: title2,
             fontColor: AppColors.grey50,
             fontSize: 12,
             fontWeight: FontWeight.w500,

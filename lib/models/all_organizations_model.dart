@@ -49,7 +49,7 @@ class AllOrganizations {
   String? image;
   String? category;
   String? locationName;
-  List<int>? locationCoordinates;
+  List<dynamic>? locationCoordinates;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
@@ -77,7 +77,7 @@ class AllOrganizations {
         locationName: json["locationName"],
         locationCoordinates: json["locationCoordinates"] == null
             ? []
-            : List<int>.from(json["locationCoordinates"]!.map((x) => x)),
+            : List<dynamic>.from(json["locationCoordinates"]!.map((x) => x)),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),

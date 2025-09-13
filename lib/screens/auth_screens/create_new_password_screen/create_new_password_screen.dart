@@ -86,12 +86,13 @@ class CreateNewPasswordScreen extends StatelessWidget {
                       maxLines: 2,
                     ),
                     const SpaceWidget(spaceHeight: 24),
-                    ButtonWidget(
-                      onPressed: controller.resetPassword,
-                      label: 'Reset Password',
-                      buttonWidth: double.infinity,
-                      buttonHeight: 56,
-                    ),
+                   Obx(()=> ButtonWidget(
+                     onPressed: controller.resetPassword,
+                     label: 'Reset Password',
+                     buttonWidth: double.infinity,
+                     buttonHeight: 56,
+                     isLoading: controller.isLoading.value,
+                   ),)
                   ],
                 ),
               );

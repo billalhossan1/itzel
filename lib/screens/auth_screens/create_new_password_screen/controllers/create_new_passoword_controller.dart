@@ -9,6 +9,7 @@ class CreateNewPasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmNewPasswordController = TextEditingController();
   final AuthRepository authRepository = AuthRepository();
+  final RxBool isLoading = false.obs;
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
@@ -21,6 +22,7 @@ class CreateNewPasswordController extends GetxController {
 
   void resetPassword() async {
     if (formKey.currentState!.validate()) {
+      isLoading.value = true;
       String newPassword = newPasswordController.text;
       String confirmPassword = confirmNewPasswordController.text;
       String token = Get.arguments['token'];
@@ -31,10 +33,16 @@ class CreateNewPasswordController extends GetxController {
         token: token,
       );
 
+      isLoading.value = false;
       if (isSuccess) {
         newPasswordController.clear();
         confirmNewPasswordController.clear();
         Get.offAllNamed(AppRoutes.loginScreen);
+        Get.snackbar(
+          "Success",
+          "Password changed successfully.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
       } else {
         Get.snackbar(
           "Error",

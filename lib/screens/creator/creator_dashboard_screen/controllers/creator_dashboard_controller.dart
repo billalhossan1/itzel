@@ -27,7 +27,7 @@ class CreatorDashboardController extends GetxController {
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     totalEarning: 0,
-    ticketSold: 0,
+    ticketSold: 0, type: '',
   ).obs;
 
   Future<void> fetchEventStatus() async {

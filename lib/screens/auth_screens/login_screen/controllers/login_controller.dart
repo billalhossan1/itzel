@@ -6,22 +6,35 @@ import '../../../../services/repository/auth_repository/auth_repository.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool isChecked = false;
   final AuthRepository authRepository = AuthRepository();
+  @override
+  void onInit() {
+   initial();
+    super.onInit();
+  }
+  void initial(){
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
 
   void toggleRememberMe(bool? value) {
     isChecked = value ?? false;
     update(); // Notify listeners
   }
 
+  RxBool isLoading = false.obs;
+
   void onSignIn() async {
     if (formKey.currentState!.validate()) {
+      isLoading.value = true;
       String? role = await authRepository.signIn(
         email: emailController.text,
         password: passwordController.text,
       );
+      isLoading.value = false;
 
       if (role != null) {
         emailController.clear();
@@ -34,12 +47,12 @@ class LoginController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
         );
       }
-    } else {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields correctly.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
     }
+  }
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
   }
 }

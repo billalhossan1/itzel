@@ -21,6 +21,7 @@ class VerifyAccountScreen extends StatelessWidget {
       ),
     );
     final email = Get.arguments['email'];
+    bool isResetPass = Get.arguments['forgot']??false;
 
     return Scaffold(
       backgroundColor: AppColors.grey100,
@@ -37,9 +38,9 @@ class VerifyAccountScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
+                    Center(
                       child: TextWidget(
-                        text: 'Verify your account',
+                        text: isResetPass?"Reset Your Password":"Verify your account",
                         fontColor: AppColors.black500,
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -101,8 +102,6 @@ class VerifyAccountScreen extends StatelessWidget {
                     ),
                     // SpaceWidget(spaceHeight: 24),
                     Obx(() {
-                      print(
-                          "Remaining Time: ${controller.remainingSeconds.value}"); // Debugging
                       return Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.sizeOf(context).width /
@@ -110,7 +109,7 @@ class VerifyAccountScreen extends StatelessWidget {
                         ),
                         child: TextWidget(
                           text: controller.canResend.value
-                              ? "Remaining time: 00.00"
+                              ? ""
                               : "Resend code in ${controller.formatTime()}",
                           fontColor: controller.canResend.value
                               ? AppColors.greyLight
@@ -127,7 +126,8 @@ class VerifyAccountScreen extends StatelessWidget {
                         horizontal: MediaQuery.sizeOf(context).width /
                             (MediaQuery.sizeOf(context).width / 8),
                       ),
-                      child: ButtonWidget(
+                      child: Obx(()=>ButtonWidget(
+                        isLoading: controller.isLoading.value,
                         onPressed: () {
                           if (controller.formKey.currentState!.validate()) {
                             controller.verifyOTP();
@@ -138,7 +138,7 @@ class VerifyAccountScreen extends StatelessWidget {
 
                             // Call the verifyOTP method from the controller
                           } else if (controller
-                                  .otpTextEditingController1.text.isEmpty ||
+                              .otpTextEditingController1.text.isEmpty ||
                               controller
                                   .otpTextEditingController2.text.isEmpty ||
                               controller
@@ -148,10 +148,10 @@ class VerifyAccountScreen extends StatelessWidget {
                             // CustomToast.showToast("Please fill all fields");
                           }
                         },
-                        label: 'Verify',
+                        label:isResetPass?"Reset": 'Verify',
                         buttonWidth: double.infinity,
                         buttonHeight: 56,
-                      ),
+                      ),),
                     ),
                     const SpaceWidget(spaceHeight: 24),
                     Obx(() {

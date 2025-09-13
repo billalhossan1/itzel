@@ -87,12 +87,13 @@ class CreatorProfileScreen extends StatelessWidget {
                   "Phone Number", _controller.phoneNumberController),
               const SpaceWidget(spaceHeight: 6),
               Obx(() => _controller.isUpdated.value
-                  ? ButtonWidget(
-                      onPressed: _controller.updateProfile,
-                      label: AppStrings.update,
-                      buttonWidth: double.infinity,
-                      buttonHeight: AppSize.width(value: 52),
-                    )
+                  ? Obx(()=>ButtonWidget(
+                isLoading: _controller.isLoading.value,
+                onPressed: _controller.updateProfile,
+                label: AppStrings.update,
+                buttonWidth: double.infinity,
+                buttonHeight: AppSize.width(value: 52),
+              ))
                   : Container()),
             ],
           ),

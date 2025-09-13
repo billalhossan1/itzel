@@ -104,100 +104,99 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
     return RefreshIndicator(
       onRefresh: _refreshData,
       color: AppColors.blueNormal,
-      child: SingleChildScrollView(
+      child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: size.height - 150,
-          ),
-          child: Column(
-            children: [
-              if (controller.allEvents.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('No events available. Pull down to refresh.'),
-                )
-              else
-                ...controller.allEvents.map(
-                  (event) {
-                    return Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      margin: EdgeInsets.only(
-                        left: size.width / (size.width / 20),
-                        right: size.width / (size.width / 20),
-                        bottom: size.width / (size.width / 12),
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppColors.grey200,
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: AppImage(
-                                      url: event.thumbnailImage,
-                                      height: size.width / (size.width / 45),
-                                      width: size.width / (size.width / 45),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SpaceWidget(spaceWidth: 8),
-                                  SizedBox(
-                                    width: size.width / (size.width / 215),
-                                    child: TextWidget(
-                                      text: event.name,
-                                      fontColor: AppColors.black900,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlignment: TextAlign.left,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              IconButtonWidget(
-                                icon: AppIconsPath.newChatIcon,
-                                onTap: () {},
-                                color: AppColors.black900,
-                                size: 24,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              const SpaceWidget(spaceHeight: 50),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ButtonWidget(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.creatorEventCreateScreen);
-                  },
-                  label: 'Create Event',
-                  buttonWidth: double.infinity,
-                  buttonHeight: size.height / (size.height / 56),
-                ),
+        padding: EdgeInsets.zero,
+        itemCount: controller.allEvents.length + 2, // +1 for button, +1 for extra space
+        itemBuilder: (context, index) {
+          if (index < controller.allEvents.length) {
+            final event = controller.allEvents[index];
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              margin: EdgeInsets.only(
+                left: size.width / (size.width / 20),
+                right: size.width / (size.width / 20),
+                bottom: size.width / (size.width / 12),
               ),
-            ],
-          ),
-        ),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.grey200,
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: AppImage(
+                              url: event.thumbnailImage,
+                              height: size.width / (size.width / 45),
+                              width: size.width / (size.width / 45),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SpaceWidget(spaceWidth: 8),
+                          SizedBox(
+                            width: size.width / (size.width / 215),
+                            child: TextWidget(
+                              text: event.name,
+                              fontColor: AppColors.black900,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlignment: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButtonWidget(
+                        icon: AppIconsPath.newChatIcon,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.editEventPostScreen, arguments: event);
+                        },
+                        color: AppColors.black900,
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          } else if (index == controller.allEvents.length) {
+            // Button as second last item
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: ButtonWidget(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.creatorEventCreateScreen);
+                    },
+                    label: 'Create Event',
+                    buttonWidth: double.infinity,
+                    buttonHeight: size.height / (size.height / 56),
+                  ),
+                ),
+                SizedBox(height: 100,)
+              ],
+            );
+          } else {
+            // Extra space at the bottom
+            return const SizedBox(height: 32);
+          }
+        },
       ),
     );
   }
@@ -305,7 +304,9 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                               ),
                               IconButtonWidget(
                                 icon: AppIconsPath.newChatIcon,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.editJobPostScreen,arguments: job);
+                                },
                                 color: AppColors.black900,
                                 size: 24,
                               ),
@@ -361,8 +362,7 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                       (product) {
                         return Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.only(
-                              left: 12, top: 12, bottom: 12),
+                          padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12),
                           margin: EdgeInsets.only(
                             left: size.width / (size.width / 20),
                             right: size.width / (size.width / 20),
@@ -380,57 +380,54 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                             ],
                           ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: AppImage(
-                                      url: product.image ?? '',
-                                      height: size.width / (size.width / 45),
-                                      width: size.width / (size.width / 45),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SpaceWidget(spaceWidth: 8),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: size.width / (size.width / 215),
-                                        child: TextWidget(
-                                          text:
-                                              product.name ?? 'Unknown Product',
-                                          fontColor: AppColors.black900,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlignment: TextAlign.left,
-                                        ),
-                                      ),
-                                      const SpaceWidget(spaceHeight: 4),
-                                      TextWidget(
-                                        text: 'Price: \$${product.price ?? 0}',
-                                        fontColor: AppColors.grey700,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      TextWidget(
-                                        text:
-                                            "${product.city ?? ''}, ${product.state ?? ''}, ${product.country ?? ''}",
-                                        fontColor: AppColors.grey700,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              // Product image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: AppImage(
+                                  url: product.image ?? '',
+                                  height: size.width / (size.width / 45),
+                                  width: size.width / (size.width / 45),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
+                              const SizedBox(width: 8), // Changed from SpaceWidget to SizedBox
+
+                              // Product information - wrapped in Expanded to prevent overflow
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: product.name ?? 'Unknown Product',
+                                      fontColor: AppColors.black900,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlignment: TextAlign.left,
+                                    ),
+                                    const SizedBox(height: 4), // Changed from SpaceWidget
+                                    TextWidget(
+                                      text: 'Price: \$${product.price ?? 0}',
+                                      fontColor: AppColors.grey700,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    TextWidget(
+                                      text: "${product.city ?? ''}, ${product.state ?? ''}, ${product.country ?? ''}",
+                                      fontColor: AppColors.grey700,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.ellipsis, // Added overflow handling
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Popup menu button
                               PopupMenuButton<int>(
-                                constraints: const BoxConstraints.expand(
-                                    width: 150, height: 110),
+                                constraints: const BoxConstraints.expand(width: 150, height: 110),
+                                padding: const EdgeInsets.all(8), // Added padding
                                 onSelected: (value) {
                                   if (value == 1) {
                                     Get.toNamed(
@@ -446,8 +443,7 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                                     value: 1,
                                     child: Text(
                                       "Edit",
-                                      style: TextStyle(
-                                          fontSize: 14, color: AppColors.black),
+                                      style: TextStyle(fontSize: 14, color: AppColors.black),
                                     ),
                                   ),
                                   const PopupMenuDivider(height: 0.5),
@@ -455,8 +451,7 @@ class _CreatorPostScreenState extends State<CreatorPostScreen>
                                     value: 2,
                                     child: Text(
                                       "Delete",
-                                      style: TextStyle(
-                                          fontSize: 14, color: AppColors.black),
+                                      style: TextStyle(fontSize: 14, color: AppColors.black),
                                     ),
                                   ),
                                 ],

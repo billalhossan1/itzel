@@ -1,234 +1,273 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:itzel/screens/creator/creator_business_information_screen/widgets/business_information_textfield_widget.dart';
-import 'package:itzel/screens/creator/creator_business_information_screen/widgets/headerTextWidget.dart';
-import 'package:itzel/screens/creator/creator_business_information_screen/widgets/title_text_widget.dart';
-import 'package:itzel/widgets/button_widget/button_widget.dart';
-
-import '../../../constants/app_colors.dart';
-import '../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../../widgets/appbar_widget/appbar_widget.dart';
-import '../../../widgets/space_widget/space_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
-import 'controllers/creator_business_information_controller.dart';
-
-class CreatorBusinessInformationScreen extends StatefulWidget {
-  const CreatorBusinessInformationScreen({super.key});
-
-  @override
-  State<CreatorBusinessInformationScreen> createState() =>
-      _CreatorBusinessInformationScreenState();
-}
-
-class _CreatorBusinessInformationScreenState
-    extends State<CreatorBusinessInformationScreen> {
-  final CreatorBusinessInformationController controller =
-      Get.put(CreatorBusinessInformationController());
-
-  Future<void> pickFile() async {
-    try {
-      if (controller.filesData.length >= 2) {
-        AppSnackBar.error('Maximum 2 images allowed');
-        return;
-      }
-
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg'],
-        withData: true, // Make sure to get the file bytes
-      );
-
-      if (result != null && result.files.isNotEmpty) {
-        final file = result.files.first;
-
-        // Check if file has bytes
-        if (file.bytes == null) {
-          AppSnackBar.error('Could not read file data');
-          return;
-        }
-
-        // Check file size
-        final fileSize = file.size;
-        const maxSize = 2 * 1024 * 1024; // 2MB
-        if (fileSize > maxSize) {
-          AppSnackBar.error('Image size must be less than 2MB');
-          return;
-        }
-
-        // Check file extension
-        final extension = file.extension?.toLowerCase();
-        if (extension != 'jpg' && extension != 'jpeg') {
-          AppSnackBar.error('Please select a JPG/JPEG image');
-          return;
-        }
-
-        // Add file to controller
-        controller.addFile(
-          file.name,
-          file.bytes!,
-        );
-      }
-    } catch (e) {
-      debugPrint('Error picking file: $e');
-      AppSnackBar.error('Error selecting image');
-    }
-  }
-
-  Widget _buildImageList() {
-    return Obx(() => Column(
-          children: [
-            for (var i = 0; i < controller.filesData.length; i++)
-              Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: Text(
-                        controller.fileNames[i],
-                        style: const TextStyle(
-                          color: AppColors.black500,
-                          fontSize: 14,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => controller.removeFile(i),
-                    ),
-                  ],
-                ),
-              ),
-            if (controller.filesData.length < 2)
-              ElevatedButton(
-                onPressed: pickFile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.black50,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    side: const BorderSide(color: AppColors.black500),
-                  ),
-                ),
-                child: const Text('Choose File'),
-              ),
-          ],
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteBg,
-      appBar: const AppbarWidget(text: 'Business Information'),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSection(
-              'Personal Information',
-              [
-                _buildField('Date of Birth', controller.birthdateController),
-                _buildField('Name', controller.nameController),
-                _buildField('Phone Number', controller.phoneNumberController,
-                    TextInputType.text),
-                _buildField('Email', controller.emailController),
-                _buildField('ID Number', controller.idNumberController,
-                    TextInputType.number),
-                _buildField('Account Number',
-                    controller.accountNumberController, TextInputType.number),
-              ],
-            ),
-            _buildSection(
-              'Bank Information',
-              [
-                _buildField('Account Holder Name',
-                    controller.accountHolderNameController),
-                _buildField('Account Holder Type',
-                    controller.accountHolderTypeController),
-                _buildField('Currency', controller.currencyController),
-                _buildField('Routing Number',
-                    controller.routingNumberController, TextInputType.number),
-              ],
-            ),
-            _buildSection(
-              'Address',
-              [
-                _buildField('Line 1', controller.lineOneController),
-                _buildField('State', controller.stateController),
-                _buildField('City', controller.cityController),
-                _buildField('Postal Code', controller.postalCodeController),
-                _buildField('Country', controller.countryController),
-              ],
-            ),
-            const HeaderTextWidget(text: 'Upload Files (Max 2)'),
-            const SpaceWidget(spaceHeight: 12),
-            _buildImageList(),
-            const SpaceWidget(spaceHeight: 4),
-            const TextWidget(
-              text: 'Please Upload JPG format only (Max 2MB each)',
-              fontColor: AppColors.whiteLighter,
-              fontSize: 10,
-              fontWeight: FontWeight.w400,
-            ),
-            const SpaceWidget(spaceHeight: 36),
-            Obx(() => ButtonWidget(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : controller.submitBusinessInformation,
-                  label: controller.isLoading.value
-                      ? 'Updating...'
-                      : 'Update & Save',
-                  buttonWidth: double.infinity,
-                )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection(String title, List<Widget> fields) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HeaderTextWidget(text: title),
-        const SpaceWidget(spaceHeight: 12),
-        ...fields,
-        const SpaceWidget(spaceHeight: 12),
-      ],
-    );
-  }
-
-  Widget _buildField(String label, TextEditingController controller,
-      [TextInputType? keyboardType]) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TitleTextWidget(text: label),
-        const SpaceWidget(spaceHeight: 4),
-        BusinessInformationTextFieldWidget(
-          hintText: '',
-          controller: controller,
-          maxLines: 1,
-          keyboardType: keyboardType ?? TextInputType.text,
-        ),
-        const SpaceWidget(spaceHeight: 8),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<CreatorBusinessInformationController>();
-    super.dispose();
-  }
-}
+// import 'package:file_picker/file_picker.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:country_code_picker/country_code_picker.dart';
+// import 'package:itzel/screens/creator/creator_business_information_screen/widgets/business_information_textfield_widget.dart';
+// import 'package:itzel/screens/creator/creator_business_information_screen/widgets/headerTextWidget.dart';
+// import 'package:itzel/screens/creator/creator_business_information_screen/widgets/title_text_widget.dart';
+// import 'package:itzel/widgets/button_widget/button_widget.dart';
+//
+// import '../../../constants/app_colors.dart';
+// import '../../../widgets/app_snack_bar/app_snack_bar.dart';
+// import '../../../widgets/appbar_widget/appbar_widget.dart';
+// import '../../../widgets/space_widget/space_widget.dart';
+// import '../../../widgets/text_widget/text_widgets.dart';
+// import 'controllers/creator_business_information_controller.dart';
+//
+// class CreatorBusinessInformationScreen extends StatefulWidget {
+//   const CreatorBusinessInformationScreen({super.key});
+//
+//   @override
+//   State<CreatorBusinessInformationScreen> createState() =>
+//       _CreatorBusinessInformationScreenState();
+// }
+//
+// class _CreatorBusinessInformationScreenState
+//     extends State<CreatorBusinessInformationScreen> {
+//   final CreatorBusinessInformationController controller =
+//       Get.put(CreatorBusinessInformationController());
+//
+//   Future<void> pickFile() async {
+//     try {
+//       if (controller.filesData.length >= 2) {
+//         AppSnackBar.error('Maximum 2 images allowed');
+//         return;
+//       }
+//
+//       FilePickerResult? result = await FilePicker.platform.pickFiles(
+//         type: FileType.custom,
+//         allowedExtensions: ['jpg', 'jpeg'],
+//         withData: true, // Make sure to get the file bytes
+//       );
+//
+//       if (result != null && result.files.isNotEmpty) {
+//         final file = result.files.first;
+//
+//         // Check if file has bytes
+//         if (file.bytes == null) {
+//           AppSnackBar.error('Could not read file data');
+//           return;
+//         }
+//
+//         // Check file size
+//         final fileSize = file.size;
+//         const maxSize = 2 * 1024 * 1024; // 2MB
+//         if (fileSize > maxSize) {
+//           AppSnackBar.error('Image size must be less than 2MB');
+//           return;
+//         }
+//
+//         // Check file extension
+//         final extension = file.extension?.toLowerCase();
+//         if (extension != 'jpg' && extension != 'jpeg') {
+//           AppSnackBar.error('Please select a JPG/JPEG image');
+//           return;
+//         }
+//
+//         // Add file to controller
+//         controller.addFile(
+//           file.name,
+//           file.bytes!,
+//         );
+//       }
+//     } catch (e) {
+//       debugPrint('Error picking file: $e');
+//       AppSnackBar.error('Error selecting image');
+//     }
+//   }
+//
+//   Widget _buildImageList() {
+//     return Obx(() => Column(
+//           children: [
+//             for (var i = 0; i < controller.filesData.length; i++)
+//               Container(
+//                 margin: const EdgeInsets.only(bottom: 8),
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+//                 decoration: BoxDecoration(
+//                   color: AppColors.white,
+//                   borderRadius: BorderRadius.circular(16),
+//                 ),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     SizedBox(
+//                       width: MediaQuery.of(context).size.width * 0.5,
+//                       child: Text(
+//                         controller.fileNames[i],
+//                         style: const TextStyle(
+//                           color: AppColors.black500,
+//                           fontSize: 14,
+//                         ),
+//                         overflow: TextOverflow.ellipsis,
+//                       ),
+//                     ),
+//                     IconButton(
+//                       icon: const Icon(Icons.close),
+//                       onPressed: () => controller.removeFile(i),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             if (controller.filesData.length < 2)
+//               ElevatedButton(
+//                 onPressed: pickFile,
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: AppColors.black50,
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(4),
+//                     side: const BorderSide(color: AppColors.black500),
+//                   ),
+//                 ),
+//                 child: const Text('Choose File'),
+//               ),
+//           ],
+//         ));
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: AppColors.whiteBg,
+//       appBar: const AppbarWidget(text: 'Business Information'),
+//       body: SingleChildScrollView(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             _buildSection(
+//               'Personal Information',
+//               [
+//                 _buildField('Date of Birth', controller.birthdateController,TextInputType.number),
+//                 _buildField('Name', controller.nameController),
+//                 // Replace phone number field with custom Row for country code picker + phone
+//                 TitleTextWidget(text: "Phone Number"),
+//                 const SpaceWidget(spaceHeight: 4),
+//                 Container(
+//                   decoration: BoxDecoration(
+//                     color: AppColors.white,
+//                     borderRadius: BorderRadius.circular(12),
+//                   ),
+//                   child: Row(
+//                     children: [
+//                       CountryCodePicker(
+//                         onChanged: (country) {
+//                           controller.countryCode = country.dialCode ?? '+1';
+//                         },
+//                         initialSelection: controller.countryCode,
+//                         favorite: const ['+1', 'US', '+91', 'IN'],
+//                         showCountryOnly: false,
+//                         showOnlyCountryWhenClosed: false,
+//                         alignLeft: false,
+//                       ),
+//                       const SizedBox(width: 8),
+//                       Expanded(
+//                         child: TextFormField(
+//                           controller: controller.phoneNumberController,
+//                           keyboardType: TextInputType.phone,
+//                           decoration: const InputDecoration(
+//                             hintText: 'Phone Number',
+//                             border: OutlineInputBorder(),
+//                             contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+//                           ),
+//                           validator: (value) {
+//                             if (value == null || value.isEmpty) {
+//                               return 'Enter phone number';
+//                             }
+//                             return null;
+//                           },
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 const SpaceWidget(spaceHeight: 8),
+//                 _buildField('Email', controller.emailController),
+//                 _buildField('ID Number', controller.idNumberController, TextInputType.number),
+//                 _buildField('Account Number', controller.accountNumberController, TextInputType.number),
+//               ],
+//             ),
+//             _buildSection(
+//               'Bank Information',
+//               [
+//                 _buildField('Account Holder Name',
+//                     controller.accountHolderNameController),
+//                 _buildField('Account Holder Type',
+//                     controller.accountHolderTypeController),
+//                 _buildField('Currency', controller.currencyController),
+//                 _buildField('Routing Number',
+//                     controller.routingNumberController, TextInputType.number),
+//               ],
+//             ),
+//             _buildSection(
+//               'Address',
+//               [
+//                 _buildField('Line 1', controller.lineOneController),
+//                 _buildField('State', controller.stateController),
+//                 _buildField('City', controller.cityController),
+//                 _buildField('Postal Code', controller.postalCodeController,TextInputType.number),
+//                 _buildField('Country', controller.countryController),
+//               ],
+//             ),
+//             const HeaderTextWidget(text: 'Upload Files (Max 2)'),
+//             const SpaceWidget(spaceHeight: 12),
+//             _buildImageList(),
+//             const SpaceWidget(spaceHeight: 4),
+//             const TextWidget(
+//               text: 'Please Upload JPG format only (Max 2MB each)',
+//               fontColor: AppColors.whiteLighter,
+//               fontSize: 10,
+//               fontWeight: FontWeight.w400,
+//             ),
+//             const SpaceWidget(spaceHeight: 36),
+//             Obx(() => ButtonWidget(
+//                   onPressed: controller.isLoading.value
+//                       ? null
+//                       : controller.submitBusinessInformation,
+//                   label: controller.isLoading.value
+//                       ? 'Updating...'
+//                       : 'Update & Save',
+//                   buttonWidth: double.infinity,
+//                 )),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildSection(String title, List<Widget> fields) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         HeaderTextWidget(text: title),
+//         const SpaceWidget(spaceHeight: 12),
+//         ...fields,
+//         const SpaceWidget(spaceHeight: 12),
+//       ],
+//     );
+//   }
+//
+//   Widget _buildField(String label, TextEditingController controller,
+//       [TextInputType? keyboardType]) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         TitleTextWidget(text: label),
+//         const SpaceWidget(spaceHeight: 4),
+//         BusinessInformationTextFieldWidget(
+//           hintText: '',
+//           controller: controller,
+//           maxLines: 1,
+//           keyboardType: keyboardType ?? TextInputType.text,
+//         ),
+//         const SpaceWidget(spaceHeight: 8),
+//       ],
+//     );
+//   }
+//
+//   @override
+//   void dispose() {
+//     Get.delete<CreatorBusinessInformationController>();
+//     super.dispose();
+//   }
+// }

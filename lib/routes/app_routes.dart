@@ -12,6 +12,7 @@ class AppRoutes {
   static const errorScreen = '/errorScreen';
   static const faqScreen = '/faqScreen';
   static const termsConditionScreen = '/termsConditionScreen';
+  // static const privacyPolicyScreen = '/privacyPolicyScreen';
 
   // User Section
   static const userHomeScreen = '/userHomeScreen';
@@ -64,4 +65,6 @@ class AppRoutes {
   static const creatorPaymentMethodScreen = '/creatorPaymentMethodScreen';
   static const creatorUpdateSellProductScreen =
       '/creatorUpdateSellProductScreen';
+  static const editEventPostScreen = '/editEventPost';
+  static const editJobPostScreen = '/editJobPostScreen';
 }

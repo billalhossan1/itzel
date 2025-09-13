@@ -28,7 +28,6 @@ class LoginScreen extends StatelessWidget {
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: GetBuilder<LoginController>(
-              init: LoginController(),
               builder: (controller) {
                 return Form(
                   key: controller.formKey,
@@ -123,12 +122,13 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       const SpaceWidget(spaceHeight: 32),
-                      ButtonWidget(
+                      Obx(()=>ButtonWidget(
+                        isLoading: controller.isLoading.value,
                         onPressed: controller.onSignIn,
                         label: AppStrings.signInButtonText,
                         buttonWidth: double.infinity,
                         buttonHeight: 56,
-                      ),
+                      ),),
                       const SpaceWidget(spaceHeight: 32),
                       // Row(
                       //   children: [
@@ -191,7 +191,8 @@ class LoginScreen extends StatelessWidget {
                           const SpaceWidget(spaceWidth: 8),
                           TextButton(
                             onPressed: () {
-                              Get.toNamed(AppRoutes.registrationScreen);
+                              // Use Get.offNamed to navigate and let GetX handle controller lifecycle
+                              Get.offNamed(AppRoutes.registrationScreen);
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,

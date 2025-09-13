@@ -62,7 +62,7 @@ class AppImage extends StatelessWidget {
         return _buildPlaceholder();
       }
       return NetworkImageWithRetry(
-        imageUrl: url!,
+        imageUrl: "${AppApiUrl.serverDomain}$url",
         width: width,
         height: height,
         fit: fit,

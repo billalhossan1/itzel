@@ -1,5 +1,6 @@
--dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivity$g
--dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Args
--dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Error
--dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter
--dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider
+# ProGuard rules for Stripe push provisioning and to avoid R8 missing class errors
+-keep class com.stripe.** { *; }
+-dontwarn com.stripe.**
+
+# Add any additional keep rules from missing_rules.txt below
+

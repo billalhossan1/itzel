@@ -29,7 +29,6 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  late final UserNotificationController _notificationController;
   int _currentIndex = 0;
   late List<Widget> tabs;
   late String userRole;
@@ -38,7 +37,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   void initState() {
     super.initState();
     userRole = Get.put(AppAuthStorage()).getRole() ?? 'USER';
-    print('Init state called');
+    // Ensure UserNotificationController is registered
+    if (!Get.isRegistered<UserNotificationController>()) {
+      Get.put(UserNotificationController());
+    }
     tabs = [
       (userRole == 'USER') ? UserHomeScreen() : CreatorDashboardScreen(),
       (userRole == 'USER') ? UserSearchScreen() : const CreatorPostScreen(),
@@ -51,9 +53,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       (userRole == 'USER') ? UserAccountScreen() : CreatorAccountScreen(),
     ];
     print('Tabs: $tabs');
-
-    _notificationController =
-        Get.put(UserNotificationController(), permanent: true);
   }
 
   @override
@@ -119,7 +118,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           color: AppColors.white,
           boxShadow: [
             BoxShadow(
-              color: AppColors.grey.withOpacity(0.3),
+              color: AppColors.grey.withValues(alpha: 0.3),
               spreadRadius: 2,
               blurRadius: 3,
             ),
@@ -196,9 +195,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                   'assets/icons/accountIcon.svg',
                   height: size.height / (size.height / 22),
                   width: size.width / (size.width / 22),
-                  color: _currentIndex == 4
-                      ? AppColors.black600
-                      : AppColors.black300,
+                  colorFilter: ColorFilter.mode(
+                    _currentIndex == 4 ? AppColors.black600 : AppColors.black300,
+                    BlendMode.srcIn,
+                  ),
                 ),
                 label: 'Account',
               ),
@@ -212,15 +212,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    // Make sure to dispose of the notification controller if needed
-    if (!Get.isRegistered<UserNotificationController>()) {
-      Get.delete<UserNotificationController>();
-    }
-    super.dispose();
   }
 }
 

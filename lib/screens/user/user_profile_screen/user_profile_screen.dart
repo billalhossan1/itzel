@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itzel/widgets/button_widget/button_widget.dart';
+import 'package:flutter/services.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
@@ -44,7 +45,7 @@ class UserProfileScreen extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   )
                                 : AppImage(
-                                    url: Get.arguments['profileImage'],
+                                    url: "${Get.arguments['profileImage']}",
                                     width: 150,
                                     height: 150,
                                     fit: BoxFit.cover,
@@ -85,14 +86,14 @@ class UserProfileScreen extends StatelessWidget {
               _buildTextField(
                   "Phone Number", _controller.phoneNumberController),
               const SpaceWidget(spaceHeight: 6),
-              Obx(() => _controller.isUpdated.value
-                  ? ButtonWidget(
+              Obx(() => ButtonWidget(
+                isLoading: _controller.isLoading.value,
                       onPressed: _controller.updateProfile,
                       label: AppStrings.update,
                       buttonWidth: double.infinity,
                       buttonHeight: AppSize.width(value: 52),
                     )
-                  : Container()),
+              ),
             ],
           ),
         ),
@@ -114,6 +115,9 @@ class UserProfileScreen extends StatelessWidget {
         TextField(
           controller: textController,
           onChanged: (value) => _controller.checkForUpdates(),
+          inputFormatters: label == "Phone Number"
+              ? [LengthLimitingTextInputFormatter(15)]
+              : null,
           decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.white,

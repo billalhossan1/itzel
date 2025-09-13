@@ -8,6 +8,7 @@ import 'package:itzel/utils/app_all_log/error_log.dart';
 import 'package:itzel/widgets/app_snack_bar/app_snack_bar.dart';
 
 import '../../../../models/my_product_model.dart';
+import '../../creator_post_screen/controllers/creator_post_controller.dart';
 
 class CreatorUpdateSellProductController extends GetxController {
   final companyNameController = TextEditingController();
@@ -80,12 +81,13 @@ class CreatorUpdateSellProductController extends GetxController {
         productData: productData,
       );
 
-      if (response != null) {
+      if (response != null&& response['success'] == true) {
+        await Get.find<CreatorPostController>().fetchAllStatuses();
         errorLog('Update successful, showing success snackbar', response);
+
+        Get.back();
         AppSnackBar.success("Product updated successfully");
         // Delay navigation to allow snackbar to display
-        await Future.delayed(const Duration(seconds: 6));
-        Get.back(); // Navigate back after successful update
       } else {
         AppSnackBar.error("Failed to update product");
       }

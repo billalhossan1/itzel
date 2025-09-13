@@ -10,15 +10,16 @@ class UserNotificationController extends GetxController {
   var notifications = <Notification>[].obs;
   var isLoading = true.obs;
   var unreadCount = 0.obs;
+  Timer? _timer;
 
   @override
   void onInit() {
     super.onInit();
     // Only fetch the count when controller is initialized
     fetchUnreadNotificationCount();
-    Timer.periodic(const Duration(seconds: 30), (_) {
-      fetchUnreadNotificationCount();
-    });
+    // _timer = Timer.periodic(const Duration(seconds: 30), (_) {
+    //   fetchUnreadNotificationCount();
+    // });
   }
 
   Future<void> fetchNotifications() async {
@@ -48,5 +49,11 @@ class UserNotificationController extends GetxController {
     } catch (e) {
       print('Error fetching unread notification count: $e');
     }
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }

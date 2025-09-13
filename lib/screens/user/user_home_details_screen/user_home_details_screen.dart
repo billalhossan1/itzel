@@ -191,16 +191,13 @@ class UserHomeDetailsScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: size.width / (size.width / 300),
-                        child: TextWidget(
-                          text: controller.event?.name ?? '',
-                          fontColor: AppColors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                          textAlignment: TextAlign.start,
-                        ),
+                      TextWidget(
+                        text: controller.event?.name ?? '',
+                        fontColor: AppColors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                        textAlignment: TextAlign.start,
                       ),
                       IconButton(
                         onPressed: () => controller

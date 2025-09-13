@@ -91,7 +91,7 @@ class AppStrings {
   static const String accountDetails = "Account Details";
 
   // User Notification Screen Strings
-  static const String notification = "Notification";
+  static const String notification = "Notifications";
 
   // User Profile Screen Strings
   static const String profileName = "Itzel Jonathan";
