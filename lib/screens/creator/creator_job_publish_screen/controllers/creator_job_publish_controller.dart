@@ -27,6 +27,7 @@ class CreatorJobPublishController extends GetxController {
         await _picker.pickImage(source: ImageSource.gallery);
     image = pickedImage;
     update(); // Notify the UI
+    //
   }
 RxBool isLoading = false.obs;
   Future<void> publishJob() async {
