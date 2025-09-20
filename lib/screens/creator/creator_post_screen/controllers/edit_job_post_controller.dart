@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import '../../../../models/get_job_status_model.dart';
 import '../../../../services/repository/creator_status_repository/creator_status_repository.dart';
-import '../../creator_dashboard_screen/controllers/creator_dashboard_controller.dart';
 
 class EditJobPostController extends GetxController {
   var isLoading = false.obs;

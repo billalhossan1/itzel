@@ -15,7 +15,6 @@ import '../screens/creator/creator_all_chat_screen/creator_all_chat_screen.dart'
 import '../screens/creator/creator_all_event_status_screen/creator_all_event_status_screen.dart';
 import '../screens/creator/creator_all_job_application_screen/creator_all_job_application_screen.dart';
 import '../screens/creator/creator_analytics_screen/creator_analytics_screen.dart';
-import '../screens/creator/creator_business_information_screen/creator_business_information_screen.dart';
 import '../screens/creator/creator_change_password_screen/creator_change_password_screen.dart';
 import '../screens/creator/creator_chat_receiver_info_screen/creator_chat_receiver_info_screen.dart';
 import '../screens/creator/creator_chat_screen/creator_chat_screen.dart';

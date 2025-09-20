@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:itzel/screens/creator/creator_all_job_application_screen/controllers/creator_all_job_application_controller.dart';
 
 import '../../../../services/repository/user_job_repository/user_job_repository.dart';
 

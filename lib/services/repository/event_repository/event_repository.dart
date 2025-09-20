@@ -8,7 +8,6 @@ import 'package:itzel/constants/app_api_url.dart';
 import 'package:itzel/models/event_model.dart';
 import 'package:itzel/services/api/api_get_services.dart';
 import 'package:itzel/services/storage_services/app_auth_storage.dart';
-import 'package:itzel/services/storage_services/app_user_storage.dart';
 import 'package:mime/mime.dart';
 
 import '../../../models/event_schedule_model.dart' as EventSchedule;

@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import '../../../../models/get_event_status_model.dart';
 import '../../../../services/repository/event_repository/event_repository.dart';
-import '../../creator_dashboard_screen/controllers/creator_dashboard_controller.dart';
 
 class EditEventPostController extends GetxController {
   var isLoading = false.obs;
