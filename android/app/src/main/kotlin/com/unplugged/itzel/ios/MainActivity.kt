@@ -1,4 +1,4 @@
-package com.unplugged.itzel
+package com.unplugged.itzel.ios
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
