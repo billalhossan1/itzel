@@ -87,10 +87,12 @@ class AppImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return Container(
+    return Image.asset(
+      "assets/images/noImage.png",
       width: width,
       height: height,
-      color: color,
+      fit: fit,
+      color: iconColor,
     );
   }
 }
@@ -158,17 +160,13 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
       fit: widget.fit,
       imageErrorBuilder: (context, error, stackTrace) {
         errorLog("Error loading network image:", stackTrace);
-        return GestureDetector(
-          onTap: _retry,
-          child: Container(
-            width: widget.width,
-            height: widget.height,
-            color: AppColors.grey,
-            child: const Center(
-              child: Icon(Icons.refresh, color: Colors.white),
-            ),
-          ),
+        return Image.asset(
+          "assets/images/noImage.png",
+          width: widget.width,
+          height: widget.height,
+          fit: widget.fit,
         );
+        ;
       },
       fadeInDuration: const Duration(milliseconds: 300),
       fadeOutDuration: const Duration(milliseconds: 300),

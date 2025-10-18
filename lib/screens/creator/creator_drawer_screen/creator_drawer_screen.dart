@@ -64,12 +64,14 @@ class CreatorDrawerScreen extends StatelessWidget {
             const SpaceWidget(spaceHeight: 16),
             Obx(
               () => CreatorDrawerSectionWidget(
-                      onTap: () {
-                        controller.onTapBusinessInformation();
-                      },
-                      text: controller.isLoading.value?"Loading please wait....":AppStrings.businessInformation,
-                      icon: AppIconsPath.businessInformationIcon,
-                    ),
+                onTap: () {
+                  controller.onTapBusinessInformation();
+                },
+                text: controller.isLoading.value
+                    ? "Loading please wait...."
+                    : AppStrings.businessInformation,
+                icon: AppIconsPath.businessInformationIcon,
+              ),
             ),
             // CreatorDrawerSectionWidget(
             //   onTap: () {
@@ -142,21 +144,23 @@ class CreatorDrawerScreen extends StatelessWidget {
               text: AppStrings.changePassword,
               icon: AppIconsPath.changePasswordIcon,
             ),
-            // CreatorDrawerSectionWidget(
-            //   onTap: () {
-            //     Get.toNamed(AppRoutes.creatorDeleteAccountScreen);
-            //   },
-            //   text: AppStrings.deleteAccount,
-            //   icon: AppIconsPath.deleteAccountIcon,
-            // ),
+            CreatorDrawerSectionWidget(
+              onTap: () {
+                Get.toNamed(AppRoutes.creatorDeleteAccountScreen);
+              },
+              text: AppStrings.deleteAccount,
+              icon: AppIconsPath.deleteAccountIcon,
+            ),
             const SpaceWidget(spaceHeight: 80),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Obx(
                 () => ButtonWidget(
-                  onPressed: controller.isLogoutLoading.value ? null : () {
-                    controller.logout();
-                  },
+                  onPressed: controller.isLogoutLoading.value
+                      ? null
+                      : () {
+                          controller.logout();
+                        },
                   label: 'Logout',
                   buttonWidth: double.infinity,
                   isLoading: controller.isLogoutLoading.value,

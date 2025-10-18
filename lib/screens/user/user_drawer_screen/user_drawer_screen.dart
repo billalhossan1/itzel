@@ -278,15 +278,14 @@ class UserDrawerScreen extends StatelessWidget {
               text: AppStrings.changePassword,
               icon: AppIconsPath.changePasswordIcon,
             ),
-            // DrawerSectionWidget(
-            //   onTap: () {
-            //     Get.toNamed(AppRoutes.userDeleteAccountScreen);
-            //   },
-            //   text: AppStrings.deleteAccount,
-            //   icon: AppIconsPath.deleteAccountIcon,
-            // ),
+            DrawerSectionWidget(
+              onTap: () {
+                Get.toNamed(AppRoutes.userDeleteAccountScreen);
+              },
+              text: AppStrings.deleteAccount,
+              icon: AppIconsPath.deleteAccountIcon,
+            ),
             const SpaceWidget(spaceHeight: 80),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ButtonWidget(
@@ -297,7 +296,6 @@ class UserDrawerScreen extends StatelessWidget {
                 buttonWidth: double.infinity,
               ),
             ),
-
             const Padding(
               padding:
                   EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 25),
@@ -308,7 +306,6 @@ class UserDrawerScreen extends StatelessWidget {
                 maxLines: 5,
               ),
             ),
-
             const SpaceWidget(spaceHeight: 16),
           ],
         ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:itzel/routes/app_routes.dart';
+import 'package:itzel/services/api/api_delete_services.dart';
 
+import '../../../constants/app_api_url.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
@@ -25,17 +29,26 @@ class _UserDeleteAccountScreenState extends State<UserDeleteAccountScreen> {
     });
   }
 
-  void deleteAccount() {
+  Future<void> deleteAccount() async {
     final password = passwordController.text;
     if (password.isEmpty) {
       showError("Enter Password");
     } else if (password.length < 6) {
       showError("Password length should be more than 6 characters");
     } else {
-      // Add your delete account logic here
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account deleted successfully')),
+      final response = await ApiDeleteServices().apiDeleteServices(
+        '${AppApiUrl.baseUrl}/user',
+        statusCode: 200,
       );
+      // Add your delete account logic here
+
+      if (response != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account deleted successfully')),
+        );
+
+        Get.toNamed(AppRoutes.loginScreen);
+      }
     }
   }
 
