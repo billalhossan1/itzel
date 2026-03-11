@@ -163,6 +163,8 @@ class UserHomeDetailsController extends GetxController {
     } catch (e) {
       errorLog("Error creating payment intent", e);
       return null;
+
+
     }
   }
 
