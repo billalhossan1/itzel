@@ -44,6 +44,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SpaceWidget(spaceHeight: 12),
+
                       const Center(
                         child: TextWidget(
                           text: AppStrings.fillInTheLoginBlanks,
@@ -53,7 +54,9 @@ class LoginScreen extends StatelessWidget {
                           maxLines: 2,
                         ),
                       ),
+
                       const SpaceWidget(spaceHeight: 24),
+
                       TextFieldWidget(
                         controller: controller.emailController,
                         hintText: 'Email',
@@ -70,7 +73,9 @@ class LoginScreen extends StatelessWidget {
                           return null;
                         },
                       ),
+
                       const SpaceWidget(spaceHeight: 12),
+
                       TextFieldWidget(
                         controller: controller.passwordController,
                         hintText: 'Password',
@@ -124,7 +129,14 @@ class LoginScreen extends StatelessWidget {
                       const SpaceWidget(spaceHeight: 32),
                       Obx(()=>ButtonWidget(
                         isLoading: controller.isLoading.value,
-                        onPressed: controller.onSignIn,
+                        onPressed:(){
+                          if (controller.formKey.currentState!.validate()) {
+                            controller.onSignIn();
+                          }
+                        },
+
+
+
                         label: AppStrings.signInButtonText,
                         buttonWidth: double.infinity,
                         buttonHeight: 56,

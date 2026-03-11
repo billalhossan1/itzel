@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:itzel/models/profile_model.dart';
 import 'package:itzel/services/repository/profile_repository/profile_repository.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 
 class UserAccountController extends GetxController {
   final ProfileRepository _profileRepository = ProfileRepository();
@@ -18,7 +19,14 @@ class UserAccountController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchProfileData();
+
+    String? token =AppAuthStorage().getToken();
+
+    print("token is possible =-=--=-=-=-=-=-=-=-=-=-=-=-=${token??''}");
+
+    if(token!=null && token.isNotEmpty==true){
+      fetchProfileData();
+    }
   }
 
   Future<void> fetchProfileData() async {

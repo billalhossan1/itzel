@@ -181,48 +181,70 @@ class RegistrationScreen extends StatelessWidget {
                                 },
                               ),
                               const SpaceWidget(spaceHeight: 12),
-                              Row(
-                                children: [
-                                  CountryCodePicker(
-                                    onChanged: (country) {
-                                      if (controller.isCreator) {
-                                        controller.creatorCountryCode = country.dialCode ?? '+1';
-                                      } else {
-                                        controller.userCountryCode = country.dialCode ?? '+1';
-                                      }
-                                    },
-                                    initialSelection: controller.isCreator
-                                        ? controller.creatorCountryCode
-                                        : controller.userCountryCode,
-                                    favorite: const ['+1', 'US', '+91', 'IN'],
-                                    showCountryOnly: false,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: TextFormField(
 
-                                      controller: controller.isCreator
-                                          ? controller.creatorPhoneController
-                                          : controller.userPhoneController,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: const InputDecoration(
-                                        hintText: 'Phone Number',
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Enter phone number';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
+
+                                  // CountryCodePicker(
+                                  //   onChanged: (country) {
+                                  //     if (controller.isCreator) {
+                                  //       controller.creatorCountryCode = country.dialCode ?? '+1';
+                                  //     } else {
+                                  //       controller.userCountryCode = country.dialCode ?? '+1';
+                                  //     }
+                                  //   },
+                                  //   initialSelection: controller.isCreator
+                                  //       ? controller.creatorCountryCode
+                                  //       : controller.userCountryCode,
+                                  //   favorite: const ['+1', 'US', '+91', 'IN'],
+                                  //   showCountryOnly: false,
+                                  //   showOnlyCountryWhenClosed: false,
+                                  //   alignLeft: false,
+                                  // ),
+
+                                  // const SizedBox(width: 8),
+                                  //
+                                  // Row(
+                                  //   children: [
+                                  //     Expanded(
+                                  //       child: TextFieldWidget(
+                                  //         controller: controller.isCreator
+                                  //             ? controller.creatorPhoneController
+                                  //             : controller.userPhoneController,
+                                  //         keyboardType: TextInputType.phone,
+                                  //         validator: (value) {
+                                  //           if (value == null || value.isEmpty) {
+                                  //             return 'Enter phone number';
+                                  //           }
+                                  //           return null;
+                                  //         }, hintText: 'Phone Number',
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+
+
+
+                                  // Expanded(
+                                  //   child: TextFormField(
+                                  //     controller: controller.isCreator
+                                  //         ? controller.creatorPhoneController
+                                  //         : controller.userPhoneController,
+                                  //     keyboardType: TextInputType.phone,
+                                  //     decoration: const InputDecoration(
+                                  //       hintText: 'Phone Number',
+                                  //       border: OutlineInputBorder(),
+                                  //       contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                                  //     ),
+                                  //     validator: (value) {
+                                  //       if (value == null || value.isEmpty) {
+                                  //         return 'Enter phone number';
+                                  //       }
+                                  //       return null;
+                                  //     },
+                                  //   ),
+                                  // ),
+
                               const SpaceWidget(spaceHeight: 12),
+
                               TextFieldWidget(
                                 controller: controller.isCreator
                                     ? controller.creatorPasswordController

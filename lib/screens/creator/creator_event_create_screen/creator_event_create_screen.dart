@@ -247,6 +247,8 @@ class CreatorEventCreateScreen extends StatelessWidget {
               maxLines: 1,
               suffixIcon: Icons.location_on,
               onTapSuffix: () async {
+
+
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -254,11 +256,27 @@ class CreatorEventCreateScreen extends StatelessWidget {
                   ),
                 );
 
-                if (result != null && result is Map<String, dynamic>) {
+                if (result != null && result is Map<String, dynamic> && result.containsKey('coordinates')) {
                   final coordinates = result['coordinates'];
-                  controller.locationController.text =
-                      '${coordinates[0]}, ${coordinates[1]}';
+                  if (coordinates is List && coordinates.length == 2) {
+                    controller.locationController.text =
+                    '${coordinates[0]}, ${coordinates[1]}';
+                  }
                 }
+
+
+                // final result = await Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const CreatorMapScreen(),
+                //   ),
+                // );
+                //
+                // if (result != null && result is Map<String, dynamic>) {
+                //   final coordinates = result['coordinates'];
+                //   controller.locationController.text =
+                //       '${coordinates[0]}, ${coordinates[1]}';
+                // }
               },
             ),
             const SpaceWidget(spaceHeight: 10),

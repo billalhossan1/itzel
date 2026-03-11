@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 
 import '../../../../models/profile_model.dart';
 import '../../../../services/repository/profile_repository/profile_repository.dart';
@@ -19,7 +20,14 @@ class CreatorAccountController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchProfileData();
+
+    String ? token=AppAuthStorage().getToken();
+    if(token!=null && token.isNotEmpty==true){
+      fetchProfileData();
+    }
+
+
+    //fetchProfileData();
   }
 
   Future<void> fetchProfileData() async {

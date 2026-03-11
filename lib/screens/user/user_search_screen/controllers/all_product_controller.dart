@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import 'package:itzel/widgets/app_snack_bar/app_snack_bar.dart';
 
 import '../../../../models/get_all_product_model.dart';
@@ -22,13 +23,15 @@ class AllProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchAllProducts();
+    String? token=AppAuthStorage().getToken();
+    if(token!=null && token.isNotEmpty==true ){
+      fetchAllProducts();
+    }
+
+
   }
 
-  Future<void> fetchAllProducts({
-    bool isLoadMore = false,
-    Map<String, dynamic>? filters,
-  }) async {
+  Future<void> fetchAllProducts({bool isLoadMore = false, Map<String, dynamic>? filters,}) async {
     try {
       if (isLoadMore) {
         isLoadingMore.value = true;

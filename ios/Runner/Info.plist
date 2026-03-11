@@ -24,25 +24,22 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GMSApiKey</key>
+	<string>AIzaSyDJMqSf1_oKuqyKo4J_XlwsA_hNa_1KHCA</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
-	<!-- Usage descriptions (keep only one instance of each) -->
-	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera to allow users to take photos and videos.</string>
-
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to your photo library so you can select and upload photos.</string>
-
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses your location to show relevant services nearby.</string>
-
-	<!-- Optional Bonjour service if you use Dart Observatory or debugging tools -->
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
-
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to the camera to allow users to take photos and videos.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location for create the event  job post and find those things</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location for create the event  job post and find those things</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to your photo library so you can select and upload photos.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -60,5 +57,7 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

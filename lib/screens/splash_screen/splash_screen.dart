@@ -11,7 +11,9 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final Size size = MediaQuery.sizeOf(context);
+
     return GetBuilder<SplashController>(
       init: SplashController(),
       builder: (controller) {

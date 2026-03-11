@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../../models/my_group_model.dart';
@@ -39,10 +40,15 @@ class UserGroupChatController extends GetxController {
 
   Future<void> init() async {
     print('🟠 Initializing controller for group: ${group.id}');
-    await fetchUserProfile();
-    await fetchMessages();
-    initSocket();
-    _startPeriodicRefresh();
+    String ? token=AppAuthStorage().getToken();
+
+    if(token!=null && token.isNotEmpty==true){
+
+      await fetchUserProfile();
+      await fetchMessages();
+      initSocket();
+      _startPeriodicRefresh();
+    }
   }
 
   void _startPeriodicRefresh() {

@@ -15,8 +15,11 @@ import '../../../auth_screens/verify_account_screen/controllers/verify_account_c
 import '../../../user/user_notification_screen/controllers/user_notification_controller.dart';
 
 class UserDrawerController extends GetxController {
+
   AppAuthStorage appAuthStorage = AppAuthStorage();
+
   final ProfileRepository _profileRepository = ProfileRepository();
+
   var eventWishlist = <EventWishList>[].obs;
   var jobWishlist = <JobWishList>[].obs;
 
@@ -67,7 +70,13 @@ class UserDrawerController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchEventWishlist();
-    fetchJobWishlist();
+    String? token=AppAuthStorage().getToken();
+    if(token!=null && token.isNotEmpty==true){
+      fetchEventWishlist();
+      fetchJobWishlist();
+    }
+    //
+    // fetchEventWishlist();
+    // fetchJobWishlist();
   }
 }

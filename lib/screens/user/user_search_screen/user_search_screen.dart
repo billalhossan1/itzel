@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:itzel/screens/user/user_search_screen/widgets/search_text_field_widget.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import 'package:itzel/utils/app_size.dart';
-
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_strings.dart';
 import '../../../routes/app_routes.dart';
@@ -40,6 +40,7 @@ class UserSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String ? token= AppAuthStorage().getToken();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
@@ -229,13 +230,26 @@ class UserSearchScreen extends StatelessWidget {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          if (jobController
-                                              .isJobInWishlist(job.id)) {
-                                            jobController
-                                                .removeFromWishlist(job.id);
-                                          } else {
-                                            jobController.addToWishlist(job.id);
-                                          }
+
+                                           String ? token=AppAuthStorage().getToken();
+
+                                           if(token!=null && token.isNotEmpty==true){
+
+                                             if (jobController
+                                                 .isJobInWishlist(job.id)) {
+                                               jobController
+                                                   .removeFromWishlist(job.id);
+                                             } else {
+                                               jobController.addToWishlist(job.id);
+                                             }
+
+                                           }else{
+
+                                             Get.snackbar("","Not registered user");
+
+                                             Get.offAndToNamed(AppRoutes.loginScreen);
+
+                                           }
                                         },
                                         borderRadius: BorderRadius.circular(4),
                                         child: Container(
@@ -379,7 +393,7 @@ class UserSearchScreen extends StatelessWidget {
                                                 size.width / (size.width / 180),
                                             child: TextWidget(
                                               text: '\$${job.salary}',
-                                              fontColor: AppColors.black500,
+                                              fontColor:AppColors.black500,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
                                               overflow: TextOverflow.ellipsis,
@@ -402,10 +416,20 @@ class UserSearchScreen extends StatelessWidget {
                                       ),
                                       InkWell(
                                         onTap: () {
+
+                                        String ? token=AppAuthStorage().getToken();
+                                        if(token!=null && token.isNotEmpty==true){
+
                                           Get.toNamed(
                                             AppRoutes.userJobApplyingScreen,
                                             arguments: {'jobId': job.id},
                                           );
+
+                                        }else{
+                                          Get.snackbar("","Not registered user");
+
+                                          Get.offAndToNamed(AppRoutes.loginScreen);
+                                        }
                                         },
                                         borderRadius: BorderRadius.circular(4),
                                         child: Container(
@@ -442,7 +466,7 @@ class UserSearchScreen extends StatelessWidget {
                   );
                 }
               }),
-              const SpaceWidget(spaceHeight: 8),
+              const SpaceWidget(spaceHeight:8),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: size.width / (size.width / 20)),
@@ -457,7 +481,14 @@ class UserSearchScreen extends StatelessWidget {
                     ),
                     TextButtonWidget(
                       onPressed: () {
+
+                        String? token=AppAuthStorage().getToken();
+                        if(token!=null && token.isNotEmpty==true){
                         Get.toNamed(AppRoutes.userAllProductListScreen);
+                        }else{
+                          Get.snackbar("","Not registered user");
+                          Get.offAndToNamed(AppRoutes.loginScreen);
+                        }
                       },
                       text: AppStrings.seeAll,
                       textColor: AppColors.blueLight,
@@ -470,6 +501,9 @@ class UserSearchScreen extends StatelessWidget {
                 ),
               ),
               const SpaceWidget(spaceHeight: 8),
+
+              if(token!=null && token.isNotEmpty==true)
+
               Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
@@ -543,8 +577,7 @@ class UserSearchScreen extends StatelessWidget {
                                     ),
                                     // SpaceWidget(spaceWidth: 4),
                                     TextWidget(
-                                      text:
-                                          "${capitalize(product.city ?? '')}, ${capitalize(product.state ?? '')}, ${capitalize(product.country ?? '')}",
+                                      text:"${capitalize(product.city ?? '')}, ${capitalize(product.state ?? '')}, ${capitalize(product.country ?? '')}",
                                       fontColor: AppColors.grey700,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
@@ -561,7 +594,10 @@ class UserSearchScreen extends StatelessWidget {
                   );
                 }
               }),
-              const SpaceWidget(spaceHeight: 80),
+
+
+              const SpaceWidget(spaceHeight: 80)
+
             ],
           ),
         ),

@@ -2,17 +2,17 @@ class AppStrings {
   AppStrings._();
 
   // ChatGPT API Key
+
   static const String chatGptApiKey =
       "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";
 
   // Stripe Publishable Key
-  static const String stripePublishableKey =
-      "pk_live_51RRpkcFCyK2dflp0IFWJGDQNgaPtrQMZKhAxSG3oJ7wdH7LCn5ZoEA1OFv0f8DucSatWiFJ4rVwaOEgScLhOknV500sXkoMCPE";
+  static const String stripePublishableKey ="pk_test_51RRpkcFCyK2dflp0W3BEynYypMSWlLybjczp25QmriIc2C897T19BdRGqnMzvGaFWJfdVUv7vRoYOk76PLMPj96200K5VOiFRk";
+      //"pk_live_51RRpkcFCyK2dflp0IFWJGDQNgaPtrQMZKhAxSG3oJ7wdH7LCn5ZoEA1OFv0f8DucSatWiFJ4rVwaOEgScLhOknV500sXkoMCPE";
   static const String appName = "Itzel";
   static const String fontFamilyName = "Poppins";
   static const String loginToAccount = "Login to your account";
-  static const String fillInTheLoginBlanks =
-      "Fill in the blank to login to your\naccount";
+  static const String fillInTheLoginBlanks ="Fill in the blank to login to your\naccount";
   static const String rememberMe = "Remember me";
   static const String forgotPassword = "Forgot Password?";
   static const String signInButtonText = "Sign in";

@@ -28,7 +28,7 @@ class UserHomeDetailsScreen extends StatelessWidget {
       s.isNotEmpty ? s[0].toUpperCase() + s.substring(1) : '';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
@@ -53,12 +53,12 @@ class UserHomeDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (controller.isVideoInitialized)
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        AspectRatio(
-                          aspectRatio: controller.controller.value.aspectRatio,
-                          child: Stack(
+                    AspectRatio(
+                      aspectRatio: controller.controller.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Stack(
                             children: [
                               // Video Player
                               ClipRRect(
@@ -68,6 +68,7 @@ class UserHomeDetailsScreen extends StatelessWidget {
 
                               // Semi-transparent overlay when paused
                               if (!controller.isVideoPlaying)
+
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.black.withOpacity(0.3),
@@ -150,11 +151,14 @@ class UserHomeDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          ),
+
                         ),
-                      ],
+                        ],
+                      ),
                     ),
+
                   const SpaceWidget(spaceHeight: 16),
+
                   Row(
                     children: [
                       if (controller.event?.tags != null)
@@ -179,6 +183,7 @@ class UserHomeDetailsScreen extends StatelessWidget {
                         }),
                     ],
                   ),
+
                   const SpaceWidget(spaceHeight: 8),
                   TextWidget(
                     text:
@@ -249,6 +254,9 @@ class UserHomeDetailsScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 32),
                   FillButtonWidget(
                     onPressed: () {
+
+                      debugPrint("This one is eventID : =-=-=-=-=-=-=-=-=-=-=-=-=${controller.event?.id??""}");
+
                       controller.makePayment(
                         eventId: controller.event?.id ?? '',
                         amount: controller.event?.price ?? 0,
@@ -265,7 +273,7 @@ class UserHomeDetailsScreen extends StatelessWidget {
                       Get.toNamed(
                         AppRoutes.userMapScreen,
                         arguments: {
-                          'name': controller.event?.name ?? '',
+                          'name': controller.event?.name ??'',
                           'coordinate': controller.event?.coordinate,
                         },
                       );

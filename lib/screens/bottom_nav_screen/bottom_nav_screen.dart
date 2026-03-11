@@ -36,6 +36,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   void initState() {
     super.initState();
+
+
+
     userRole = Get.put(AppAuthStorage()).getRole() ?? 'USER';
     // Ensure UserNotificationController is registered
     if (!Get.isRegistered<UserNotificationController>()) {
@@ -57,6 +60,12 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    String? token= AppAuthStorage().getToken();
+
+
+
+
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -85,7 +94,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           height: size.height / (size.height / 45),
           width: size.width / (size.width / 120),
         ),
-        actions: [
+        actions:[
+
+         if(token!=null && token.isNotEmpty==true)
+
           IconButton(
               tooltip: "Notifications",
               onPressed: () {
@@ -215,7 +227,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   }
 }
 
-Route _createUserDrawerRoute() {
+Route _createUserDrawerRoute(){
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => UserDrawerScreen(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {

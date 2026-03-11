@@ -83,8 +83,8 @@ class CreatorProfileScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 16),
               _buildTextField("Username", _controller.usernameController),
               _buildTextField("Address", _controller.addressController),
-              _buildTextField(
-                  "Phone Number", _controller.phoneNumberController),
+              // _buildTextField(
+              //     "Phone Number", _controller.phoneNumberController),
               const SpaceWidget(spaceHeight: 6),
               Obx(() => _controller.isUpdated.value
                   ? Obx(()=>ButtonWidget(

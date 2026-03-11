@@ -107,4 +107,6 @@ class LocationController extends GetxController {
       print('Error getting destination address: $e');
     }
   }
+
+
 }

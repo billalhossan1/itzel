@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itzel/routes/app_routes.dart';
 import 'package:itzel/screens/user/user_account_screen/widgets/profile_info_widget.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import 'package:itzel/widgets/button_widget/button_widget.dart';
 
 import '../../../constants/app_colors.dart';
@@ -23,6 +24,9 @@ class UserAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String? token=AppAuthStorage().getToken();
+
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
@@ -31,7 +35,7 @@ class UserAccountScreen extends StatelessWidget {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            return SingleChildScrollView(
+            return  token!=null?  SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,10 +73,10 @@ class UserAccountScreen extends StatelessWidget {
                     label: 'Email',
                     value: controller.email.value,
                   ),
-                  ProfileInfoWidget(
-                    label: 'Contact Number',
-                    value: controller.contactNumber.value,
-                  ),
+                  // ProfileInfoWidget(
+                  //   label: 'Contact Number',
+                  //   value: controller.contactNumber.value,
+                  // ),
                   ProfileInfoWidget(
                     label: 'Address',
                     value: capitalize(controller.address.value),
@@ -99,7 +103,36 @@ class UserAccountScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            );
+            ):
+
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+
+                children: [
+                  Text("You are not a registered user."),
+
+                  SizedBox(
+                    height: 16
+                  ),
+
+                  GestureDetector(
+
+                    onTap: (){
+
+                     Get.offAllNamed(AppRoutes.registrationScreen);
+
+                    },
+
+                    child: Text("Registration",style: TextStyle(
+                      color: AppColors.blue,
+                      decoration: TextDecoration.underline
+                    ),),
+                  )
+                ],
+              ),
+            )
+            ;
           }
         },
       ),

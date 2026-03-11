@@ -3,6 +3,7 @@ import 'package:itzel/models/get_job_model.dart';
 
 import '../../../../services/repository/profile_repository/profile_repository.dart';
 import '../../../../services/repository/user_job_repository/user_job_repository.dart';
+import '../../../../services/storage_services/app_auth_storage.dart' show AppAuthStorage;
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserAllJobController extends GetxController {
@@ -16,8 +17,14 @@ class UserAllJobController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    String? token=AppAuthStorage().getToken();
+
     fetchJobs();
-    fetchJobWishlist();
+    if(token!=null && token.isNotEmpty==true){
+      fetchJobWishlist();
+    }
+
   }
 
   Future<void> fetchJobs() async {

@@ -20,28 +20,39 @@ class UserMapScreen extends StatelessWidget {
     final List<double> coordinate = arguments['coordinate'];
     final LatLng destination = LatLng(coordinate[0], coordinate[1]);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+
+      locationController.getLocationUpdates();
+
       locationController.initializeDestination(destination);
     });
 
     Size size = MediaQuery.sizeOf(context);
+
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
       body: Obx(() {
-        final currentLocation = locationController.currentLocation.value;
+
+        final currentLocation =locationController.currentLocation.value;
+
+        print("This is the  current location  =-=-=-=-=-=-=-=-=-=-=-- ${currentLocation??""}");
 
         if (currentLocation == null) {
+
           return const Center(child: CircularProgressIndicator());
+
         }
 
         return Column(
           children: [
+
             Obx(() => MapAppBarWidget(
-                  titleText: name,
+                  titleText:name,
                   subTitleText: locationController.isLoadingDestination.value
                       ? 'Fetching address...'
                       : locationController.destinationAddress.value,
                 )),
+
             Expanded(
               child: GoogleMap(
                 mapType: MapType.normal,
@@ -86,3 +97,9 @@ class UserMapScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+

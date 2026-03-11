@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../routes/app_routes.dart';
@@ -18,8 +19,17 @@ class UserHomeScreen extends StatelessWidget {
 
   UserHomeScreen({super.key});
 
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
+
     Size size = MediaQuery.sizeOf(context);
     ResponsiveUtils.initialize(context);
     return AnnotatedRegion(
@@ -61,10 +71,24 @@ class UserHomeScreen extends StatelessWidget {
                     ...controller.events.map((event) {
                       return InkWell(
                         onTap: () {
-                          Get.toNamed(
-                            AppRoutes.userHomeDetailsScreen,
-                            arguments: {'id': event.id},
-                          );
+
+                          String ? token=AppAuthStorage().getToken();
+
+                          if(token !=null && token.isNotEmpty==true){
+                            print("this is url : =-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=${event.thumbnailImage}");
+                            Get.toNamed(
+                              AppRoutes.userHomeDetailsScreen,
+                              arguments: {'id': event.id},
+                            );
+                          }else{
+
+                            Get.snackbar("","Not registered user");
+
+                            Get.offAndToNamed(AppRoutes.loginScreen);
+
+
+
+                          }
                         },
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
@@ -115,7 +139,9 @@ class UserHomeScreen extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             color: AppColors.blue50,
                                             borderRadius:
+
                                                 BorderRadius.circular(4),
+
                                           ),
                                           child: TextWidget(
                                             text: capitalize(type),
@@ -164,7 +190,26 @@ class UserHomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+
+                                      String? token=AppAuthStorage().getToken();
+
+                                      if(token!=null && token.isNotEmpty==true){
+
+                                        Get.toNamed(
+                                          AppRoutes.userHomeDetailsScreen,
+                                          arguments: {'id': event.id},
+                                        );
+
+                                      }else{
+                                        Get.snackbar("","Not registered user");
+
+                                        Get.offAndToNamed(AppRoutes.loginScreen);
+                                      }
+
+
+
+                                    },
                                     borderRadius: BorderRadius.circular(4),
                                     child: Container(
                                       padding: EdgeInsets.symmetric(

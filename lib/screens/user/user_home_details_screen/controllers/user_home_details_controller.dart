@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:itzel/models/event_model.dart';
+import 'package:itzel/services/api/api_patch_services.dart';
 import 'package:itzel/services/api/api_post_services.dart';
 import 'package:itzel/services/repository/event_repository/event_repository.dart';
 import 'package:video_player/video_player.dart';
@@ -14,6 +15,7 @@ class UserHomeDetailsController extends GetxController {
   final EventRepository _eventRepository = EventRepository();
   final ProfileRepository _profileRepository = ProfileRepository();
   final ApiPostServices _apiPostServices = ApiPostServices();
+  final ApiPatchServices _apiPatchServices= ApiPatchServices();
 
   VideoPlayerController? _controller;
   bool isVideoEnded = false;
@@ -70,12 +72,15 @@ class UserHomeDetailsController extends GetxController {
     try {
       isLoading.value = true;
       event = await _eventRepository.getEventById(id);
+
+      debugPrint('=-=-=-=-=-=-=--=--= This one is video url ::::::::::::::${AppApiUrl.domain}${event!.introMedia}');
+
       isLoading.value = false;
 
       if (event != null && (event!.introMedia?.isNotEmpty ?? false)) {
-        String videoUrl = event!.introMedia!.startsWith('http')
+        String videoUrl = event!.introMedia!.startsWith('http') || event!.introMedia!.startsWith('https')
             ? event!.introMedia!
-            : '${AppApiUrl.domain}/${event!.introMedia}';
+            :'${AppApiUrl.domain}${event!.introMedia}';
 
         await initializeVideoPlayer(videoUrl);
       }
@@ -83,6 +88,7 @@ class UserHomeDetailsController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       errorLog("Error fetching event details", e);
+
     }
   }
 
@@ -140,12 +146,19 @@ class UserHomeDetailsController extends GetxController {
 
   bool get isVideoPlaying => _controller?.value.isPlaying ?? false;
 
-  Future<Map<String, dynamic>?> createPaymentIntent(int amount) async {
+  Future<Map<String, dynamic>?> createPaymentIntent(int amount, var id) async {
     try {
-      final response = await _apiPostServices.apiPostServices(
-        url: '${AppApiUrl.baseUrl}${AppApiUrl.createPaymentIntent}',
+      final response = await  _apiPatchServices.apiPatchServices(
+        url: '${AppApiUrl.baseUrl}${AppApiUrl.createPaymentIntent}/${id??""}',
         body: {'amount': amount},
       );
+
+      print("This is succssURL=--=-=-=-=-=-=-=-=-=--=-=-=-${response["data"]["url"]}");
+
+      if(response["data"]["message"]=="Payment intent created successfully"){
+
+      }
+
       return response;
     } catch (e) {
       errorLog("Error creating payment intent", e);
@@ -158,34 +171,44 @@ class UserHomeDetailsController extends GetxController {
     required int amount,
   }) async {
     try {
-      final paymentIntentData = await createPaymentIntent(amount);
-      if (paymentIntentData == null) return false;
+      final paymentIntentData = await createPaymentIntent(amount,eventId??"");
 
-      final clientSecret = paymentIntentData["data"]["client_secret"];
-      if (clientSecret == null || clientSecret.isEmpty) return false;
+       if (paymentIntentData == null) return false;
+      //
+      // final clientSecret = paymentIntentData["data"]["client_secret"];
+      // if (clientSecret == null || clientSecret.isEmpty) return false;
+      //
+      // await Stripe.instance.initPaymentSheet(
+      //     paymentSheetParameters: SetupPaymentSheetParameters(
+      //     paymentIntentClientSecret: clientSecret,
+      //     merchantDisplayName: 'Itzel',
+      //     style: ThemeMode.system,
+      //   ),
+      // );
+      //
+      // try {
+      //   await Stripe.instance.presentPaymentSheet();
+      //
+      //
+      //    final response= await _apiPatchServices.apiPatchServices(url:"'${AppApiUrl.baseUrl}/group/join/${eventId??""}'" );
+      //
+      //   // final response = await _apiPostServices.apiPostServices(
+      //   //   url: '${AppApiUrl.baseUrl}/group/join/${eventId??""}',
+      //   //   body: {
+      //   //     'event': eventId,
+      //   //     'transactionId': paymentIntentData["data"]["paymentIntent"],
+      //   //   },
+      //   // );
+      //
+      //
+      //   return response != null && response['success'] == true;
+      // } catch (e) {
+      //   return false;
+      // }
 
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Itzel',
-          style: ThemeMode.system,
-        ),
-      );
+      return true;
 
-      try {
-        await Stripe.instance.presentPaymentSheet();
-        final response = await _apiPostServices.apiPostServices(
-          url: '${AppApiUrl.baseUrl}/group/join/',
-          body: {
-            'event': eventId,
-            'transactionId': paymentIntentData["data"]["paymentIntent"],
-          },
-        );
 
-        return response != null && response['success'] == true;
-      } catch (e) {
-        return false;
-      }
     } catch (e) {
       return false;
     }

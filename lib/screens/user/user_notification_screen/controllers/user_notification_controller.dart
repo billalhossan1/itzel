@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:itzel/models/notification_model.dart';
 import 'package:itzel/services/repository/notification_repository/notification_repository.dart';
+import 'package:itzel/services/storage_services/app_auth_storage.dart';
 
 class UserNotificationController extends GetxController {
   final NotificationRepository _notificationRepository =
@@ -16,13 +17,20 @@ class UserNotificationController extends GetxController {
   void onInit() {
     super.onInit();
     // Only fetch the count when controller is initialized
-    fetchUnreadNotificationCount();
+
+    String? token=AppAuthStorage().getToken();
+
+    if(token!=null && token.isNotEmpty==true){
+      fetchUnreadNotificationCount();
+    }
+
+
     // _timer = Timer.periodic(const Duration(seconds: 30), (_) {
     //   fetchUnreadNotificationCount();
     // });
   }
 
-  Future<void> fetchNotifications() async {
+  Future<void> fetchNotifications()async{
     try {
       isLoading.value = true;
       final fetchedNotifications =

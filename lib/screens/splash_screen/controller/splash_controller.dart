@@ -12,7 +12,10 @@ class SplashController extends GetxController {
   Future<void> initialDataLoad() async {
     try {
       var token = appAuthStorage.getToken();
-      if (token != null && token.isNotEmpty) {
+
+      print("This is the token =-=-=-=-=-==-=-=-=-=${token??"nulll"}");
+
+      if (token != null && token.isNotEmpty){
         String? userRole = extractRoleFromToken(token);
 
         await Future.delayed(
@@ -29,13 +32,19 @@ class SplashController extends GetxController {
         await Future.delayed(
           const Duration(seconds: 2),
           () {
-            Get.offAllNamed(AppRoutes.loginScreen);
+
+            Get.offAll(const BottomNavScreen());
+
+            //Get.offAllNamed(AppRoutes.loginScreen);
           },
         );
       }
     } catch (e) {
+
       errorLog("initial data load function", e);
+
       Get.offAllNamed(AppRoutes.errorScreen);
+
     }
   }
 

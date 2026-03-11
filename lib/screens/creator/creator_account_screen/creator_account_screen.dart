@@ -72,10 +72,10 @@ class CreatorAccountScreen extends StatelessWidget {
                     label: 'Email',
                     value: controller.email.value,
                   ),
-                  ProfileInfoWidget(
-                    label: 'Contact Number',
-                    value: controller.contactNumber.value,
-                  ),
+                  // ProfileInfoWidget(
+                  //   label: 'Contact Number',
+                  //   value: controller.contactNumber.value,
+                  // ),
                   ProfileInfoWidget(
                     label: 'Address',
                     value: capitalize(controller.address.value),
