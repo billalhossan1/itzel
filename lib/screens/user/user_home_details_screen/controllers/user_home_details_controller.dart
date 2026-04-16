@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:itzel/models/event_model.dart';
+import 'package:itzel/screens/web_view_screen/web_screen.dart';
 import 'package:itzel/services/api/api_patch_services.dart';
 import 'package:itzel/services/api/api_post_services.dart';
 import 'package:itzel/services/repository/event_repository/event_repository.dart';
@@ -155,9 +156,11 @@ class UserHomeDetailsController extends GetxController {
 
       print("This is succssURL=--=-=-=-=-=-=-=-=-=--=-=-=-${response["data"]["url"]}");
 
-      if(response["data"]["message"]=="Payment intent created successfully"){
+     // if(response["data"]["message"]=="Payment intent created successfully"){
 
-      }
+        Get.to(PaymentWebViewScreen(paymentUrl:"${response["data"]["url"]}"));
+
+     // }
 
       return response;
     } catch (e) {

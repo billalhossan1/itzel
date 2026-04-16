@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/screens/web_view_screen/web_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../models/subscription_model.dart';
@@ -35,6 +36,10 @@ class CreatorSubscriptionsController extends GetxController {
   Future<void> launchSubscriptionUrl() async {
     final url = subscriptions[selectedPackIndex.value].url;
 
+
+    Get.to(PaymentWebViewScreen(paymentUrl: url??""));
+
+
     // webViewController = WebViewController()
     //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
     //   ..setNavigationDelegate(
@@ -69,54 +74,98 @@ class CreatorSubscriptionsController extends GetxController {
 
     // Show WebView in dialog
 
-    webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.white)
-      ..setNavigationDelegate(NavigationDelegate(
-        onHttpError: (error) {},
-        onPageFinished: (url) {},
-        onWebResourceError: (error) {},
-        onProgress: (progress) {},
-        onPageStarted: (url) {},
-        onNavigationRequest: (request) {
-          appLog(request.url);
+    // webViewController = WebViewController()
+    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    //   ..setNavigationDelegate(
+    //     NavigationDelegate(
+    //       onPageStarted: (url) {
+    //         // setState(() => _isLoading = true);
+    //         isLoading==true;
+    //         update();
+    //       },
+    //       onPageFinished: (url) {
+    //         // setState(() => _isLoading = false);
+    //         isLoading==false;
+    //         update();
+    //       },
+    //       onNavigationRequest: (NavigationRequest request) {
+    //         // Handle success/cancel redirects from payment gateway
+    //         if (request.url.contains('payment-success') ||
+    //             request.url.contains('success')) {
+    //           Navigator.pop(context, 'success');
+    //           return NavigationDecision.prevent;
+    //         }
+    //         if (request.url.contains('payment-cancel') ||
+    //             request.url.contains('cancel')) {
+    //           Navigator.pop(context, 'cancel');
+    //           return NavigationDecision.prevent;
+    //         }
+    //         return NavigationDecision.navigate;
+    //       },
+    //       onWebResourceError: (WebResourceError error) {
+    //         debugPrint('WebView error: ${error.description}');
+    //       },
+    //     ),
+    //   )
+    //   ..loadRequest(Uri.parse(url));
 
-          if (request.url.toLowerCase().contains("success")) {
-            Get.snackbar(
-              'Success',
-              'Payment completed successfully!',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.green,
-              colorText: Colors.white,
-            );
-            Get.back();
-            return NavigationDecision.prevent;
-          }
 
-          if (request.url.toLowerCase().contains("error")) {
-            Get.snackbar(
-              'Error',
-              'Payment failed. Please try again.',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      ))
-      ..loadRequest(Uri.parse(url));
-    Get.dialog(
-      Dialog(
-        child: SizedBox(
-          height: Get.height * 0.8,
-          width: Get.width * 0.9,
-          child: WebViewWidget(controller: webViewController),
-        ),
-      ),
-      barrierDismissible: true,
-    );
+
+    //
+    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    //   ..setBackgroundColor(Colors.white)
+    //   ..setNavigationDelegate(NavigationDelegate(
+    //     onHttpError: (error) {},
+    //     onPageFinished: (url) {
+    //
+    //
+    //
+    //     },
+    //     onWebResourceError: (error) {},
+    //     onProgress: (progress) {},
+    //     onPageStarted: (url) {},
+    //     onNavigationRequest: (NavigationRequest request) {
+    //       appLog(request.url);
+    //
+    //       debugPrint("This is the feedBack url =-=-=-===-=-=-=-=-=-=-=-=-=-=-=-=${request.url}");
+    //
+    //
+    //       if (request.url.toLowerCase().contains("success")) {
+    //         Get.snackbar(
+    //           'Success',
+    //           'Payment completed successfully!',
+    //           snackPosition: SnackPosition.TOP,
+    //           backgroundColor: Colors.green,
+    //           colorText: Colors.white,
+    //         );
+    //         Get.back();
+    //         return NavigationDecision.prevent;
+    //       }
+    //
+    //       if (request.url.toLowerCase().contains("error")) {
+    //         Get.snackbar(
+    //           'Error',
+    //           'Payment failed. Please try again.',
+    //           snackPosition: SnackPosition.TOP,
+    //           backgroundColor: Colors.red,
+    //           colorText: Colors.white,
+    //         );
+    //         return NavigationDecision.prevent;
+    //       }
+    //       return NavigationDecision.navigate;
+    //     },
+    //   ))
+    //   ..loadRequest(Uri.parse(url));
+    // Get.dialog(
+    //   Dialog(
+    //     child: SizedBox(
+    //       height: Get.height * 0.8,
+    //       width: Get.width * 0.9,
+    //       child: WebViewWidget(controller: webViewController),
+    //     ),
+    //   ),
+    //   barrierDismissible: true,
+    // );
   }
 
   @override

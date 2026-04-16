@@ -15,6 +15,11 @@ class CreatorSubscriptionsScreen extends StatelessWidget {
 
   CreatorSubscriptionsScreen({super.key});
 
+
+
+  List<String> myFeature=["alkncawcnaijaj acwfiwej lAZcnwfeiowj ","Vtyfatyfcx kjbacab kjbbabasiou kjBacb jklcnaoi "];
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -80,16 +85,22 @@ class CreatorSubscriptionsScreen extends StatelessWidget {
                               crossAxisCount: 2,
                               crossAxisSpacing: size.width / (size.width / 2),
                               mainAxisSpacing: size.width / (size.width / 2),
-                              children: subscription.features.map((feature) {
+                              children:subscription.features.map((feature) {
+
                                 return Row(
                                   children: [
                                     const CircleAvatar(
                                       radius: 3,
                                       backgroundColor: AppColors.blueNormal,
                                     ),
+
                                     const SpaceWidget(spaceWidth: 4),
+
                                     TextWidget(
+
+                                      textAlignment: TextAlign.start,
                                       text: feature,
+                                      maxLines: 3,
                                       fontColor: AppColors.blueNormal,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
@@ -98,6 +109,7 @@ class CreatorSubscriptionsScreen extends StatelessWidget {
                                 );
                               }).toList(),
                             ),
+
                           ],
                         ),
                       ),

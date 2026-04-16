@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:itzel/screens/creator/creator_post_screen/edit_job_post_screen.dart';
 import 'package:itzel/screens/user/user_saved_events_screen/user_saved_events_screen.dart';
 import 'package:itzel/screens/user/user_saved_jobs_screen/user_saved_jobs_screen.dart';
+import 'package:itzel/screens/web_view_screen/web_screen.dart';
 
 import '../screens/auth_screens/create_new_password_screen/create_new_password_screen.dart';
 import '../screens/auth_screens/forgot_password_screen/forgot_password_screen.dart';
@@ -74,6 +75,13 @@ class RouteManager {
         page: () => const SplashScreen(),
         binding: GeneralBindings(),
       ),
+
+      GetPage(
+        name: AppRoutes.webScreen,
+        page: () => const PaymentWebViewScreen(paymentUrl: ""),
+        binding: GeneralBindings(),
+      ),
+
       GetPage(
         name: AppRoutes.registrationScreen,
         page: () => const RegistrationScreen(),
