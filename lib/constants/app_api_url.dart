@@ -155,5 +155,7 @@ class AppApiUrl {
   static const String creatorMyProduct = "/sell/my-listings";
   static const String creatorSellProduct = "/sell";
   static const String creatorUpdateSellProduct = "/sell";
+  static const String getAllSubscription = "/subscription";
+  static const String buySubscription = "/subscription/buy";
   static  String updateJob(var id) => "/api/v1/job/$id";
 }
