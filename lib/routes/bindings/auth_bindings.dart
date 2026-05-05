@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itzel/screens/subscription_plan_screen/controller/subscription_controller.dart';
 
 import '../../screens/auth_screens/create_new_password_screen/controllers/create_new_passoword_controller.dart';
 import '../../screens/auth_screens/forgot_password_screen/controllers/forgot_password_controller.dart';
@@ -14,5 +15,6 @@ class AuthBindings extends Bindings {
     Get.lazyPut(() => RegistrationController());
     Get.lazyPut(() => VerifyAccountController());
     Get.lazyPut(() => CreateNewPasswordController());
+    Get.lazyPut(() => SubscriptionController());
   }
 }

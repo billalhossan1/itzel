@@ -48,7 +48,8 @@ class LoginController extends GetxController {
       if (role != null) {
         emailController.clear();
         passwordController.clear();
-        Get.offAllNamed(AppRoutes.bottomNavScreen, arguments: role);
+        Get.offAllNamed(AppRoutes.subscriptionScreen, arguments: {'role':role});
+        // Get.offAllNamed(AppRoutes.bottomNavScreen, arguments: role);
       } else {
         Get.snackbar(
           'Error',

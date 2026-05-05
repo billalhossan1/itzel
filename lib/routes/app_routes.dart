@@ -68,4 +68,5 @@ class AppRoutes {
       '/creatorUpdateSellProductScreen';
   static const editEventPostScreen = '/editEventPost';
   static const editJobPostScreen = '/editJobPostScreen';
+  static const subscriptionScreen = '/subscriptionScreen';
 }

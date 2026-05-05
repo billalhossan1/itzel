@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:itzel/screens/creator/creator_post_screen/edit_job_post_screen.dart';
+import 'package:itzel/screens/subscription_plan_screen/screen/subscription_plan_screen.dart';
 import 'package:itzel/screens/user/user_saved_events_screen/user_saved_events_screen.dart';
 import 'package:itzel/screens/user/user_saved_jobs_screen/user_saved_jobs_screen.dart';
 import 'package:itzel/screens/web_view_screen/web_screen.dart';
@@ -379,6 +380,10 @@ class RouteManager {
       ), GetPage(
         name: AppRoutes.editJobPostScreen,
         page: () => EditJobPostScreen(),
+      ),
+      GetPage(
+        name: AppRoutes.subscriptionScreen,
+        page: () => SubscriptionPlanScreen(),
       ),
     ];
   }
