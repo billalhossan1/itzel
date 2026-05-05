@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  flutter_dotenv: ^5.1.0
   get:
   get_storage:
   flutter_svg:
@@ -116,6 +117,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,14 +1,15 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AppStrings {
   AppStrings._();
 
-  // ChatGPT API Key
+  // Note: API Keys are now loaded from environment variables (.env file)
+  // See .env.example for configuration instructions
 
-  static const String chatGpt =
-      "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";
+  static String get chatGpt => dotenv.env['CHAT_GPT_API_KEY'] ?? '';
 
-  // Stripe Publishable Key
-  static const String stripe ="pk_test_51RRpkcFCyK2dflp0W3BEynYypMSWlLybjczp25QmriIc2C897T19BdRGqnMzvGaFWJfdVUv7vRoYOk76PLMPj96200K5VOiFRk";
-      //"pk_live_51RRpkcFCyK2dflp0IFWJGDQNgaPtrQMZKhAxSG3oJ7wdH7LCn5ZoEA1OFv0f8DucSatWiFJ4rVwaOEgScLhOknV500sXkoMCPE";
+  static String get stripe => dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
+
   static const String appName = "Itzel";
   static const String fontFamilyName = "Poppins";
   static const String loginToAccount = "Login to your account";
