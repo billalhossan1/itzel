@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../../constants/app_strings.dart';
 
-const String apiSecretKey = AppStrings.chatGptApiKey;
+const String apiSecretKey = AppStrings.chatGpt;
 
 class ChatController extends GetxController {
   final _storage = GetStorage();

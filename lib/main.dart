@@ -13,7 +13,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await GetStorage.init();
 
-  Stripe.publishableKey = AppStrings.stripePublishableKey;
+  Stripe.publishableKey = AppStrings.stripe;
   await Stripe.instance.applySettings();
 
   runApp(const MainApp());

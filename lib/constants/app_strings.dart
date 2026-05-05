@@ -3,11 +3,11 @@ class AppStrings {
 
   // ChatGPT API Key
 
-  static const String chatGptApiKey =
+  static const String chatGpt =
       "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";
 
   // Stripe Publishable Key
-  static const String stripePublishableKey ="pk_test_51RRpkcFCyK2dflp0W3BEynYypMSWlLybjczp25QmriIc2C897T19BdRGqnMzvGaFWJfdVUv7vRoYOk76PLMPj96200K5VOiFRk";
+  static const String stripe ="pk_test_51RRpkcFCyK2dflp0W3BEynYypMSWlLybjczp25QmriIc2C897T19BdRGqnMzvGaFWJfdVUv7vRoYOk76PLMPj96200K5VOiFRk";
       //"pk_live_51RRpkcFCyK2dflp0IFWJGDQNgaPtrQMZKhAxSG3oJ7wdH7LCn5ZoEA1OFv0f8DucSatWiFJ4rVwaOEgScLhOknV500sXkoMCPE";
   static const String appName = "Itzel";
   static const String fontFamilyName = "Poppins";
