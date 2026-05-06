@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:itzel/models/event_model.dart';
 import 'package:itzel/screens/web_view_screen/web_screen.dart';
