@@ -50,8 +50,8 @@ dependencies:
   fl_chart: ^0.69.2
   file_picker:
   table_calendar:
-  flutter_spinkit: ^5.2.1
-  flutter_keyboard_visibility: ^6.0.0
+  flutter_spinkit:
+  flutter_keyboard_visibility:
   jwt_decoder:
 #  google_maps_flutter:
   google_maps_flutter: ^2.13.1
@@ -59,8 +59,8 @@ dependencies:
   flutter_polyline_points:
   geocoding:
   geolocator:
-  url_launcher: ^6.3.1
-  webview_flutter: ^4.10.0
+  url_launcher:
+  webview_flutter:
   google_sign_in:
   #  firebase_core:
   #  firebase_auth:
