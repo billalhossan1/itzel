@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import '../../../routes/app_routes.dart';
 
 class SubscriptionController extends GetxController {
-  Set<String> productIdsBackend = {'30_days_subscription', '365_days_subscription'};
+  Set<String> productIdsBackend = {'30_days_subscription_itzel', '365_days_subscription'};
   RxBool isLoading = false.obs;
   bool _available = false;
   final InAppPurchase _iap = InAppPurchase.instance;
