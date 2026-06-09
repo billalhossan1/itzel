@@ -45,7 +45,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : controller.products.isEmpty
+                        : controller.subscriptionPlan.isEmpty
                             ? Center(
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
@@ -58,12 +58,20 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: controller.products.length,
+                                itemCount: controller.subscriptionPlan.length,
                                 itemBuilder: (context, index) {
-                                  final product = controller.products[index];
+                                  final plan =
+                                      controller.subscriptionPlan[index];
+                                  final priceLabel = (plan.price ?? 0) > 0
+                                      ? '\$${plan.price}'
+                                      : 'Free';
                                   return GestureDetector(
                                     onTap: () {
-                                      controller.buyProduct(product.id);
+                                      if ((plan.price ?? 0) > 0 &&
+                                          plan.productId != null) {
+                                        controller
+                                            .buyProduct(plan.productId!);
+                                      }
                                     },
                                     child: Padding(
                                       padding:
@@ -83,7 +91,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                                 children: [
                                                   Expanded(
                                                     child: TextWidget(
-                                                      text: product.title,
+                                                      text: plan.name ?? '',
                                                       fontSize: AppSize.height(
                                                           value: 22),
                                                       fontWeight:
@@ -93,7 +101,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   TextWidget(
-                                                    text: product.price,
+                                                    text: priceLabel,
                                                     fontSize: AppSize.height(
                                                         value: 24),
                                                     fontWeight: FontWeight.w700,
@@ -101,17 +109,12 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
-                                              TextWidget(
-                                                text: product.description,
-                                                fontSize:
-                                                    AppSize.height(value: 16),
-                                                fontWeight: FontWeight.w400,
-                                                fontColor: AppColors.grey,
-                                              ),
                                               SizedBox(height: 20),
-                                              _subscriptionTextWidget(
-                                                  "Full access to all features"),
+                                              ...?(plan.features
+                                                  ?.map((f) =>
+                                                      _subscriptionTextWidget(
+                                                          f))
+                                                  .toList()),
                                             ],
                                           ),
                                         ),

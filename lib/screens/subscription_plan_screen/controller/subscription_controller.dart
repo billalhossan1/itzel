@@ -119,6 +119,11 @@ class SubscriptionController extends GetxController {
         subscriptionPlan.value = subscriptionPlan.where((plan) {
           return availableProductIds.contains(plan.productId);
         }).toList();
+        // subscriptionPlan.value = List<SubscriptionItem>.from(
+        //   data
+        //       .map((x) => SubscriptionItem.fromJson(x))
+        //       .where((item) => (item.price ?? 0) != 0),
+        // );
       }
     }
     isLoading.value = false;

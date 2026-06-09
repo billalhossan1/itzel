@@ -42,7 +42,7 @@ class AppStrings {
       '\n\n•  BBA / MBA from reputed University';
   static const String experience = "Experience";
   static const String experienceDetails = '•  At least 10 years\n'
-      '• The applicants should have experience in the following business area(s): Pharmaceutical/Medicine Companies';
+      '• The applicants should have experience in the following business area(s):Pharmaceutical/Medicine Companies';
   static const String additionalRequirements = "Additional Requirements";
   static const String additionalRequirementsDetails =
       '•  10 years’ experience in similar position in any reputed Pharmaceuticals Company.\n'

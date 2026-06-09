@@ -302,6 +302,13 @@ class UserDrawerScreen extends StatelessWidget {
             ),
             DrawerSectionWidget(
               onTap: () {
+                Get.toNamed(AppRoutes.subscriptionScreen);
+              },
+              text: AppStrings.subscriptions,
+              icon: AppIconsPath.subscription,
+            ),
+            DrawerSectionWidget(
+              onTap: () {
                 String? token = AppAuthStorage().getToken();
 
                 if (token != null && token.isNotEmpty == true) {

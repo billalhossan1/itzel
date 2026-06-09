@@ -89,7 +89,7 @@ class AuthRepository {
           "name": name,
           "email": email,
           "password": password,
-          "contact":contact,
+          "contact": contact,
           "role": "CREATOR"
         },
       );
@@ -111,9 +111,12 @@ class AuthRepository {
     required String otp,
   }) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-          url: AppApiUrl.registrationVerifyEmail,
-          body: {"email": email, "oneTimeCode": int.parse(otp),"platform":Platform.isAndroid?"google":"apple"});
+      var response = await apiPostServices
+          .apiPostServices(url: AppApiUrl.registrationVerifyEmail, body: {
+        "email": email,
+        "oneTimeCode": int.parse(otp),
+        "platform": Platform.isAndroid ? "google" : "apple"
+      });
       if (response != null) {
         return true;
       }
@@ -159,7 +162,11 @@ class AuthRepository {
     try {
       var response = await apiPostServices.apiPostServices(
           url: AppApiUrl.verifyEmail,
-          body: {"email": email, "oneTimeCode": int.parse(otp)});
+          body: {
+            "email": email,
+            "oneTimeCode": int.parse(otp),
+            "platform": "apple"
+          });
       if (response != null && response["data"] != null) {
         return response["data"].toString();
       }

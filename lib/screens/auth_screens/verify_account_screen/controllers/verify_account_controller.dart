@@ -23,7 +23,6 @@ class VerifyAccountController extends GetxController {
 
   @override
   void onInit() {
-
     super.onInit();
     startTimer();
   }
@@ -96,7 +95,6 @@ class VerifyAccountController extends GetxController {
       );
       isLoading.value = false;
       print("Loading =======================================");
-
 
       // print('API Response: $token');
 
