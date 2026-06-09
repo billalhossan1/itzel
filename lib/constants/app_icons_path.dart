@@ -30,4 +30,5 @@ class AppIconsPath {
   static const String paymentIcon = "assets/icons/paymentIcon.svg";
   static const String subscriptionIcon = "assets/icons/subscriptionIcon.svg";
   static const String closeIcon = "assets/icons/closeIcon.svg";
+  static const String subscription = "assets/icons/subscription.svg";
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../../constants/app_api_url.dart';
@@ -111,7 +113,7 @@ class AuthRepository {
     try {
       var response = await apiPostServices.apiPostServices(
           url: AppApiUrl.registrationVerifyEmail,
-          body: {"email": email, "oneTimeCode": int.parse(otp)});
+          body: {"email": email, "oneTimeCode": int.parse(otp),"platform":Platform.isAndroid?"google":"apple"});
       if (response != null) {
         return true;
       }

@@ -154,15 +154,13 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_drawer_controller.dart';
 
 class UserDrawerScreen extends StatelessWidget {
-
   final controller = Get.put(UserDrawerController());
 
   UserDrawerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    String? token=AppAuthStorage().getToken();
+    String? token = AppAuthStorage().getToken();
 
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -191,7 +189,6 @@ class UserDrawerScreen extends StatelessWidget {
           width: size.width / (size.width / 120),
         ),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,55 +196,55 @@ class UserDrawerScreen extends StatelessWidget {
             const SpaceWidget(spaceHeight: 12),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-
               child: TextWidget(
                 text: AppStrings.accountSetting,
                 fontColor: AppColors.black500,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-
             ),
             const SpaceWidget(spaceHeight: 16),
-
             DrawerSectionWidget(
               onTap: () {
-
-                String ? token=AppAuthStorage().getToken();
-                if(token !=null && token.isNotEmpty==true){
+                String? token = AppAuthStorage().getToken();
+                if (token != null && token.isNotEmpty == true) {
                   Get.toNamed(
                     AppRoutes.userSavedEventsScreen,
                     arguments: controller.eventWishlist,
                   );
-                }else{
-
+                } else {
                   Get.offAllNamed(AppRoutes.loginScreen);
-
-
                 }
-
-
               },
               text: AppStrings.savedEvents,
               icon: AppIconsPath.savedEventsIcon,
             ),
             DrawerSectionWidget(
               onTap: () {
+                String? token = AppAuthStorage().getToken();
+                if (token != null && token.isNotEmpty == true) {
+                  Get.toNamed(
+                    AppRoutes.subscriptionScreen,
+                  );
+                } else {
+                  Get.offAllNamed(AppRoutes.loginScreen);
+                }
+              },
+              text: AppStrings.subscription,
+              icon: AppIconsPath.subscription,
+            ),
+            DrawerSectionWidget(
+              onTap: () {
+                String? token = AppAuthStorage().getToken();
 
-                String ? token=AppAuthStorage().getToken();
-
-                if(token !=null && token.isNotEmpty==true){
+                if (token != null && token.isNotEmpty == true) {
                   Get.toNamed(
                     AppRoutes.userSavedJobsScreen,
                     arguments: controller.jobWishlist,
                   );
-
-                }else{
-
+                } else {
                   Get.offAllNamed(AppRoutes.loginScreen);
                 }
-
-
               },
               text: AppStrings.savedJobs,
               icon: AppIconsPath.savedEventsIcon,
@@ -305,32 +302,24 @@ class UserDrawerScreen extends StatelessWidget {
             ),
             DrawerSectionWidget(
               onTap: () {
+                String? token = AppAuthStorage().getToken();
 
-                String ? token=AppAuthStorage().getToken();
-
-                if(token !=null && token.isNotEmpty==true){
-
-                Get.toNamed(AppRoutes.userChangePasswordScreen);
-
-                }else{
-
+                if (token != null && token.isNotEmpty == true) {
+                  Get.toNamed(AppRoutes.userChangePasswordScreen);
+                } else {
                   Get.offAllNamed(AppRoutes.loginScreen);
                 }
-               // Get.toNamed(AppRoutes.userChangePasswordScreen);
+                // Get.toNamed(AppRoutes.userChangePasswordScreen);
               },
               text: AppStrings.changePassword,
               icon: AppIconsPath.changePasswordIcon,
             ),
             DrawerSectionWidget(
               onTap: () {
-
-                String? token=AppAuthStorage().getToken();
-                if(token !=null && token.isNotEmpty==true){
-
+                String? token = AppAuthStorage().getToken();
+                if (token != null && token.isNotEmpty == true) {
                   Get.toNamed(AppRoutes.userDeleteAccountScreen);
-
-                }else{
-
+                } else {
                   Get.offAllNamed(AppRoutes.loginScreen);
                 }
               },
@@ -339,19 +328,16 @@ class UserDrawerScreen extends StatelessWidget {
             ),
             const SpaceWidget(spaceHeight: 80),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-
-              child: token !=null ? ButtonWidget(
-                onPressed: () {
-                  controller.logout();
-                },
-                label: 'Logout',
-                buttonWidth: double.infinity,
-              ):
-
-              SizedBox()
-
-            ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: token != null
+                    ? ButtonWidget(
+                        onPressed: () {
+                          controller.logout();
+                        },
+                        label: 'Logout',
+                        buttonWidth: double.infinity,
+                      )
+                    : SizedBox()),
             const Padding(
               padding:
                   EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 25),
@@ -362,7 +348,6 @@ class UserDrawerScreen extends StatelessWidget {
                 maxLines: 5,
               ),
             ),
-
             const SpaceWidget(spaceHeight: 16),
           ],
         ),

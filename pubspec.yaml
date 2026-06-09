@@ -66,7 +66,10 @@ dependencies:
   #  firebase_auth:
   #  cloud_firestore:
   google_sign_in_ios: ^5.7.8
-  in_app_purchase: ^3.2.3
+  in_app_purchase:
+  in_app_purchase_storekit:
+  in_app_purchase_android:
+
 
 
   http:
@@ -116,7 +119,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - .env
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
