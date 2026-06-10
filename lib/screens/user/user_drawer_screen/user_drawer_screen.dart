@@ -140,7 +140,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:itzel/screens/user/user_drawer_screen/widgets/drawer_section_widget.dart';
-import 'package:itzel/services/repository/auth_repository/auth_repository.dart';
 import 'package:itzel/services/storage_services/app_auth_storage.dart';
 import 'package:itzel/widgets/button_widget/button_widget.dart';
 

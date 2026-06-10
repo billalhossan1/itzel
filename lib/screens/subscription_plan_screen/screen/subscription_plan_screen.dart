@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -16,9 +16,11 @@ class SubscriptionPlanScreen extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(
+                left: 16, right: 16, top: MediaQuery.of(context).padding.top),
             child: Obx(() {
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -33,13 +35,11 @@ class SubscriptionPlanScreen extends StatelessWidget {
                           text: 'Subscription Plan',
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
+                          fontColor: Colors.black,
                         ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: AppSize.height(value: 40)),
-
                   Expanded(
                     child: controller.isLoading.value
                         ? Center(
@@ -58,6 +58,8 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                 ),
                               )
                             : ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
                                 itemCount: controller.subscriptionPlan.length,
                                 itemBuilder: (context, index) {
                                   final plan =
@@ -71,51 +73,46 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                     onTap: () {
                                       controller.onSubscribe(index);
                                     },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20.0),
-                                      child: Card(
-                                        color: AppColors.blue100,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 8),
+                                      padding: EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(
+                                            AppSize.height(value: 12)),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: TextWidget(
-                                                      text: plan.name ?? '',
-                                                      fontSize: AppSize.height(
-                                                          value: 22),
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontColor:
-                                                          AppColors.blue,
-                                                    ),
-                                                  ),
-                                                  TextWidget(
-                                                    text: priceLabel,
-                                                    fontSize: AppSize.height(
-                                                        value: 24),
-                                                    fontWeight: FontWeight.w700,
-                                                    fontColor: AppColors.blue,
-                                                  ),
-                                                ],
+                                              TextWidget(
+                                                text: plan.name ?? '',
+                                                fontSize:
+                                                    AppSize.height(value: 22),
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: AppColors.blue,
                                               ),
-                                              SizedBox(height: 20),
-                                              ...?(plan.features
-                                                  ?.map((f) =>
-                                                      _subscriptionTextWidget(
-                                                          f))
-                                                  .toList()),
+                                              TextWidget(
+                                                text: priceLabel,
+                                                fontSize:
+                                                    AppSize.height(value: 24),
+                                                fontWeight: FontWeight.w700,
+                                                fontColor: AppColors.blue,
+                                              ),
                                             ],
                                           ),
-                                        ),
+                                          SizedBox(height: 10),
+                                          ...?(plan.features
+                                              ?.map((f) =>
+                                                  _subscriptionTextWidget(f))
+                                              .toList()),
+                                        ],
                                       ),
                                     ),
                                   );

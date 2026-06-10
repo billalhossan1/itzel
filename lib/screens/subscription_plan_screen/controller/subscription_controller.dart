@@ -86,15 +86,26 @@ class SubscriptionController extends GetxController {
 
     if (response != null && response['data'] != null) {
       List data = response['data'] ?? [];
+
       subscriptionPlan.value = List<SubscriptionItem>.from(
-        data.map((x) => SubscriptionItem.fromJson(x)).where((plan) => (plan.price ?? 0) > 0),
+        data
+            .map((x) => SubscriptionItem.fromJson(x))
+            .where((plan) => (plan.price ?? 0) > 0),
       );
 
-      final productIds = subscriptionPlan
-          .where(
-              (e) => (e.price ?? 0) > 0 && (e.productId?.isNotEmpty ?? false))
-          .map((e) => e.productId!)
-          .toSet();
+      // Filter out any free plan (where price <= 0 or null, or name is 'free' case-insensitive)
+      // and ensure a product ID exists
+      final paidPlansFromApi = List<SubscriptionItem>.from(
+        data.map((x) => SubscriptionItem.fromJson(x)),
+      ).where((plan) {
+        final hasPrice = plan.price != null && plan.price! > 0;
+        final hasProductId =
+            plan.productId != null && plan.productId!.isNotEmpty;
+        final isFreeName = plan.name?.toLowerCase() == 'free';
+        return hasPrice && hasProductId && !isFreeName;
+      }).toList();
+
+      final productIds = paidPlansFromApi.map((e) => e.productId!).toSet();
 
       if (productIds.isNotEmpty) {
         Logger().i("Packages to search on IAP: $productIds");
@@ -105,6 +116,7 @@ class SubscriptionController extends GetxController {
 
         if (productResponse.error != null) {
           Logger().e("IAP Error: ${productResponse.error}");
+          subscriptionPlan.clear();
           isLoading.value = false;
           update();
           return;
@@ -114,19 +126,19 @@ class SubscriptionController extends GetxController {
           storeProducts[product.id] = product;
         }
 
-        // Only show plans available in Google or Apple Store
+        // Only show plans available in Google or Apple Store and matched with API product id
         final availableProductIds =
             productResponse.productDetails.map((p) => p.id).toSet();
 
-        subscriptionPlan.value = subscriptionPlan.where((plan) {
+        subscriptionPlan.value = paidPlansFromApi.where((plan) {
           return availableProductIds.contains(plan.productId);
         }).toList();
-        // subscriptionPlan.value = List<SubscriptionItem>.from(
-        //   data
-        //       .map((x) => SubscriptionItem.fromJson(x))
-        //       .where((item) => (item.price ?? 0) != 0),
-        // );
+      } else {
+        // If there are no premium product IDs, clear the list so no free plans are shown
+        subscriptionPlan.clear();
       }
+    } else {
+      subscriptionPlan.clear();
     }
     isLoading.value = false;
     update();
