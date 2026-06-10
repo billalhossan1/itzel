@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -16,9 +16,11 @@ class SubscriptionPlanScreen extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(
+                left: 16, right: 16, top: MediaQuery.of(context).padding.top),
             child: Obx(() {
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -33,19 +35,17 @@ class SubscriptionPlanScreen extends StatelessWidget {
                           text: 'Subscription Plan',
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
+                          fontColor: Colors.black,
                         ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: AppSize.height(value: 40)),
-
                   Expanded(
                     child: controller.isLoading.value
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : controller.products.isEmpty
+                        : controller.subscriptionPlan.isEmpty
                             ? Center(
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
@@ -58,63 +58,62 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: controller.products.length,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                itemCount: controller.subscriptionPlan.length,
                                 itemBuilder: (context, index) {
-                                  final product = controller.products[index];
+                                  final plan =
+                                      controller.subscriptionPlan[index];
+                                  final priceLabel = (plan.price ?? 0) > 0
+                                      ? '\$${plan.price}'
+                                      : 'Free';
                                   return GestureDetector(
                                     onTap: () {
-                                      controller.buyProduct(product.id);
+                                      if ((plan.price ?? 0) > 0 &&
+                                          plan.productId != null) {
+                                        controller.buyProduct(plan.productId!);
+                                      }
                                     },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20.0),
-                                      child: Card(
-                                        color: AppColors.blue100,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 8),
+                                      padding: EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(
+                                            AppSize.height(value: 12)),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: TextWidget(
-                                                      text: product.title,
-                                                      fontSize: AppSize.height(
-                                                          value: 22),
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontColor:
-                                                          AppColors.blue,
-                                                    ),
-                                                  ),
-                                                  TextWidget(
-                                                    text: product.price,
-                                                    fontSize: AppSize.height(
-                                                        value: 24),
-                                                    fontWeight: FontWeight.w700,
-                                                    fontColor: AppColors.blue,
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 10),
                                               TextWidget(
-                                                text: product.description,
+                                                text: plan.name ?? '',
                                                 fontSize:
-                                                    AppSize.height(value: 16),
-                                                fontWeight: FontWeight.w400,
-                                                fontColor: AppColors.grey,
+                                                    AppSize.height(value: 22),
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: AppColors.blue,
                                               ),
-                                              SizedBox(height: 20),
-                                              _subscriptionTextWidget(
-                                                  "Full access to all features"),
+                                              TextWidget(
+                                                text: priceLabel,
+                                                fontSize:
+                                                    AppSize.height(value: 24),
+                                                fontWeight: FontWeight.w700,
+                                                fontColor: AppColors.blue,
+                                              ),
                                             ],
                                           ),
-                                        ),
+                                          SizedBox(height: 10),
+                                          ...?(plan.features
+                                              ?.map((f) =>
+                                                  _subscriptionTextWidget(f))
+                                              .toList()),
+                                        ],
                                       ),
                                     ),
                                   );

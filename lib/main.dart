@@ -8,6 +8,9 @@ import 'main_app_entry.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load environment variables from .env file
+  // await dotenv.load(fileName: ".env");
+
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

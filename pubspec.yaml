@@ -65,7 +65,10 @@ dependencies:
   #  firebase_auth:
   #  cloud_firestore:
   google_sign_in_ios: ^5.7.8
-  in_app_purchase: ^3.2.3
+  in_app_purchase:
+  in_app_purchase_storekit:
+  in_app_purchase_android:
+
 
 
   http:
@@ -105,6 +108,8 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
+  config:
+    enable-swift-package-manager: false
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -115,7 +120,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/ 
-  #   - images/a_dot_ham.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

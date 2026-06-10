@@ -11,7 +11,7 @@ class SubscriptionPlanModel {
     if (json['data'] != null) {
       data = <SubscriptionItem>[];
       json['data'].forEach((v) {
-        data!.add(new SubscriptionItem.fromJson(v));
+        data!.add(SubscriptionItem.fromJson(v));
       });
     }
   }
@@ -29,12 +29,13 @@ class SubscriptionPlanModel {
 
 class SubscriptionItem {
   String? sId;
-  String? title;
-  List<String>? description;
-  int? price;
-  String? duration;
-  String? paymentType;
-  String? status;
+  String? name;
+  int? allowedJobPost;
+  int? allowedEventPost;
+  List<String>? features;
+  num? price;
+  String? type;
+  String? platform;
   String? productId;
   String? createdAt;
   String? updatedAt;
@@ -42,26 +43,28 @@ class SubscriptionItem {
 
   SubscriptionItem(
       {this.sId,
-        this.title,
-        this.description,
-        this.price,
-        this.duration,
-        this.paymentType,
-        this.status,
-        this.productId,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+      this.name,
+      this.allowedJobPost,
+      this.allowedEventPost,
+      this.features,
+      this.price,
+      this.type,
+      this.platform,
+      this.productId,
+      this.createdAt,
+      this.updatedAt,
+      this.iV});
 
   SubscriptionItem.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    title = json['title'];
-    description = json['description'].cast<String>();
+    name = json['name'];
+    allowedJobPost = json['allowedJobPost'];
+    allowedEventPost = json['allowedEventPost'];
+    features = json['features'] != null ? json['features'].cast<String>() : [];
     price = json['price'];
-    duration = json['duration'];
-    paymentType = json['paymentType'];
-    status = json['status'];
-    productId = json['product_id'];
+    type = json['type'];
+    platform = json['platform'];
+    productId = json['productId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
@@ -70,13 +73,14 @@ class SubscriptionItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['title'] = title;
-    data['description'] = description;
+    data['name'] = name;
+    data['allowedJobPost'] = allowedJobPost;
+    data['allowedEventPost'] = allowedEventPost;
+    data['features'] = features;
     data['price'] = price;
-    data['duration'] = duration;
-    data['paymentType'] = paymentType;
-    data['status'] = status;
-    data['product_id'] = productId;
+    data['type'] = type;
+    data['platform'] = platform;
+    data['productId'] = productId;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;

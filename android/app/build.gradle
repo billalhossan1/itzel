@@ -4,17 +4,17 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
-//def keystoreProperties = new Properties()
-//def keystorePropertiesFile = rootProject.file("key.properties")
-//
-//if (keystorePropertiesFile.exists()) {
-//    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-//}
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+
+if (keystorePropertiesFile.exists()) {
+   keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 android {
     namespace = "com.unplugged.itzel"
     compileSdk = 35
 //    compileSdkVersion 33
-    ndkVersion = "25.1.8937393"//flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -40,26 +40,26 @@ android {
     }
 
 
-//    signingConfigs {
-//        release {
-//            keyAlias = keystoreProperties['keyAlias']
-//            keyPassword = keystoreProperties['keyPassword']
-//            storeFile = file(keystoreProperties['storeFile'])
-//            storePassword = keystoreProperties['storePassword']
-//        }
-//    }
+   signingConfigs {
+       release {
+           keyAlias = keystoreProperties['keyAlias']
+           keyPassword = keystoreProperties['keyPassword']
+           storeFile = file(keystoreProperties['storeFile'])
+           storePassword = keystoreProperties['storePassword']
+       }
+   }
 
-//    buildTypes {
-//        release {
-//            // Use the release signing config
-//            signingConfig signingConfigs.release
-//
-//            // Optional settings (can be adjusted as needed)
-//            minifyEnabled false
-//            shrinkResources false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
+   buildTypes {
+       release {
+           // Use the release signing config
+           signingConfig signingConfigs.release
+
+           // Optional settings (can be adjusted as needed)
+           minifyEnabled false
+           shrinkResources false
+           proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+       }
+   }
 
 
     buildTypes {
@@ -75,8 +75,7 @@ android {
 flutter {
     source = "../.."
 }
-//
-//dependencies {
-//    implementation 'com.android.support:multidex:1.0.3' // add this
-//    implementation 'com.google.android.material:material:1.5.0'
-//}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.11.0'
+}
