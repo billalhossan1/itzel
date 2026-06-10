@@ -19,9 +19,11 @@ class SubscriptionPlanScreen extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 16, right: 16, top: MediaQuery.of(context).padding.top),
             child: Obx(() {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
+              return Stack(
                 children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                   Row(
                     children: [
                       IconButton(
@@ -120,8 +122,19 @@ class SubscriptionPlanScreen extends StatelessWidget {
                               ),
                   ),
                 ],
-              );
-            }),
+              ),
+              if (controller.isPurchaseLoading.value)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.3),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        }),
           ),
         );
       },

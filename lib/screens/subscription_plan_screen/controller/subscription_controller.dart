@@ -179,7 +179,10 @@ class SubscriptionController extends GetxController {
           final PurchaseParam purchaseParam = PurchaseParam(
             productDetails: product,
           );
-          _iap.buyNonConsumable(purchaseParam: purchaseParam);
+          final bool success = await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+          if (!success) {
+            isPurchaseLoading.value = false;
+          }
         } else {
           AppSnackBar.error('Product not available in store');
         }
