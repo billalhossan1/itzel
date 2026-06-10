@@ -1,5 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class AppStrings {
   AppStrings._();
 
@@ -15,7 +13,8 @@ class AppStrings {
   static const String appName = "Itzel";
   static const String fontFamilyName = "Poppins";
   static const String loginToAccount = "Login to your account";
-  static const String fillInTheLoginBlanks ="Fill in the blank to login to your\naccount";
+  static const String fillInTheLoginBlanks =
+      "Fill in the blank to login to your\naccount";
   static const String rememberMe = "Remember me";
   static const String forgotPassword = "Forgot Password?";
   static const String signInButtonText = "Sign in";
