@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:logger/logger.dart';
 
 import '../../../constants/app_api_url.dart';
@@ -85,7 +87,7 @@ class SubscriptionController extends GetxController {
     if (response != null && response['data'] != null) {
       List data = response['data'] ?? [];
       subscriptionPlan.value = List<SubscriptionItem>.from(
-        data.map((x) => SubscriptionItem.fromJson(x)),
+        data.map((x) => SubscriptionItem.fromJson(x)).where((plan) => (plan.price ?? 0) > 0),
       );
 
       final productIds = subscriptionPlan
@@ -145,19 +147,102 @@ class SubscriptionController extends GetxController {
     }
   }
 
-  void buyProduct(String productId) {
+  Future<void> onSubscribe(int index) async {
     if (isPurchaseLoading.value) return;
+    final plan = subscriptionPlan[index];
 
-    final product = storeProducts[productId];
-    if (product != null) {
-      isPurchaseLoading.value = true;
-      final PurchaseParam purchaseParam = PurchaseParam(
-        productDetails: product,
-      );
-      _iap.buyNonConsumable(purchaseParam: purchaseParam);
-    } else {
-      AppSnackBar.error('Product not available in store');
+    try {
+      if ((plan.price ?? 0) == 0) {
+        //buy free plan
+        isPurchaseLoading.value = true;
+        final isSuccess = await _sendVerifyRequest(packageId: plan.sId);
+        isPurchaseLoading.value = false;
+
+        if (isSuccess) _onSuccess();
+      } else {
+        //buy subscription from store
+        final product = storeProducts[plan.productId];
+        if (product != null) {
+          isPurchaseLoading.value = true;
+          final PurchaseParam purchaseParam = PurchaseParam(
+            productDetails: product,
+          );
+          _iap.buyNonConsumable(purchaseParam: purchaseParam);
+        } else {
+          AppSnackBar.error('Product not available in store');
+        }
+      }
+    } catch (e) {
+      isPurchaseLoading.value = false;
+      Logger().e("Subscribe error: $e");
     }
+  }
+
+  ProductDetails? getProduct(String productId) {
+    return storeProducts[productId];
+  }
+
+  String getDuration(ProductDetails product) {
+    if (Platform.isIOS && product is AppStoreProductDetails) {
+      final period = product.skProduct.subscriptionPeriod;
+      if (period != null) {
+        final numberOfUnits = period.numberOfUnits;
+        final unitName = period.unit.name.toLowerCase();
+        String unitStr = '';
+        if (unitName.contains('month')) {
+          unitStr = numberOfUnits == 1 ? 'Month' : 'Months';
+        } else if (unitName.contains('year')) {
+          unitStr = numberOfUnits == 1 ? 'Year' : 'Years';
+        } else if (unitName.contains('week')) {
+          unitStr = numberOfUnits == 1 ? 'Week' : 'Weeks';
+        } else if (unitName.contains('day')) {
+          unitStr = numberOfUnits == 1 ? 'Day' : 'Days';
+        } else {
+          unitStr = period.unit.name;
+        }
+        return numberOfUnits == 1 ? unitStr : '$numberOfUnits $unitStr';
+      }
+    }
+
+    if (Platform.isAndroid && product is GooglePlayProductDetails) {
+      final phases = product.productDetails.subscriptionOfferDetails;
+      if (phases != null && phases.isNotEmpty) {
+        final recurringPhase = phases.first.pricingPhases.last;
+        final period = recurringPhase.billingPeriod; // e.g. "P1M", "P1Y", "P1W"
+        final regExp = RegExp(r'P(\d+)([WMYD])');
+        final match = regExp.firstMatch(period);
+        if (match != null) {
+          final amount = int.tryParse(match.group(1) ?? '1') ?? 1;
+          final unit = match.group(2);
+          String unitStr = '';
+          if (unit == 'M') {
+            unitStr = amount == 1 ? 'Month' : 'Months';
+          } else if (unit == 'Y') {
+            unitStr = amount == 1 ? 'Year' : 'Years';
+          } else if (unit == 'W') {
+            unitStr = amount == 1 ? 'Week' : 'Weeks';
+          } else if (unit == 'D') {
+            unitStr = amount == 1 ? 'Day' : 'Days';
+          }
+          return amount == 1 ? unitStr : '$amount $unitStr';
+        }
+        return period;
+      }
+    }
+
+    return '';
+  }
+
+  String getPlanDuration(SubscriptionItem plan) {
+    if ((plan.price ?? 0) == 0) {
+      return plan.type ?? "Lifetime";
+    }
+    final product = storeProducts[plan.productId];
+    if (product == null) {
+      return plan.type ?? "Month";
+    }
+    final durationStr = getDuration(product);
+    return durationStr.isEmpty ? (plan.type ?? "Month") : durationStr;
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
@@ -204,7 +289,9 @@ class SubscriptionController extends GetxController {
         body: {
           "packageId": packageId,
           "productId": purchaseDetails?.productID,
-          "purchaseId": purchaseDetails?.purchaseID,
+          "purchaseId": purchaseDetails is GooglePlayPurchaseDetails
+              ? purchaseDetails.billingClientPurchase.purchaseToken
+              : purchaseDetails?.purchaseID,
           "platform": Platform.isAndroid ? "google" : "apple",
           "trasactionDate": purchaseDetails?.transactionDate,
           "status": purchaseDetails?.status.name,

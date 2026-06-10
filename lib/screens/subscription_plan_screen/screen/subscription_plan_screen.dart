@@ -62,16 +62,14 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final plan =
                                       controller.subscriptionPlan[index];
+                                  final durationStr =
+                                      controller.getPlanDuration(plan);
                                   final priceLabel = (plan.price ?? 0) > 0
-                                      ? '\$${plan.price}'
+                                      ? '\$${plan.price} / $durationStr'
                                       : 'Free';
                                   return GestureDetector(
                                     onTap: () {
-                                      if ((plan.price ?? 0) > 0 &&
-                                          plan.productId != null) {
-                                        controller
-                                            .buyProduct(plan.productId!);
-                                      }
+                                      controller.onSubscribe(index);
                                     },
                                     child: Padding(
                                       padding:
