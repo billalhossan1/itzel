@@ -224,6 +224,7 @@ class UserDrawerScreen extends StatelessWidget {
                 if (token != null && token.isNotEmpty == true) {
                   Get.toNamed(
                     AppRoutes.subscriptionScreen,
+                    arguments: {'route_from': 'drawer'},
                   );
                 } else {
                   Get.offAllNamed(AppRoutes.loginScreen);
@@ -301,7 +302,10 @@ class UserDrawerScreen extends StatelessWidget {
             ),
             DrawerSectionWidget(
               onTap: () {
-                Get.toNamed(AppRoutes.subscriptionScreen);
+                Get.toNamed(
+                  AppRoutes.subscriptionScreen,
+                  arguments: {'route_from': 'drawer'},
+                );
               },
               text: AppStrings.subscriptions,
               icon: AppIconsPath.subscription,

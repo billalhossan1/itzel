@@ -13,7 +13,7 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controllers/user_profile_controller.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final UserProfileController _controller = Get.put(UserProfileController());
+  final UserProfileController _controller = Get.find<UserProfileController>();
 
   UserProfileScreen({super.key});
 

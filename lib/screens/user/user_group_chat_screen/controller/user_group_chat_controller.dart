@@ -26,7 +26,7 @@ class UserGroupChatController extends GetxController {
 
   final MyGroupRepository _myGroupRepository = MyGroupRepository();
   final UserProfileController _userProfileController =
-      Get.put(UserProfileController());
+      Get.find<UserProfileController>();
   Data? userProfile;
   late IO.Socket socket;
 
