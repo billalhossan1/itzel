@@ -21,11 +21,10 @@ class CreatorAccountController extends GetxController {
   void onInit() {
     super.onInit();
 
-    String ? token=AppAuthStorage().getToken();
-    if(token!=null && token.isNotEmpty==true){
+    String? token = AppAuthStorage().getToken();
+    if (token != null && token.isNotEmpty == true) {
       fetchProfileData();
     }
-
 
     //fetchProfileData();
   }
@@ -33,7 +32,7 @@ class CreatorAccountController extends GetxController {
   Future<void> fetchProfileData() async {
     isLoading.value = true;
     try {
-      final Data? data = await _profileRepository.fetchProfile();
+      final ProfileModel? data = await _profileRepository.fetchProfile();
       if (data != null) {
         username.value = data.name;
         email.value = data.email;
@@ -49,5 +48,4 @@ class CreatorAccountController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

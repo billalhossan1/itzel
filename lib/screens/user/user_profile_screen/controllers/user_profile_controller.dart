@@ -61,10 +61,9 @@ class UserProfileController extends GetxController {
 
         await Get.find<UserAccountController>().fetchProfileData();
         isLoading.value = false;
-        
+
         Get.back();
         AppSnackBar.success('Profile updated successfully');
-
 
         isUpdated.value = false;
       } else {
@@ -79,9 +78,9 @@ class UserProfileController extends GetxController {
     }
   }
 
-  Future<Data?> fetchProfileData() async {
+  Future<ProfileModel?> fetchProfileData() async {
     try {
-      Data? profileData = await _profileRepository.fetchProfile();
+      ProfileModel? profileData = await _profileRepository.fetchProfile();
       if (profileData != null) {
         usernameController.text = profileData.name;
         addressController.text = profileData.location;

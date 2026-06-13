@@ -17,6 +17,7 @@ class ButtonWidget extends StatelessWidget {
   final BorderRadiusGeometry buttonRadius;
   final Color? backgroundColor;
   final bool isLoading;
+  final FontWeight fontWeight;
 
   const ButtonWidget({
     super.key,
@@ -34,6 +35,7 @@ class ButtonWidget extends StatelessWidget {
     this.buttonRadius = const BorderRadius.all(Radius.circular(8)),
     this.backgroundColor,
     this.isLoading = false,
+    this.fontWeight = FontWeight.w500,
   });
 
   @override
@@ -75,7 +77,7 @@ class ButtonWidget extends StatelessWidget {
                   color: textColor,
                   fontSize: (MediaQuery.sizeOf(context).width /
                       (MediaQuery.sizeOf(context).width / fontSize)),
-                  fontWeight: FontWeight.w500,
+                  fontWeight: fontWeight,
                 ),
               ),
       ),

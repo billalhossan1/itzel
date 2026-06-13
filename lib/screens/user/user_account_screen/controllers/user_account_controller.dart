@@ -20,11 +20,11 @@ class UserAccountController extends GetxController {
   void onInit() {
     super.onInit();
 
-    String? token =AppAuthStorage().getToken();
+    String? token = AppAuthStorage().getToken();
 
-    print("token is possible =-=--=-=-=-=-=-=-=-=-=-=-=-=${token??''}");
+    print("token is possible =-=--=-=-=-=-=-=-=-=-=-=-=-=${token ?? ''}");
 
-    if(token!=null && token.isNotEmpty==true){
+    if (token != null && token.isNotEmpty == true) {
       fetchProfileData();
     }
   }
@@ -32,7 +32,7 @@ class UserAccountController extends GetxController {
   Future<void> fetchProfileData() async {
     isLoading.value = true;
     try {
-      final Data? data = await _profileRepository.fetchProfile();
+      final ProfileModel? data = await _profileRepository.fetchProfile();
       if (data != null) {
         username.value = data.name;
         email.value = data.email;
@@ -48,5 +48,4 @@ class UserAccountController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

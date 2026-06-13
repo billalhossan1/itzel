@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/routes/app_routes.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
@@ -73,53 +74,93 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                       final priceLabel = (plan.price ?? 0) > 0
                                           ? '\$${plan.price} / $durationStr'
                                           : 'Free';
-                                      return GestureDetector(
-                                        onTap: () {
-                                          controller.onSubscribe(index);
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 8),
-                                          padding: EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius: BorderRadius.circular(
-                                                AppSize.height(value: 12)),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  TextWidget(
-                                                    text: plan.name ?? '',
-                                                    fontSize: AppSize.height(
-                                                        value: 22),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontColor: AppColors.blue,
+
+                                      final isSubscribed = controller
+                                              .profileModel
+                                              .value
+                                              ?.subscriptionPackageId ==
+                                          plan.sId;
+
+                                      return Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 8),
+                                        padding: EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(
+                                              AppSize.height(value: 12)),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                TextWidget(
+                                                  text: plan.name ?? '',
+                                                  fontSize:
+                                                      AppSize.height(value: 22),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontColor: AppColors.blue,
+                                                ),
+                                                TextWidget(
+                                                  text: priceLabel,
+                                                  fontSize:
+                                                      AppSize.height(value: 24),
+                                                  fontWeight: FontWeight.w700,
+                                                  fontColor: AppColors.blue,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10),
+                                            ...?(plan.features
+                                                ?.map((f) =>
+                                                    _subscriptionTextWidget(f))
+                                                .toList()),
+                                            SizedBox(height: 20),
+                                            Center(
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  if (isSubscribed) {
+                                                    Get.offAllNamed(AppRoutes
+                                                        .bottomNavScreen);
+                                                  } else {
+                                                    controller
+                                                        .onSubscribe(index);
+                                                  }
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: isSubscribed
+                                                      ? Colors.grey
+                                                      : AppColors.blue,
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 10,
                                                   ),
-                                                  TextWidget(
-                                                    text: priceLabel,
-                                                    fontSize: AppSize.height(
-                                                        value: 24),
-                                                    fontWeight: FontWeight.w700,
-                                                    fontColor: AppColors.blue,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            AppSize.height(
+                                                                value: 10)),
                                                   ),
-                                                ],
+                                                ),
+                                                child: Text(
+                                                  isSubscribed
+                                                      ? "Subscribed"
+                                                      : 'Subscribe',
+                                                  style: TextStyle(
+                                                    color: AppColors.white,
+                                                    fontSize: AppSize.height(
+                                                        value: 16),
+                                                  ),
+                                                ),
                                               ),
-                                              SizedBox(height: 10),
-                                              ...?(plan.features
-                                                  ?.map((f) =>
-                                                      _subscriptionTextWidget(
-                                                          f))
-                                                  .toList()),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       );
                                     },

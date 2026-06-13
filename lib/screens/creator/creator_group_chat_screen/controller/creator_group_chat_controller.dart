@@ -26,7 +26,7 @@ class CreatorGroupChatController extends GetxController {
   final MyGroupRepository _myGroupRepository = MyGroupRepository();
   final CreatorProfileController _creatorProfileController =
       Get.put(CreatorProfileController());
-  Data? userProfile;
+  ProfileModel? userProfile;
   late IO.Socket socket;
 
   CreatorGroupChatController({required this.group}) {

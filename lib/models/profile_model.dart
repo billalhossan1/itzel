@@ -7,7 +7,7 @@ String welcomeToJson(Welcome data) => json.encode(data.toJson());
 class Welcome {
   bool success;
   String message;
-  Data data;
+  ProfileModel data;
 
   Welcome({
     required this.success,
@@ -18,7 +18,7 @@ class Welcome {
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
         success: json["success"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: ProfileModel.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +28,7 @@ class Welcome {
       };
 }
 
-class Data {
+class ProfileModel {
   String id;
   String name;
   String role;
@@ -43,8 +43,9 @@ class Data {
   int v;
   String contact;
   String location;
+  String subscriptionPackageId;
 
-  Data({
+  ProfileModel({
     required this.id,
     required this.name,
     required this.role,
@@ -59,9 +60,11 @@ class Data {
     required this.v,
     required this.contact,
     required this.location,
+    this.subscriptionPackageId = '',
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
+        subscriptionPackageId: json["subscriptionPackageId"] ?? '',
         id: json["_id"] ?? '',
         name: json["name"] ?? '',
         role: json["role"] ?? '',
