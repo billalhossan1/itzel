@@ -82,7 +82,10 @@ class CreatorDrawerScreen extends StatelessWidget {
             // ),
             CreatorDrawerSectionWidget(
               onTap: () {
-                Get.toNamed(AppRoutes.subscriptionScreen);
+                Get.toNamed(
+                  AppRoutes.subscriptionScreen,
+                  arguments: {'route_from': 'drawer'},
+                );
               },
               text: AppStrings.subscriptions,
               icon: AppIconsPath.subscriptionIcon,

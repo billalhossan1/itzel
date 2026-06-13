@@ -10,6 +10,8 @@ import '../../screens/user/user_home_screen/controllers/user_home_controller.dar
 import '../../screens/user/user_notification_screen/controllers/user_notification_controller.dart';
 import '../../screens/user/user_search_screen/controllers/user_search_controller.dart';
 
+import '../../screens/user/user_profile_screen/controllers/user_profile_controller.dart';
+
 class UserBindings extends Bindings {
   @override
   void dependencies() {
@@ -23,7 +25,7 @@ class UserBindings extends Bindings {
     Get.lazyPut(() => UserEventController());
     Get.lazyPut(() => UserAccountController());
     Get.lazyPut(() => UserNotificationController());
-    // Get.lazyPut(() => UserProfileController());
+    Get.lazyPut(() => UserProfileController(), fenix: true);
     //Get.lazyPut(() => UserFaqController());
     //Get.lazyPut(() => UserTermsConditionController());
     Get.lazyPut(() => UserChangePasswordController());

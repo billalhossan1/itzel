@@ -23,10 +23,12 @@ class UserProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments ?? {};
-    usernameController.text = args['username'] ?? '';
-    addressController.text = args['address'] ?? '';
-    phoneNumberController.text = args['contactNumber'] ?? '';
+    if (Get.arguments != null && Get.arguments is Map) {
+      final args = Get.arguments;
+      usernameController.text = args['username'] ?? '';
+      addressController.text = args['address'] ?? '';
+      phoneNumberController.text = args['contactNumber'] ?? '';
+    }
   }
 
   Future<void> pickImage() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itzel/routes/bindings/user_bindings.dart';
 import 'package:itzel/routes/route_manager.dart';
 import 'package:itzel/utils/app_size.dart';
 
@@ -17,6 +18,7 @@ class MainApp extends StatelessWidget {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
+        initialBinding: UserBindings(),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.blue),
           useMaterial3: true,

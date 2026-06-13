@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+import 'package:itzel/screens/user/user_profile_screen/controllers/user_profile_controller.dart';
 import 'package:logger/logger.dart';
 
 import '../../../constants/app_api_url.dart';
@@ -28,6 +29,10 @@ class SubscriptionController extends GetxController {
   bool isRestoreChecked = false;
   String role = '';
 
+  bool routeFromDrawer = false;
+  bool _restoreDone = false;
+  bool _isPurchasing = false;
+
   // Backward compatibility with existing UI
   List<ProductDetails> get products => storeProducts.values.toList();
 
@@ -35,8 +40,16 @@ class SubscriptionController extends GetxController {
   void onInit() async {
     super.onInit();
 
+    bool performRestoreCheck = false;
+
     if (Get.arguments != null) {
-      role = Get.arguments['role'] ?? '';
+      if (Get.arguments is Map) {
+        routeFromDrawer = Get.arguments['route_from'] == "drawer";
+        performRestoreCheck = Get.arguments['perform_restore_check'] == true;
+        role = Get.arguments['role'] ?? '';
+      } else if (Get.arguments is String) {
+        role = Get.arguments;
+      }
     }
 
     final bool isAvailable = await _iap.isAvailable();
@@ -47,8 +60,9 @@ class SubscriptionController extends GetxController {
         (purchaseDetailsList) {
           if (purchaseDetailsList.isNotEmpty) {
             _listenToPurchaseUpdated(purchaseDetailsList);
-          } else if (!isRestoreChecked) {
+          } else if (!isRestoreChecked && !_isPurchasing) {
             isRestoreChecked = true;
+            isPurchaseLoading.value = false;
             _fetchSubscriptionPlan();
           }
         },
@@ -60,8 +74,11 @@ class SubscriptionController extends GetxController {
           Logger().e("Purchase stream error: $error");
         },
       );
+      await Get.find<UserProfileController>().fetchProfileData();
 
-      await onRestore(showLoader: false);
+      if (performRestoreCheck || !routeFromDrawer) {
+        await onRestore(showLoader: false);
+      }
       _fetchSubscriptionPlan();
     } else {
       isLoading.value = false;
@@ -81,7 +98,7 @@ class SubscriptionController extends GetxController {
 
     final response = await ApiGetServices().apiGetServices(
       AppApiUrl.getAllSubscription,
-      queryParameters: {'platform': Platform.isAndroid ? 'apple' : 'apple'},
+      queryParameters: {'platform': Platform.isAndroid ? 'google' : 'apple'},
     );
 
     if (response != null && response['data'] != null) {
@@ -145,18 +162,22 @@ class SubscriptionController extends GetxController {
   }
 
   Future<void> onRestore({bool showLoader = true}) async {
+    // Guard: restore can only run once per controller lifecycle
+    if (_restoreDone) return;
+    _restoreDone = true;
+
     if (showLoader) isPurchaseLoading.value = true;
     try {
       await _iap.restorePurchases();
       Logger().i("Restore completed");
     } catch (e) {
-      if (showLoader) {
-        AppSnackBar.error('Failed to restore purchases: $e');
-      }
-      Logger().e("Restore error: $e");
-    } finally {
       if (showLoader) isPurchaseLoading.value = false;
+      AppSnackBar.error('Failed to restore purchases: $e');
+      Logger().e("Restore error: $e");
     }
+    // Note: Do NOT set isPurchaseLoading = false here on success.
+    // The restore results are delivered asynchronously via purchaseStream.
+    // The loader will be hidden in _listenToPurchaseUpdated when processing is done.
   }
 
   Future<void> onSubscribe(int index) async {
@@ -175,12 +196,15 @@ class SubscriptionController extends GetxController {
         //buy subscription from store
         final product = storeProducts[plan.productId];
         if (product != null) {
+          _isPurchasing = true; // mark real purchase in progress
           isPurchaseLoading.value = true;
           final PurchaseParam purchaseParam = PurchaseParam(
             productDetails: product,
           );
-          final bool success = await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+          final bool success =
+              await _iap.buyNonConsumable(purchaseParam: purchaseParam);
           if (!success) {
+            _isPurchasing = false;
             isPurchaseLoading.value = false;
           }
         } else {
@@ -188,6 +212,7 @@ class SubscriptionController extends GetxController {
         }
       }
     } catch (e) {
+      _isPurchasing = false;
       isPurchaseLoading.value = false;
       Logger().e("Subscribe error: $e");
     }
@@ -260,32 +285,95 @@ class SubscriptionController extends GetxController {
     return durationStr.isEmpty ? (plan.type ?? "Month") : durationStr;
   }
 
-  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        isPurchaseLoading.value = true;
-      } else {
-        isPurchaseLoading.value = false;
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          AppSnackBar.error(
-            purchaseDetails.error?.message ?? 'Purchase failed',
-          );
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          final isSuccess = await _sendVerifyRequest(
-            packageId: getPlanId(purchaseDetails) ?? '',
-            purchaseDetails: purchaseDetails,
-          );
+  Future<void> _listenToPurchaseUpdated(
+    List<PurchaseDetails> purchaseDetailsList,
+  ) async {
+    // 1. Check if anything is still pending
+    final hasPending = purchaseDetailsList.any(
+      (p) => p.status == PurchaseStatus.pending,
+    );
 
-          if (isSuccess) {
-            _onSuccess();
-          }
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          await _iap.completePurchase(purchaseDetails);
+    if (hasPending) {
+      isPurchaseLoading.value = true;
+      return;
+    }
+
+    // Show errors for any failed purchases
+    for (final purchase in purchaseDetailsList) {
+      if (purchase.status == PurchaseStatus.error) {
+        AppSnackBar.error(
+          purchase.error?.message ?? 'Purchase failed',
+        );
+      }
+    }
+
+    // 2. Filter successful or restored purchases
+    final validPurchases = purchaseDetailsList
+        .where(
+          (p) =>
+              p.status == PurchaseStatus.purchased ||
+              p.status == PurchaseStatus.restored,
+        )
+        .toList();
+
+    if (validPurchases.isNotEmpty) {
+      // Find the latest purchase based on transactionDate
+      PurchaseDetails latestPurchase = validPurchases.first;
+      int latestTime = _parseTransactionDate(latestPurchase.transactionDate);
+
+      for (var i = 1; i < validPurchases.length; i++) {
+        final currentPurchase = validPurchases[i];
+        final currentTime = _parseTransactionDate(
+          currentPurchase.transactionDate,
+        );
+        if (currentTime > latestTime) {
+          latestPurchase = currentPurchase;
+          latestTime = currentTime;
         }
       }
-    });
+
+      // Verify the latest purchase with the backend FIRST
+      final isSuccess = await _sendVerifyRequest(
+        packageId: getPlanId(latestPurchase) ?? '',
+        purchaseDetails: latestPurchase,
+      );
+
+      // 3. Only acknowledge purchases to the store AFTER backend verification
+      // This prevents the store treating the transaction as "done" if backend failed
+      for (final purchase in purchaseDetailsList) {
+        if (purchase.pendingCompletePurchase && purchase.purchaseID != null) {
+          await _iap.completePurchase(purchase);
+        }
+      }
+
+      isPurchaseLoading.value = false;
+      _isPurchasing = false;
+
+      if (isSuccess) {
+        _onSuccess();
+      }
+    } else {
+      // Stream emitted but no valid purchases — hide loader
+      isPurchaseLoading.value = false;
+      _isPurchasing = false;
+
+      // Complete any remaining pending-complete purchases even with no valid ones
+      for (final purchase in purchaseDetailsList) {
+        if (purchase.pendingCompletePurchase) {
+          await _iap.completePurchase(purchase);
+        }
+      }
+    }
+  }
+
+  int _parseTransactionDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return 0;
+    // Try to parse as integer (milliseconds since epoch)
+    final ms = int.tryParse(dateStr);
+    if (ms != null) return ms;
+    // Fallback to DateTime parse (ISO-8601)
+    final dt = DateTime.tryParse(dateStr);
+    return dt?.millisecondsSinceEpoch ?? 0;
   }
 
   String? getPlanId(PurchaseDetails purchaseDetails) => subscriptionPlan
@@ -328,6 +416,10 @@ class SubscriptionController extends GetxController {
 
   void _onSuccess() {
     AppSnackBar.success('Subscription successful!');
-    Get.offAllNamed(AppRoutes.bottomNavScreen, arguments: role);
+    if (routeFromDrawer) {
+      Get.back();
+    } else {
+      Get.offAllNamed(AppRoutes.bottomNavScreen, arguments: role);
+    }
   }
 }
