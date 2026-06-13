@@ -97,7 +97,7 @@ class AppApiUrl {
   AppApiUrl._(); // Private constructor for singleton pattern
 
   // Base Domains
-  static const String localDomain = "http://10.10.7.65:5001";
+  static const String localDomain = "http://10.10.26.185:5001";
   // static const String serverDomain = "https://www.api.914unplugged.com";
   static const String serverDomain = "https://www.api.914unplugged.com";
   static const String accountSuccessUrl =
