@@ -89,11 +89,11 @@ class ProfileRepository {
   final ApiGetServices _apiGetServices = ApiGetServices();
   final ApiPatchServices _apiPatchServices = ApiPatchServices();
 
-  Future<Data?> fetchProfile() async {
+  Future<ProfileModel?> fetchProfile() async {
     try {
       final response = await _apiGetServices.apiGetServices(AppApiUrl.profile);
       if (response != null && response['success'] == true) {
-        final data = Data.fromJson(response['data']);
+        final data = ProfileModel.fromJson(response['data']);
         return data;
       } else {
         print('API call failed with status: ${response['status']}');

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+import 'package:itzel/models/profile_model.dart';
 import 'package:itzel/screens/user/user_profile_screen/controllers/user_profile_controller.dart';
 import 'package:logger/logger.dart';
 
@@ -28,6 +29,10 @@ class SubscriptionController extends GetxController {
   late StreamSubscription<List<PurchaseDetails>> _purchaseSubscription;
   bool isRestoreChecked = false;
   String role = '';
+
+  UserProfileController _userProfileController =
+      Get.find<UserProfileController>();
+  Rxn<ProfileModel> profileModel = Rxn();
 
   bool routeFromDrawer = false;
   bool _restoreDone = false;
@@ -74,7 +79,7 @@ class SubscriptionController extends GetxController {
           Logger().e("Purchase stream error: $error");
         },
       );
-      await Get.find<UserProfileController>().fetchProfileData();
+      profileModel.value = await _userProfileController.fetchProfileData();
 
       if (performRestoreCheck || !routeFromDrawer) {
         await onRestore(showLoader: false);

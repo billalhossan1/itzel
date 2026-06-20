@@ -27,7 +27,7 @@ class UserGroupChatController extends GetxController {
   final MyGroupRepository _myGroupRepository = MyGroupRepository();
   final UserProfileController _userProfileController =
       Get.find<UserProfileController>();
-  Data? userProfile;
+  ProfileModel? userProfile;
   late IO.Socket socket;
 
   UserGroupChatController({required this.group}) {
@@ -40,10 +40,9 @@ class UserGroupChatController extends GetxController {
 
   Future<void> init() async {
     print('🟠 Initializing controller for group: ${group.id}');
-    String ? token=AppAuthStorage().getToken();
+    String? token = AppAuthStorage().getToken();
 
-    if(token!=null && token.isNotEmpty==true){
-
+    if (token != null && token.isNotEmpty == true) {
       await fetchUserProfile();
       await fetchMessages();
       initSocket();

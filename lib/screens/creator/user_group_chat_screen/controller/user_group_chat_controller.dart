@@ -22,7 +22,7 @@ class UserGroupChatController extends GetxController {
   final MyGroupRepository _myGroupRepository = MyGroupRepository();
   final UserProfileController _userProfileController =
       Get.find<UserProfileController>();
-  Data? userProfile;
+  ProfileModel? userProfile;
   late IO.Socket socket;
 
   UserGroupChatController({required this.group}) {

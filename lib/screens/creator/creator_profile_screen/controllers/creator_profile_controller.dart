@@ -73,9 +73,9 @@ class CreatorProfileController extends GetxController {
     }
   }
 
-  Future<Data?> fetchProfileData() async {
+  Future<ProfileModel?> fetchProfileData() async {
     try {
-      Data? profileData = await _profileRepository.fetchProfile();
+      ProfileModel? profileData = await _profileRepository.fetchProfile();
       if (profileData != null) {
         usernameController.text = profileData.name;
         addressController.text = profileData.location;
