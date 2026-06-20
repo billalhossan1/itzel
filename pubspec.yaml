@@ -47,7 +47,7 @@ dependencies:
   dotted_border:
   intl:
   fl_chart: ^0.69.2
-  file_picker:
+  file_picker: 11.0.2
   table_calendar:
   flutter_spinkit:
   flutter_keyboard_visibility:

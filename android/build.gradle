@@ -3,6 +3,31 @@ allprojects {
         google()
         mavenCentral()
     }
+    
+    // Force specific versions of AndroidX libraries that do not require Android API 36 / AGP 8.9+
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'androidx.browser' && details.requested.name == 'browser') {
+                details.useVersion '1.8.0'
+            }
+            if (details.requested.group == 'androidx.activity' && (details.requested.name == 'activity' || details.requested.name == 'activity-ktx')) {
+                details.useVersion '1.9.3'
+            }
+            if (details.requested.group == 'androidx.core' && (details.requested.name == 'core' || details.requested.name == 'core-ktx')) {
+                details.useVersion '1.13.1'
+            }
+            if (details.requested.group == 'androidx.navigation' && (details.requested.name == 'navigation-runtime' || details.requested.name == 'navigation-common')) {
+                details.useVersion '2.8.3'
+            }
+            if (details.requested.group == 'androidx.navigationevent' && details.requested.name == 'navigationevent-android') {
+                details.useVersion '1.0.1' // Or a stable older version
+            }
+            if (details.requested.group == 'org.jetbrains.kotlin' && details.requested.name.startsWith('kotlin-stdlib')) {
+                details.useVersion '2.1.0'
+            }
+
+        }
+    }
 }
 
 rootProject.buildDir = "../build"
@@ -10,6 +35,12 @@ subprojects {
 
    // project.layout.buildDirectory = "${rootProject.buildDir}/${project.name}"
     project.buildDir = "${rootProject.buildDir}/${project.name}"
+    
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += ["-Xskip-metadata-version-check"]
+        }
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")

@@ -83,7 +83,7 @@ import '../utils/app_all_log/error_log.dart';
 /// Returns the appropriate domain based on the build mode.
 String _getDomain() {
   const String serverDomain = "https://www.api.914unplugged.com"; // Live server
-  const String localDomain = "http://139.59.0.25:3005"; // Local server
+  const String localDomain = "https://www.api.914unplugged.com"; // Local server
 
   try {
     return kReleaseMode ? serverDomain : localDomain;
@@ -97,7 +97,7 @@ class AppApiUrl {
   AppApiUrl._(); // Private constructor for singleton pattern
 
   // Base Domains
-  static const String localDomain = "http://10.10.26.185:5001";
+  static const String localDomain = "https://www.api.914unplugged.com";
   // static const String serverDomain = "https://www.api.914unplugged.com";
   static const String serverDomain = "https://www.api.914unplugged.com";
   static const String accountSuccessUrl =

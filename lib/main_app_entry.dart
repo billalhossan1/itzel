@@ -7,6 +7,8 @@ import 'package:itzel/utils/app_size.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_strings.dart';
 
+GlobalKey<NavigatorState>? appNavigatorStateKey = GlobalKey<NavigatorState>();
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -16,6 +18,7 @@ class MainApp extends StatelessWidget {
       AppSize.size =
           MediaQueryData.fromView(WidgetsBinding.instance.window).size;
       return GetMaterialApp(
+        navigatorKey: appNavigatorStateKey,
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
         initialBinding: UserBindings(),
