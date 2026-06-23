@@ -81,6 +81,16 @@ class SubscriptionController extends GetxController {
       );
       profileModel.value = await _userProfileController.fetchProfileData();
 
+      // If the user already has an active subscription package, let them in.
+      // Only auto-route when the screen is acting as a gate. When opened from
+      // a drawer, the user intentionally came to view the plans, so don't pop.
+      final packageId = profileModel.value?.subscriptionPackageId;
+      if (!routeFromDrawer && packageId != null && packageId.isNotEmpty) {
+        isLoading.value = false;
+        _onSuccess();
+        return;
+      }
+
       if (performRestoreCheck || !routeFromDrawer) {
         await onRestore(showLoader: false);
       }
@@ -280,14 +290,14 @@ class SubscriptionController extends GetxController {
 
   String getPlanDuration(SubscriptionItem plan) {
     if ((plan.price ?? 0) == 0) {
-      return plan.type ?? "Lifetime";
+      return "Lifetime";
     }
     final product = storeProducts[plan.productId];
     if (product == null) {
-      return plan.type ?? "Month";
+      return "Monthly";
     }
     final durationStr = getDuration(product);
-    return durationStr.isEmpty ? (plan.type ?? "Month") : durationStr;
+    return durationStr.isEmpty ? "Monthly" : durationStr;
   }
 
   Future<void> _listenToPurchaseUpdated(
@@ -420,7 +430,6 @@ class SubscriptionController extends GetxController {
   }
 
   void _onSuccess() {
-    AppSnackBar.success('Subscription successful!');
     if (routeFromDrawer) {
       Get.back();
     } else {

@@ -40,6 +40,7 @@ class SubscriptionItem {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  String? duration;
 
   SubscriptionItem(
       {this.sId,
@@ -53,6 +54,7 @@ class SubscriptionItem {
       this.productId,
       this.createdAt,
       this.updatedAt,
+      this.duration,
       this.iV});
 
   SubscriptionItem.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class SubscriptionItem {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    duration = json['duration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +85,7 @@ class SubscriptionItem {
     data['platform'] = platform;
     data['productId'] = productId;
     data['createdAt'] = createdAt;
+    data['duration'] = duration;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
     return data;

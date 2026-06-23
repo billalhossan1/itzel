@@ -103,15 +103,15 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                                 TextWidget(
                                                   text: plan.name ?? '',
                                                   fontSize:
-                                                      AppSize.height(value: 22),
-                                                  fontWeight: FontWeight.w600,
+                                                      AppSize.height(value: 24),
+                                                  fontWeight: FontWeight.w700,
                                                   fontColor: AppColors.blue,
                                                 ),
                                                 TextWidget(
                                                   text: priceLabel,
                                                   fontSize:
-                                                      AppSize.height(value: 24),
-                                                  fontWeight: FontWeight.w700,
+                                                      AppSize.height(value: 22),
+                                                  fontWeight: FontWeight.w600,
                                                   fontColor: AppColors.blue,
                                                 ),
                                               ],
@@ -187,25 +187,36 @@ class SubscriptionPlanScreen extends StatelessWidget {
   }
 
   Widget _subscriptionTextWidget(String text) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 10,
-          backgroundColor: AppColors.black,
-          child: Icon(
-            Icons.check,
-            size: 15,
-            color: Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+      ),
+      margin: EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 10,
+            backgroundColor: AppColors.black,
+            child: Icon(
+              Icons.check,
+              size: 15,
+              color: Colors.white,
+            ),
           ),
-        ),
-        SizedBox(width: AppSize.width(value: 10)),
-        TextWidget(
-          text: text,
-          fontSize: AppSize.height(value: 16),
-          fontWeight: FontWeight.w400,
-          fontColor: AppColors.grey,
-        ),
-      ],
+          SizedBox(width: AppSize.width(value: 10)),
+          Expanded(
+            child: TextWidget(
+              text: text,
+              maxLines: 50,
+              textAlignment: TextAlign.left,
+              fontSize: AppSize.height(value: 16),
+              fontWeight: FontWeight.w400,
+              fontColor: AppColors.grey,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
