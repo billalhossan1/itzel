@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itzel/routes/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
@@ -165,6 +166,64 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                final uri = Uri.parse(
+                                    'https://sites.google.com/view/914-unplugged-privacy-policy/home');
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,
+                                      mode: LaunchMode.externalApplication);
+                                }
+                              },
+                              child: Text(
+                                'Privacy Policy',
+                                style: TextStyle(
+                                  color: AppColors.blue,
+                                  fontSize: 13,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColors.blue,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                '|',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final uri = Uri.parse(
+                                    'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,
+                                      mode: LaunchMode.externalApplication);
+                                }
+                              },
+                              child: Text(
+                                'Terms of Use',
+                                style: TextStyle(
+                                  color: AppColors.blue,
+                                  fontSize: 13,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColors.blue,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

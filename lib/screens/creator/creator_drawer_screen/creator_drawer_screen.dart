@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:itzel/screens/creator/creator_drawer_screen/widgets/creator_drawer_section_widget.dart';
 import 'package:itzel/widgets/button_widget/button_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icons_path.dart';
@@ -135,7 +136,11 @@ class CreatorDrawerScreen extends StatelessWidget {
             ),
             CreatorDrawerSectionWidget(
               onTap: () {
-                Get.toNamed(AppRoutes.termsConditionScreen);
+                launchUrl(
+                  Uri.parse(
+                    'https://sites.google.com/view/914-unplugged-terms-condtions/home',
+                  ),
+                );
               },
               text: AppStrings.termsConditions,
               icon: AppIconsPath.termsConditionIcon,
