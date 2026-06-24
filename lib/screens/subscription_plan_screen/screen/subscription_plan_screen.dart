@@ -19,7 +19,10 @@ class SubscriptionPlanScreen extends StatelessWidget {
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(
-                left: 16, right: 16, top: MediaQuery.of(context).padding.top),
+                left: 16,
+                right: 16,
+                top: MediaQuery.of(context).padding.top,
+                bottom: MediaQuery.of(context).padding.bottom),
             child: Obx(() {
               return Stack(
                 children: [
