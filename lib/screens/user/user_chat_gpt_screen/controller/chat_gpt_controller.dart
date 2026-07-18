@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:itzel/utils/app_all_log/app_log.dart';
 
 import '../../../../constants/app_strings.dart';
 
- String apiSecretKey = AppStrings.chatGpt;
+String apiSecretKey = AppStrings.chatGpt;
 
 class ChatController extends GetxController {
   final _storage = GetStorage();
@@ -80,35 +81,70 @@ class ChatController extends GetxController {
   }
 
   Future<String> generateResponse(String prompt) async {
-    var url = Uri.https("api.openai.com", "/v1/chat/completions");
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiSecretKey',
-      },
-      body: json.encode({
-        "model": "gpt-4o-mini",
-        "messages": [
-          {
-            "role": "system",
-            "content": "You are an assistant and your name is Itzel."
-          },
-          {"role": "user", "content": prompt}
-        ]
-      }),
-    );
+    appLog('generateResponse ▶ prompt: $prompt');
 
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    if (jsonResponse.containsKey('choices')) {
-      var choices = jsonResponse['choices'] as List<dynamic>;
-      if (choices.isNotEmpty && choices[0].containsKey('message')) {
-        var message = choices[0]['message'];
-        if (message.containsKey('content')) {
-          return message['content'] as String;
+    try {
+      var url = Uri.https("api.openai.com", "/v1/chat/completions");
+      appLog('generateResponse ▶ request URL: $url');
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiSecretKey',
+        },
+        body: json.encode({
+          "model": "gpt-4o-mini",
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an assistant and your name is Itzel."
+            },
+            {"role": "user", "content": prompt}
+          ]
+        }),
+      );
+
+      appLog('generateResponse ▶ status code: ${response.statusCode}');
+      appLog('generateResponse ▶ raw response body: ${response.body}');
+
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      appLog('generateResponse ▶ parsed JSON keys: ${jsonResponse.keys.toList()}');
+
+      if (jsonResponse.containsKey('choices')) {
+        var choices = jsonResponse['choices'] as List<dynamic>;
+        appLog('generateResponse ▶ choices count: ${choices.length}');
+
+        if (choices.isNotEmpty && choices[0].containsKey('message')) {
+          var message = choices[0]['message'];
+          appLog('generateResponse ▶ message: $message');
+
+          if (message.containsKey('content')) {
+            final content = message['content'] as String;
+            appLog('generateResponse ▶ extracted content: $content');
+            return content;
+          } else {
+            appLog('generateResponse ▶ WARNING: "content" key missing in message');
+          }
+        } else {
+          appLog('generateResponse ▶ WARNING: choices is empty or "message" key missing');
         }
+      } else {
+        // OpenAI returns an "error" object when the key is invalid / quota exceeded
+        final error = jsonResponse['error'];
+        appLog(
+          'generateResponse ▶ ERROR: "choices" key not found.\n'
+          '  ↳ HTTP status  : ${response.statusCode}\n'
+          '  ↳ Error type   : ${error?['type']}\n'
+          '  ↳ Error code   : ${error?['code']}\n'
+          '  ↳ Error message: ${error?['message']}',
+        );
       }
+    } catch (e, stackTrace) {
+      appLog('generateResponse ▶ EXCEPTION caught:\n  $e\n$stackTrace');
     }
+
+    appLog('generateResponse ▶ returning fallback: Failed to generate response.');
     return 'Failed to generate response.';
   }
 }

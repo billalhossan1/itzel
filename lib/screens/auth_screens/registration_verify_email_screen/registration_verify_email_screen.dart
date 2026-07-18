@@ -53,7 +53,7 @@ class RegistrationVerifyEmailScreen extends StatelessWidget {
                       child: const Center(
                         child: TextWidget(
                           text:
-                              "You're almost there! We’ve sent a 6-digit code to your email. Please enter the code to verify your email address",
+                              "You're almost there! We’ve sent a 4-digit code to your email. Please enter the code to verify your email address",
                           fontColor: AppColors.grey,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,

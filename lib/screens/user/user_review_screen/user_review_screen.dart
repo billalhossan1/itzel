@@ -117,6 +117,15 @@ class UserReviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const TextWidget(
+          text: 'Review & Feedback',
+          fontColor: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: AppColors.whiteBg,
       body: GetBuilder<UserReviewController>(
         init: UserReviewController(categoryId: categoryId),

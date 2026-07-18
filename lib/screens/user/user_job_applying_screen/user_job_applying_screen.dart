@@ -41,157 +41,160 @@ class UserJobApplyingScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(AppSize.width(value: 16)),
-                    margin: EdgeInsets.only(
-                      left: size.width / (size.width / 20),
-                      right: size.width / (size.width / 20),
-                      bottom: size.width / (size.width / 20),
-                      top: size.width / (size.width / 12),
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: AppColors.grey500,
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: AppImage(
-                                url: job.image,
-                                height: size.width / (size.width / 40),
-                                width: size.width / (size.width / 40),
-                                fit: BoxFit.cover,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(AppSize.width(value: 16)),
+                      margin: EdgeInsets.only(
+                        left: size.width / (size.width / 20),
+                        right: size.width / (size.width / 20),
+                        bottom: size.width / (size.width / 20),
+                        top: size.width / (size.width / 12),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppColors.grey500,
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: AppImage(
+                                  url: job.image,
+                                  height: size.width / (size.width / 40),
+                                  width: size.width / (size.width / 40),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                            const SpaceWidget(spaceWidth: 6),
-                            Column(
+                              const SpaceWidget(spaceWidth: 6),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextWidget(
+                                    text: capitalize(job.role),
+                                    fontColor: AppColors.black500,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  const SpaceWidget(spaceHeight: 4),
+                                  Row(
+                                    children: [
+                                      TextWidget(
+                                        text: capitalize(job.companyName),
+                                        fontColor: AppColors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      const SpaceWidget(spaceWidth: 4),
+                                      TextWidget(
+                                        text: DateFormat('dd.MM.yyyy, hh:mm a')
+                                            .format(job.createdAt),
+                                        fontColor: AppColors.grey700,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          const SpaceWidget(spaceHeight: 20),
+                          TextWidget(
+                            text: capitalize(job.description),
+                            fontColor: AppColors.grey700,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            textAlignment: TextAlign.justify,
+                          ),
+                          const SpaceWidget(spaceHeight: 12),
+                          const TextWidget(
+                            text: AppStrings.requirements,
+                            fontColor: AppColors.grey900,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          const SpaceWidget(spaceHeight: 12),
+                          ...job.requirements.map((requirement) => TextWidget(
+                                text: capitalize("• $requirement"),
+                                fontColor: AppColors.grey700,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                textAlignment: TextAlign.justify,
+                              )),
+                          const SpaceWidget(spaceHeight: 12),
+                          const TextWidget(
+                            text: AppStrings.experience,
+                            fontColor: AppColors.grey900,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          const SpaceWidget(spaceHeight: 12),
+                          ...job.experience.map((exp) => TextWidget(
+                                text: capitalize("• $exp"),
+                                fontColor: AppColors.grey700,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                textAlignment: TextAlign.justify,
+                              )),
+                          const SpaceWidget(spaceHeight: 12),
+                          const TextWidget(
+                            text: AppStrings.additionalRequirements,
+                            fontColor: AppColors.grey900,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          const SpaceWidget(spaceHeight: 12),
+                          ...job.additionalRequirement
+                              .map((additionalReq) => TextWidget(
+                                    text: capitalize("• $additionalReq"),
+                                    fontColor: AppColors.grey700,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    textAlignment: TextAlign.justify,
+                                  )),
+                          const SpaceWidget(spaceHeight: 16),
+                          ...job.questions.map((question) {
+                            print(job.questions);
+                            return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextWidget(
-                                  text: capitalize(job.role),
-                                  fontColor: AppColors.black500,
-                                  fontSize: 16,
+                                  text: capitalize(question),
+                                  fontColor: AppColors.black400,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 const SpaceWidget(spaceHeight: 4),
-                                Row(
-                                  children: [
-                                    TextWidget(
-                                      text: capitalize(job.companyName),
-                                      fontColor: AppColors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    const SpaceWidget(spaceWidth: 4),
-                                    TextWidget(
-                                      text: DateFormat('dd.MM.yyyy, hh:mm a')
-                                          .format(job.createdAt),
-                                      fontColor: AppColors.grey700,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ],
+                                JobApplyingTextFieldWidget(
+                                  controller: _controller.answers[question]!,
+                                  maxLines: 1,
+                                  validator: (value) =>
+                                      value!.isEmpty ? "Enter answer" : null,
                                 ),
+                                const SpaceWidget(spaceHeight: 8),
                               ],
-                            )
-                          ],
-                        ),
-                        const SpaceWidget(spaceHeight: 20),
-                        TextWidget(
-                          text: capitalize(job.description),
-                          fontColor: AppColors.grey700,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          textAlignment: TextAlign.justify,
-                        ),
-                        const SpaceWidget(spaceHeight: 12),
-                        const TextWidget(
-                          text: AppStrings.requirements,
-                          fontColor: AppColors.grey900,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        const SpaceWidget(spaceHeight: 12),
-                        ...job.requirements.map((requirement) => TextWidget(
-                              text: capitalize("• $requirement"),
-                              fontColor: AppColors.grey700,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              textAlignment: TextAlign.justify,
-                            )),
-                        const SpaceWidget(spaceHeight: 12),
-                        const TextWidget(
-                          text: AppStrings.experience,
-                          fontColor: AppColors.grey900,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        const SpaceWidget(spaceHeight: 12),
-                        ...job.experience.map((exp) => TextWidget(
-                              text: capitalize("• $exp"),
-                              fontColor: AppColors.grey700,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              textAlignment: TextAlign.justify,
-                            )),
-                        const SpaceWidget(spaceHeight: 12),
-                        const TextWidget(
-                          text: AppStrings.additionalRequirements,
-                          fontColor: AppColors.grey900,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        const SpaceWidget(spaceHeight: 12),
-                        ...job.additionalRequirement
-                            .map((additionalReq) => TextWidget(
-                                  text: capitalize("• $additionalReq"),
-                                  fontColor: AppColors.grey700,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  textAlignment: TextAlign.justify,
-                                )),
-                        const SpaceWidget(spaceHeight: 16),
-                        ...job.questions.map((question) {
-                          print(job.questions);
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextWidget(
-                                text: capitalize(question),
-                                fontColor: AppColors.black400,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              const SpaceWidget(spaceHeight: 4),
-                              JobApplyingTextFieldWidget(
-                                controller: _controller.answers[question]!,
-                                maxLines: 1,
-                                validator: (value) =>
-                                    value!.isEmpty ? "Enter answer" : null,
-                              ),
-                              const SpaceWidget(spaceHeight: 8),
-                            ],
-                          );
-                        }),
-                        const SpaceWidget(spaceHeight: 24),
-                        SubmitButtonWidget(
-                          onPressed: _controller.applyForJob,
-                          label: AppStrings.submit,
-                          buttonWidth: double.infinity,
-                        ),
-                      ],
+                            );
+                          }),
+                          const SpaceWidget(spaceHeight: 24),
+                          SubmitButtonWidget(
+                            onPressed: _controller.applyForJob,
+                            label: AppStrings.submit,
+                            buttonWidth: double.infinity,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

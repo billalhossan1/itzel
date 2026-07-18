@@ -21,7 +21,7 @@ class VerifyAccountScreen extends StatelessWidget {
       ),
     );
     final email = Get.arguments['email'];
-    bool isResetPass = Get.arguments['forgot']??false;
+    bool isResetPass = Get.arguments['forgot'] ?? false;
 
     return Scaffold(
       backgroundColor: AppColors.grey100,
@@ -40,7 +40,9 @@ class VerifyAccountScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: TextWidget(
-                        text: isResetPass?"Reset Your Password":"Verify your account",
+                        text: isResetPass
+                            ? "Reset Your Password"
+                            : "Verify your account",
                         fontColor: AppColors.black500,
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -54,7 +56,7 @@ class VerifyAccountScreen extends StatelessWidget {
                       child: const Center(
                         child: TextWidget(
                           text:
-                              "You're almost there! We’ve sent a 6-digit code to your email. Please enter the code to verify your email address",
+                              "You're almost there! We’ve sent a 4-digit code to your email. Please enter the code to verify your email address",
                           fontColor: AppColors.grey,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -126,32 +128,34 @@ class VerifyAccountScreen extends StatelessWidget {
                         horizontal: MediaQuery.sizeOf(context).width /
                             (MediaQuery.sizeOf(context).width / 8),
                       ),
-                      child: Obx(()=>ButtonWidget(
-                        isLoading: controller.isLoading.value,
-                        onPressed: () {
-                          if (controller.formKey.currentState!.validate()) {
-                            controller.verifyOTP();
-                            controller.otpTextEditingController1.clear();
-                            controller.otpTextEditingController2.clear();
-                            controller.otpTextEditingController3.clear();
-                            controller.otpTextEditingController4.clear();
+                      child: Obx(
+                        () => ButtonWidget(
+                          isLoading: controller.isLoading.value,
+                          onPressed: () {
+                            if (controller.formKey.currentState!.validate()) {
+                              controller.verifyOTP();
+                              controller.otpTextEditingController1.clear();
+                              controller.otpTextEditingController2.clear();
+                              controller.otpTextEditingController3.clear();
+                              controller.otpTextEditingController4.clear();
 
-                            // Call the verifyOTP method from the controller
-                          } else if (controller
-                              .otpTextEditingController1.text.isEmpty ||
-                              controller
-                                  .otpTextEditingController2.text.isEmpty ||
-                              controller
-                                  .otpTextEditingController3.text.isEmpty ||
-                              controller
-                                  .otpTextEditingController4.text.isEmpty) {
-                            // CustomToast.showToast("Please fill all fields");
-                          }
-                        },
-                        label:isResetPass?"Reset": 'Verify',
-                        buttonWidth: double.infinity,
-                        buttonHeight: 56,
-                      ),),
+                              // Call the verifyOTP method from the controller
+                            } else if (controller
+                                    .otpTextEditingController1.text.isEmpty ||
+                                controller
+                                    .otpTextEditingController2.text.isEmpty ||
+                                controller
+                                    .otpTextEditingController3.text.isEmpty ||
+                                controller
+                                    .otpTextEditingController4.text.isEmpty) {
+                              // CustomToast.showToast("Please fill all fields");
+                            }
+                          },
+                          label: isResetPass ? "Reset" : 'Verify',
+                          buttonWidth: double.infinity,
+                          buttonHeight: 56,
+                        ),
+                      ),
                     ),
                     const SpaceWidget(spaceHeight: 24),
                     Obx(() {

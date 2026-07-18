@@ -23,6 +23,13 @@ class UserAllCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: TextWidget(
+          text: 'All Categories',
+          fontColor: Colors.white,
+        ),
+      ),
       backgroundColor: AppColors.whiteBg,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -35,21 +42,24 @@ class UserAllCategoryScreen extends StatelessWidget {
                     horizontal: size.width * 0.05), // 5% of screen width
                 child: const TextWidget(
                   fontSize: 18,
-                  fontWeight: FontWeight.w500, text: AppStrings.allCategories,
+                  fontWeight: FontWeight.w500,
+                  text: AppStrings.allCategories,
                 ),
               ),
               const SpaceWidget(spaceHeight: 24),
               Obx(() {
                 if (_controller.isLoading.value) {
                   return SizedBox(
-                    height: size.height * 0.5, // Ensures spinner is centered and avoids overflow
+                    height: size.height *
+                        0.5, // Ensures spinner is centered and avoids overflow
                     child: const Center(child: CircularProgressIndicator()),
                   );
                 } else {
                   return GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.05),
                     crossAxisSpacing: size.width * 0.01, // 1% of width
                     mainAxisSpacing: size.height * 0.01, // 1% of height
                     crossAxisCount: 3,
