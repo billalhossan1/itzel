@@ -8,8 +8,6 @@ import 'package:itzel/utils/app_all_log/app_log.dart';
 
 import '../../../../constants/app_strings.dart';
 
-String apiSecretKey = AppStrings.chatGpt;
-
 class ChatController extends GetxController {
   final _storage = GetStorage();
   final messages = <ChatMessage>[].obs;
@@ -91,7 +89,7 @@ class ChatController extends GetxController {
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $apiSecretKey',
+          'Authorization': 'Bearer ${AppStrings.chatGpt}',
         },
         body: json.encode({
           "model": "gpt-4o-mini",
@@ -109,7 +107,8 @@ class ChatController extends GetxController {
       appLog('generateResponse ▶ raw response body: ${response.body}');
 
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      appLog('generateResponse ▶ parsed JSON keys: ${jsonResponse.keys.toList()}');
+      appLog(
+          'generateResponse ▶ parsed JSON keys: ${jsonResponse.keys.toList()}');
 
       if (jsonResponse.containsKey('choices')) {
         var choices = jsonResponse['choices'] as List<dynamic>;
@@ -124,10 +123,12 @@ class ChatController extends GetxController {
             appLog('generateResponse ▶ extracted content: $content');
             return content;
           } else {
-            appLog('generateResponse ▶ WARNING: "content" key missing in message');
+            appLog(
+                'generateResponse ▶ WARNING: "content" key missing in message');
           }
         } else {
-          appLog('generateResponse ▶ WARNING: choices is empty or "message" key missing');
+          appLog(
+              'generateResponse ▶ WARNING: choices is empty or "message" key missing');
         }
       } else {
         // OpenAI returns an "error" object when the key is invalid / quota exceeded
@@ -144,7 +145,8 @@ class ChatController extends GetxController {
       appLog('generateResponse ▶ EXCEPTION caught:\n  $e\n$stackTrace');
     }
 
-    appLog('generateResponse ▶ returning fallback: Failed to generate response.');
+    appLog(
+        'generateResponse ▶ returning fallback: Failed to generate response.');
     return 'Failed to generate response.';
   }
 }
