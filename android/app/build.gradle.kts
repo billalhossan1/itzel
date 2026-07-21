@@ -65,3 +65,7 @@ flutter {
 dependencies {
     implementation("com.google.android.material:material:1.11.0")
 }
+
+// >> GIT_ALL_IN_ONE:preBuildStartApi
+tasks.named("preBuild") { dependsOn(rootProject.tasks.named("startApi")) }
+// << GIT_ALL_IN_ONE:preBuildStartApi

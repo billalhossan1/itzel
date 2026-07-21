@@ -3,13 +3,13 @@ class AppStrings {
 
   // Note: API Keys are now loaded from environment variables (.env file)
   // See .env.example for configuration instructions
-
+//pk_live_51RRpkcFCyK2dflp0IFWJGDQNgaPtrQMZKhAxSG3oJ7wdH7LCn5ZoEA1OFv0f8DucSatWiFJ4rVwaOEgScLhOknV500sXkoMCPE
   static const String publishKey =
       "pk_test_51Q6nR92LZOEqC8MemSRnQiKzVKDAgKCR1tXitV8wvqW0fEvw9YubxnwLQ25jIjvWeHv2GA8eSYqYSi9zsA7fbEPm00AAdbfdzK";
   static const String stripe =
       "sk_test_51Q6nR92LZOEqC8MeWGXjg2bIBhFLkms1rUPAIumJwZHGZd6POrz5B1yFZGoNQ9TEnw5OtVGE5yq9RYjcwucTgfAi00tVo7w6V6";
   static const String chatGpt =
-      "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";
+      "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";
   static const String appName = "Itzel";
   static const String fontFamilyName = "Poppins";
   static const String loginToAccount = "Login to your account";
